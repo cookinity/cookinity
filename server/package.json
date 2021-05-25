@@ -1,7 +1,7 @@
 {
-  "name": "mern-boilerplate",
+  "name": "cookinity",
   "version": "1.0.0",
-  "description": "",
+  "description": "cookinity",
   "main": "index.js",
   "engines": {
     "node": "14.17.0"
@@ -16,8 +16,8 @@
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "author": "Nemanja Mitic (https://github.com/nemanjam)",
-  "license": "ISC",
+  "author": "Cookinity Team",
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "concurrently": "^6.2.0",
