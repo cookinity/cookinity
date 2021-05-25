@@ -1,3 +1,17 @@
+/node_modules
+package-lock.json
+
+/config/dev.js
+/security/cert.key
+/security/cert.pem
+#/public
+
+/.vscode
+.env
+
+!public/images
+public/images/*
+
 
 # Created by https://www.toptal.com/developers/gitignore/api/osx,windows,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=osx,windows,linux
