@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import { loginUserWithEmail } from '../../store/actions/authActions';
 import { loginSchema } from './validation';
-import './styles.css';
+import './styles.scss';
 
 const Login = ({ auth, history, loginUserWithEmail }) => {
   const formik = useFormik({

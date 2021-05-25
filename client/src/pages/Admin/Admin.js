@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import requireAdmin from '../../hoc/requireAdmin';
 import Layout from '../../layout/Layout';
-import './styles.css';
+import './styles.scss';
 
 const Admin = () => {
   return (

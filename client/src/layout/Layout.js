@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
-import './styles.css';
+import './styles.scss';
 
 const Layout = ({ children }) => {
   return (
