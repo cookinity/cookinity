@@ -1,69 +1,26 @@
-# MERN Boilerplate
+# Cookinity
 
-This is fullstack boilerplate with React, Redux, Express, Mongoose and Passport. Skip the tedious part and get straight to developing your app.
-
-## Demo
-
-Live demo is available here: **[Demo](https://mern-boilerplate-demo.herokuapp.com/)**
-
-## Features
-
-- Server
-
-  - User and Message models with `1:N` relation
-  - Full CRUD REST API operations for both Message and User models
-  - Passport authentication with local `email/password`, Facebook and Google OAuth strategies and JWT protected APIs
-  - `User` and `Admin` roles
-  - NodeJS server with Babel for new JS syntax unified with React client
-  - `async/await` syntax across whole app
-  - Joi server side validation of user's input
-  - Single `.env` file configuration
-  - Image upload with Multer
-  - Database seed
-
-- Client
-
-  - React client with functional components and Hooks
-  - Redux state management with Thunk for async actions
-  - CSS agnostic, so you don't waste your time replacing my CSS framework with yours
-  - Home, Users, Profile, Admin, Notfound, Login and Register pages
-  - Protected routes with Higher order components
-  - Different views for unauthenticated, authenticated and admin user
-  - Edit/Delete forms for Message and User with Formik and Yup validation
-  - Admin has privileges to edit and delete other users and their messages
-  - Layout component, so you can have pages without Navbar
-  - Loading states with Loader component
-  - Single config file within `/constants` folder
+This is the development repository for the cookinity webapp. https://github.com/nemanjam/mern-boilerplate was used as a boilerplate for creating this app.
 
 ## Installation
 
 Read on on how to set up this for development. Clone the repo.
 
 ```
-$ git clone https://github.com/nemanjam/mern-boilerplate.git
-$ cd mern-boilerplate
+$ git clone https://github.com/cookinity/cookinity.git
+$ cd cookinity
 ```
 
 ### Server
 
 #### .env file
 
-Rename `.env.example` to `.env` and fill in database connection strings, Google and Facebook tokens, JWT secret and your client and server production URLs.
+Rename `.env.example` to `.env` and fill in database connection strings, JWT secret and your client and server production URLs.
 
 ```
 #db
-MONGO_URI_DEV=mongodb://localhost:27017/mernboilerplate
+MONGO_URI_DEV=mongodb://localhost:27017/cookinity
 MONGO_URI_PROD=
-
-#google
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-GOOGLE_CALLBACK_URL=/auth/google/callback
-
-#facebook
-FACEBOOK_APP_ID=
-FACEBOOK_SECRET=
-FACEBOOK_CALLBACK_URL=/auth/facebook/callback
 
 #jwt
 JWT_SECRET_DEV=secret
@@ -71,9 +28,9 @@ JWT_SECRET_PROD=
 
 #site urls
 CLIENT_URL_DEV=https://localhost:3000
-CLIENT_URL_PROD=https://mern-boilerplate-demo.herokuapp.com
+CLIENT_URL_PROD=https://cookinity.herokuapp.com
 SERVER_URL_DEV=https://localhost:5000
-SERVER_URL_PROD=https://mern-boilerplate-demo.herokuapp.com
+SERVER_URL_PROD=https://cookinity.herokuapp.com
 
 #img folder path
 IMAGES_FOLDER_PATH=/public/images/
@@ -81,7 +38,7 @@ IMAGES_FOLDER_PATH=/public/images/
 
 #### Generate certificates
 
-Facebook OAuth requires that your server runs on `https` in development as well, so you need to generate certificates. Go to `/server/security` folder and run this.
+In order for your server to run on `https` in development as well, you need to generate certificates. Go to `/server/security` folder and run this.
 
 ```
 $ cd server/security
@@ -114,20 +71,6 @@ $ npm start
 ```
 
 That's it as far for development setup. For production check the `Deployment on Heroku` section.
-
-## Screenshots
-
-![Screenshot1](/screenshots/Screenshot_1.png)
-
-![Screenshot2](/screenshots/Screenshot_2.png)
-
-![Screenshot3](/screenshots/Screenshot_3.png)
-
-![Screenshot4](/screenshots/Screenshot_4.png)
-
-![Screenshot5](/screenshots/Screenshot_5.png)
-
-![Screenshot6](/screenshots/Screenshot_6.png)
 
 ## Deployment on Heroku
 
@@ -212,28 +155,3 @@ Before all this happens Heroku needs to install the dependencies for both server
 ```
 "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix server && npm install --prefix client && npm run build --prefix client"
 ```
-
-### Client Setup
-
-Before you push to production you'll need to set your URLs in `client/constants`. That's it.
-
-```javascript
-export const FACEBOOK_AUTH_LINK =
-  "https://my-own-app.herokuapp.com/auth/facebook";
-export const GOOGLE_AUTH_LINK = "https://my-own-app.herokuapp.com/auth/google";
-```
-
-## References
-
-- Brad Traversy [Dev connector 2.0](https://github.com/bradtraversy/devconnector_2.0)
-- Brad Traversy [Learn The MERN Stack Youtube playlist](https://www.youtube.com/watch?v=PBTYxXADG_k&list=PLillGF-RfqbbiTGgA77tGO426V3hRF9iE)
-- Thinkster [react-redux-realworld-example-app](https://github.com/gothinkster/react-redux-realworld-example-app)
-- Thinkster [
-  node-express-realworld-example-app ](https://github.com/gothinkster/node-express-realworld-example-app)
-- Quinston Pimenta [Deploy React with Node (Express, configured for ES6, Babel) to Heroku (without babel-node)](https://www.youtube.com/watch?v=mvI25HLDfR4)
-
-- Kim Nguyen [How to Deploy ES6 Node.js & Express back-end to Heroku](https://medium.com/@kimtnguyen/how-to-deploy-es6-node-js-express-back-end-to-heroku-7e6743e8d2ff)
-
-## Licence
-
-### MIT
