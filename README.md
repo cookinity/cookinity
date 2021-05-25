@@ -1,3 +1,6 @@
+Boilerplate based on: https://github.com/bradtraversy/proshop_mern
+
+
 ## Usage
 
 
