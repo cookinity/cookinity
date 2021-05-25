@@ -72,6 +72,12 @@ $ npm start
 
 That's it as far for development setup. For production check the `Deployment on Heroku` section.
 
+### Generate Admin User
+Change the role of the user you want to be a admin to "ADMIN".
+![Uploading image.png…]()
+
+
+
 ## Deployment on Heroku
 
 #### Push to Heroku
