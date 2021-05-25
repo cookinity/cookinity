@@ -74,7 +74,7 @@ That's it as far for development setup. For production check the `Deployment on 
 
 ### Generate Admin User
 Change the role of the user you want to be a admin to "ADMIN".
-![Uploading image.png…]()
+![image](https://user-images.githubusercontent.com/29718932/119522214-13c1e280-bd7c-11eb-95b3-08766bc68305.png)
 
 
 
