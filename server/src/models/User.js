@@ -53,7 +53,7 @@ userSchema.methods.toJSON = function () {
     ? this.avatar
     : fs.existsSync(absoluteAvatarFilePath)
     ? `${process.env.IMAGES_FOLDER_PATH}${this.avatar}`
-    : `${process.env.IMAGES_FOLDER_PATH}avatar2.jpg`;
+    : `${process.env.IMAGES_FOLDER_PATH}avatar1.jpg`;
 
   return {
     id: this._id,
