@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { attachTokenToHeaders } from '../authentication/authActions';
-import { GET_USERS_LOADING, GET_USERS_SUCCESS, GET_USERS_FAIL } from '../../types';
+import { GET_USERS_LOADING, GET_USERS_SUCCESS, GET_USERS_FAIL } from '../../actionTypes';
 
 export const getUsers = () => async (dispatch, getState) => {
   dispatch({

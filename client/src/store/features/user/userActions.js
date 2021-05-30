@@ -11,7 +11,7 @@ import {
   DELETE_USER_LOADING,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
-} from '../../types';
+} from '../../actionTypes';
 
 import { logOutUser, loadMe } from '../authentication/authActions';
 

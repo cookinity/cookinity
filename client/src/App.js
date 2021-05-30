@@ -4,17 +4,17 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
 
-import Login from './pages/Login/Login';
-import Register from './pages/Register/Register';
-import Home from './pages/Home/Home';
-import Profile from './pages/Profile/Profile';
-import Users from './pages/Users/Users';
-import Admin from './pages/Admin/Admin';
-import NotFound from './pages/NotFound/NotFound';
+import Login from './components/Login/Login';
+import Register from './components/Register/Register';
+import Profile from './components/Profile/Profile';
+import Users from './components/Users/Users';
+import Admin from './components/Admin/Admin';
+import NotFound from './components/NotFound/NotFound';
 
-import Loader from './components/Loader/Loader';
+import Loader from './components/Shared/Loader/Loader';
 
 import { loadMe } from './store/features/authentication/authActions';
+import { Home } from 'components/Home/Home';
 
 const App = ({ auth, loadMe }) => {
   useEffect(() => {

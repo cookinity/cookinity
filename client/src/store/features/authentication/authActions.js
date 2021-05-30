@@ -8,7 +8,7 @@ import {
   ME_LOADING,
   ME_SUCCESS,
   ME_FAIL,
-} from '../../types';
+} from '../../actionTypes';
 
 // ==== THUNKS ====
 export const loadMe = () => async (dispatch, getState) => {

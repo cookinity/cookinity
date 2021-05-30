@@ -6,7 +6,7 @@ import {
   ME_LOADING,
   ME_SUCCESS,
   ME_FAIL,
-} from '../../types';
+} from '../../actionTypes';
 
 const initialState = {
   token: localStorage.getItem('token'),
