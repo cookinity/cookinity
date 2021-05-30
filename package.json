@@ -11,6 +11,7 @@
   },
   "author": "cookinity team",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {}
 }
