@@ -1,6 +1,8 @@
-
+/node_modules
 # Created by https://www.toptal.com/developers/gitignore/api/osx,windows,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=osx,windows,linux
+
+
 
 ### Linux ###
 *~

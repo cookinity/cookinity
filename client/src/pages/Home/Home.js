@@ -5,12 +5,10 @@ import { Link } from 'react-router-dom';
 
 import Layout from '../../layout/Layout';
 
-import './styles.scss';
-
 const Home = ({ auth }) => {
   return (
     <Layout>
-      <div className="home-page">
+      <div>
         <h1>Home page</h1>
         {!auth.isAuthenticated ? (
           <div>

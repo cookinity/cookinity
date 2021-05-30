@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import App from './App';
-import './index.scss';
 import store from 'store/store';
 
 ReactDOM.render(

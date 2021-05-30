@@ -1,59 +1,64 @@
 import React from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 import { logOutUser } from '../../store/features/authentication/authActions';
-import './styles.scss';
+import { LinkContainer } from 'react-router-bootstrap';
 
-const Navbar = ({ auth, logOutUser, history }) => {
+export const NavigationBar = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const auth = useSelector((state) => state.auth);
+
   const onLogOut = (event) => {
     event.preventDefault();
-    logOutUser(history);
+    dispatch(logOutUser(history));
   };
 
-  return (
-    <nav className="navbar">
-      <h2 className="logo">Cookinity</h2>
-      <ul className="nav-links flex-1">
-        <li className="nav-item">
-          <Link to="/">Home</Link>
-        </li>
-        {auth.isAuthenticated ? (
-          <>
-            <li className="nav-item">
-              <Link to="/users">Users</Link>
-            </li>
-            <li className="nav-item">
-              <Link to={`/${auth.me.username}`}>Profile</Link>
-            </li>
-            {auth.me?.role === 'ADMIN' && (
-              <li className="nav-item">
-                <Link to="/admin">Admin</Link>
-              </li>
-            )}
-            <li className="flex-1" />
-            <img className="avatar" src={auth.me.avatar} />
-            <li className="nav-item" onClick={onLogOut}>
-              <a href="#">Log out</a>
-            </li>
-          </>
-        ) : (
-          <>
-            <li className="flex-1" />
+  let navBarContent;
 
-            <li className="nav-item">
-              <Link to="/login">Login</Link>
-            </li>
-          </>
-        )}
-      </ul>
-    </nav>
+  if (auth.isAuthenticated) {
+    navBarContent = (
+      <>
+        <LinkContainer to="/users">
+          <Nav.Link>Users</Nav.Link>
+        </LinkContainer>
+        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <LinkContainer to={`/${auth.me.username}`}>
+            <NavDropdown.Item>Profile</NavDropdown.Item>
+          </LinkContainer>
+          {auth.me?.role === 'ADMIN' && (
+            <LinkContainer to="/admin">
+              <NavDropdown.Item>Admin</NavDropdown.Item>
+            </LinkContainer>
+          )}
+          <NavDropdown.Item onClick={onLogOut}>Log Out</NavDropdown.Item>
+        </NavDropdown>
+      </>
+    );
+  } else {
+    navBarContent = (
+      <LinkContainer to="/login">
+        <Nav.Link>Login</Nav.Link>
+      </LinkContainer>
+    );
+  }
+
+  return (
+    <Navbar bg="primary" variant="dark" expand="lg">
+      <LinkContainer to="/">
+        <Navbar.Brand>Cookinity</Navbar.Brand>
+      </LinkContainer>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <LinkContainer to="/">
+            <Nav.Link>Home</Nav.Link>
+          </LinkContainer>
+          {navBarContent}
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
-
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-export default compose(withRouter, connect(mapStateToProps, { logOutUser }))(Navbar);
