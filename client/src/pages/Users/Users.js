@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
-import { getUsers } from '../../store/actions/usersActions';
+import { getUsers } from '../../store/features/users/usersActions';
 import Layout from '../../layout/Layout';
 import Loader from '../../components/Loader/Loader';
 import requireAuth from '../../hoc/requireAuth';

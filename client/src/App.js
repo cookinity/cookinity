@@ -14,7 +14,7 @@ import NotFound from './pages/NotFound/NotFound';
 
 import Loader from './components/Loader/Loader';
 
-import { loadMe } from './store/actions/authActions';
+import { loadMe } from './store/features/authentication/authActions';
 
 const App = ({ auth, loadMe }) => {
   useEffect(() => {

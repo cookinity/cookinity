@@ -11,6 +11,8 @@
   },
   "author": "cookinity team",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.5.1"
+  },
   "devDependencies": {}
 }

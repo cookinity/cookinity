@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { attachTokenToHeaders } from './authActions';
+import { attachTokenToHeaders } from '../authentication/authActions';
 import {
   GET_PROFILE_LOADING,
   GET_PROFILE_SUCCESS,
@@ -11,9 +11,9 @@ import {
   DELETE_USER_LOADING,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
-} from '../types';
+} from '../../types';
 
-import { logOutUser, loadMe } from './authActions';
+import { logOutUser, loadMe } from '../authentication/authActions';
 
 export const editUser = (id, formData, history) => async (dispatch, getState) => {
   dispatch({

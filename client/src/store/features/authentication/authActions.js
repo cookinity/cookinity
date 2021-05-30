@@ -8,8 +8,9 @@ import {
   ME_LOADING,
   ME_SUCCESS,
   ME_FAIL,
-} from '../types';
+} from '../../types';
 
+// ==== THUNKS ====
 export const loadMe = () => async (dispatch, getState) => {
   dispatch({ type: ME_LOADING });
 

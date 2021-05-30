@@ -8,7 +8,7 @@ import {
   DELETE_USER_LOADING,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
-} from '../types';
+} from '../../types';
 
 const initialState = {
   profile: {},

@@ -5,8 +5,8 @@ import { useFormik } from 'formik';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 
-import { getProfile, editUser, deleteUser } from '../../store/actions/userActions';
-import { loadMe } from '../../store/actions/authActions';
+import { getProfile, editUser, deleteUser } from '../../store/features/user/userActions';
+import { loadMe } from '../../store/features/authentication/authActions';
 import Layout from '../../layout/Layout';
 import Loader from '../../components/Loader/Loader';
 import requireAuth from '../../hoc/requireAuth';

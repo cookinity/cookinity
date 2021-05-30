@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 import { useFormik } from 'formik';
 
-import { registerUserWithEmail } from '../../store/actions/registerActions';
+import { registerUserWithEmail } from '../../store/features/registration/registerActions';
 import { registerSchema } from './validation';
 import './styles.scss';
 

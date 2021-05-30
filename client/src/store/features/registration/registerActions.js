@@ -4,7 +4,7 @@ import {
   REGISTER_WITH_EMAIL_LOADING,
   REGISTER_WITH_EMAIL_SUCCESS,
   REGISTER_WITH_EMAIL_FAIL,
-} from '../types';
+} from '../../types';
 
 export const registerUserWithEmail = (formData, history) => async (dispatch, getState) => {
   dispatch({ type: REGISTER_WITH_EMAIL_LOADING });

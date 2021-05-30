@@ -1,33 +1,31 @@
-import {
-  REGISTER_WITH_EMAIL_LOADING,
-  REGISTER_WITH_EMAIL_SUCCESS,
-  REGISTER_WITH_EMAIL_FAIL,
-} from '../types';
+import { GET_USERS_LOADING, GET_USERS_SUCCESS, GET_USERS_FAIL } from '../../types';
 
 const initialState = {
+  users: [],
   isLoading: false,
   error: null,
 };
 
 export default function (state = initialState, { type, payload }) {
   switch (type) {
-    case REGISTER_WITH_EMAIL_LOADING:
+    case GET_USERS_LOADING:
       return {
         ...state,
         isLoading: true,
         error: null,
       };
-    case REGISTER_WITH_EMAIL_SUCCESS:
+    case GET_USERS_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        error: null,
+        users: payload.users,
       };
-    case REGISTER_WITH_EMAIL_FAIL:
+    case GET_USERS_FAIL:
       return {
         ...state,
         isLoading: false,
-        error: payload.error,
+        users: [],
+        error: payload,
       };
     default:
       return state;
