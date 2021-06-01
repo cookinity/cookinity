@@ -74,7 +74,6 @@ const CreateClass = () => {
           resetForm();
           setClassCreated(true);
         } catch (err) {
-          debugger;
           setIsError(true);
           setErrorMessage(err?.response?.data.message || err.message);
         }
