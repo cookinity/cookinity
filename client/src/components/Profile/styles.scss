@@ -5,7 +5,7 @@
 
 .profile .avatar {
   width: 220px;
-  height: 220px;
+  height: 260px;
   align-self: center;
   margin-right: 20px;
   object-fit: cover;
@@ -43,4 +43,8 @@
 }
 .profile .form {
   margin-bottom: 30px;
+}
+
+.layout {
+  margin-left: 15px;
 }

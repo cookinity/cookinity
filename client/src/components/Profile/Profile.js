@@ -11,6 +11,7 @@ import Layout from '../Layout/Layout';
 import Loader from '../Shared/Loader/Loader';
 import requireAuth from '../../higherOrderComponents/requireAuth';
 import { profileSchema } from './validation';
+import {Button, Form, Image} from 'react-bootstrap'
 
 import './styles.scss';
 
@@ -80,140 +81,154 @@ const Profile = ({
 
   return (
     <Layout>
-      <div className="profile">
-        <h1>Profile page</h1>
-        <p>
-          This is the profile page. User can edit his own profile and Admin can edit any user's
-          profile. Only authenticated users can see this page.
-        </p>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <div className="profile-info">
-            <img src={image ? image : profile.avatar} className="avatar" />
-            <div className="info-container">
-              <div>
-                <span className="label">Provider: </span>
-                <span className="info">{profile.provider}</span>
-              </div>
-              <div>
-                <span className="label">Role: </span>
-                <span className="info">{profile.role}</span>
-              </div>
-              <div>
-                <span className="label">Name: </span>
-                <span className="info">{profile.name}</span>
-              </div>
-              <div>
-                <span className="label">Username: </span>
-                <span className="info">{profile.username}</span>
-              </div>
-              <div>
-                <span className="label">Email: </span>
-                <span className="info">{profile.email}</span>
-              </div>
-              <div>
-                <span className="label">Joined: </span>
-                <span className="info">
-                  {moment(profile.createdAt).format('dddd, MMMM Do YYYY, H:mm:ss')}
-                </span>
-              </div>
-              <div>
-                <button
-                  className="btn"
-                  type="button"
-                  onClick={handleClickEdit}
-                  disabled={!(me?.username === profile.username || me?.role === 'ADMIN')}
-                >
-                  {isEdit ? 'Cancel' : 'Edit'}
-                </button>
+      <div className = "layout">
+        <div className="profile">
+          <h1>Profile page</h1>
+          <p>
+            This is the profile page. User can edit his own profile and Admin can edit any user's
+            profile. Only authenticated users can see this page.
+          </p>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <div className="profile-info">
+              <Image src={image ? image : profile.avatar} className="avatar" rounded />
+              <div className="info-container">
+                <div>
+                  <span className="label">Provider: </span>
+                  <span className="info">{profile.provider}</span>
+                </div>
+                <div>
+                  <span className="label">Role: </span>
+                  <span className="info">{profile.role}</span>
+                </div>
+                <div>
+                  <span className="label">Name: </span>
+                  <span className="info">{profile.name}</span>
+                </div>
+                <div>
+                  <span className="label">Username: </span>
+                  <span className="info">{profile.username}</span>
+                </div>
+                <div>
+                  <span className="label">Email: </span>
+                  <span className="info">{profile.email}</span>
+                </div>
+                <div>
+                  <span className="label">Joined: </span>
+                  <span className="info">
+                    {moment(profile.createdAt).format('dddd, MMMM Do YYYY, H:mm:ss')}
+                  </span>
+                </div>
+                <div>
+                  <Button 
+                    variant="primary" 
+                    type="button"
+                    onClick={handleClickEdit}
+                    disabled={!(me?.username === profile.username || me?.role === 'ADMIN')}
+                  >
+                    {isEdit ? 'Cancel' : 'Edit'}
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {error && <p className="error">{error}</p>}
+          {error && <p className="error">{error}</p>}
 
-        {isEdit && (
-          <div className="form">
-            <form onSubmit={formik.handleSubmit}>
-              <div>
-                <label>Avatar:</label>
-                <input name="image" type="file" onChange={onChange} />
-                {image && (
-                  <button
-                    className="btn"
-                    onClick={() => {
-                      setImage(null);
-                      setAvatar(null);
-                    }}
-                    type="button"
-                  >
-                    Remove Image
-                  </button>
-                )}
-              </div>
-              <input name="id" type="hidden" value={formik.values.id} />
-              <div className="input-div">
-                <label>Name:</label>
-                <input
-                  placeholder="Name"
-                  name="name"
-                  className=""
-                  type="text"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.name}
-                />
-                {formik.touched.name && formik.errors.name ? (
-                  <p className="error">{formik.errors.name}</p>
-                ) : null}
-              </div>
-              <div className="input-div">
-                <label>Username:</label>
-                <input
-                  placeholder="Username"
-                  name="username"
-                  className=""
-                  type="text"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.username}
-                />
-                {formik.touched.username && formik.errors.username ? (
-                  <p className="error">{formik.errors.username}</p>
-                ) : null}
-              </div>
-              {profile.provider === 'email' && (
+          {isEdit && (
+            <div className="form">
+              <form onSubmit={formik.handleSubmit}>
+                <div>
+                  <Form>
+                    <Form.Group>
+                      <Form.File label="Avatar:"name="image" type="file" onChange={onChange}/>
+                    </Form.Group>
+                  </Form>
+                  {image && (
+                    <Button 
+                      style={{marginBottom: 5}}
+                      variant="primary"
+                      type="button"
+                      onClick={() => {
+                        setImage(null);
+                        setAvatar(null);
+                      }}
+                    >
+                      Remove Image
+                    </Button>
+                  )}
+                </div>
+                <input name="id" type="hidden" value={formik.values.id} />
                 <div className="input-div">
-                  <label>Password:</label>
-                  <input
-                    placeholder="Password"
-                    name="password"
-                    className=""
-                    type="password"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.password}
-                  />
-                  {formik.touched.password && formik.errors.password ? (
-                    <p className="error">{formik.errors.password}</p>
+                  <Form>
+                    <Form.Group controlId="nameInput">
+                      <Form.Label>Name:</Form.Label>
+                      <Form.Control placeholder="Name"
+                          name="name"
+                          className=""
+                          type="text"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.name} 
+                      />
+                    </Form.Group>
+                  </Form>
+                  {formik.touched.name && formik.errors.name ? (
+                    <p className="error">{formik.errors.name}</p>
                   ) : null}
                 </div>
-              )}
-              <button type="submit" className="btn">
-                Save
-              </button>
-              <button
-                onClick={() => handleDeleteUser(profile.id, history)}
-                type="button"
-                className="btn"
-              >
-                Delete profile
-              </button>
-            </form>
-          </div>
-        )}
+                <div className="input-div">
+                  <Form>
+                    <Form.Group controlId="userNameInput">
+                      <Form.Label>Username:</Form.Label>
+                      <Form.Control 
+                          placeholder="Username"
+                          name="username"
+                          className=""
+                          type="text"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.username}
+                      />
+                    </Form.Group>
+                  </Form>
+                  {formik.touched.username && formik.errors.username ? (
+                    <p className="error">{formik.errors.username}</p>
+                  ) : null}
+                </div>
+                {profile.provider === 'email' && (
+                  <div className="input-div" style={{marginBottom: 10}}>
+                    <Form.Group controlId="userNameInput">
+                      <Form.Label>Password:</Form.Label>
+                      <Form.Control 
+                          placeholder="Password"
+                          name="password"
+                          className=""
+                          type="password"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.password}
+                      />
+                    </Form.Group>
+                    {formik.touched.password && formik.errors.password ? (
+                      <p className="error">{formik.errors.password}</p>
+                    ) : null}
+                  </div>
+                )}
+                <Button variant = "primary" type="submit">
+                  Save
+                </Button>
+                <Button
+                  variant = "primary"
+                  onClick={() => handleDeleteUser(profile.id, history)}
+                >
+                  Delete profile
+                </Button>
+              </form>
+            </div>
+          )}
+        </div>
       </div>
     </Layout>
   );
