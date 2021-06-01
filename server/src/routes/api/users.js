@@ -31,7 +31,6 @@ const upload = multer({
 
 router.put('/:id', [requireJwtAuth, upload.single('avatar')], async (req, res, next) => {
   try {
-    debugger;
     const tempUser = await User.findById(req.params.id);
     if (!tempUser) return res.status(404).json({ message: 'No such user.' });
     if (!(tempUser.id === req.user.id || req.user.role === 'ADMIN'))

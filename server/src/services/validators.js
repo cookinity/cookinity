@@ -5,6 +5,12 @@ export const loginSchema = Joi.object().keys({
   password: Joi.string().trim().min(6).max(20).required(),
 });
 
+// ToDo: Write Class Schema Validator
+// export const classSchema = Joi.object().keys({
+//   name: Joi.string().trim().required(),
+
+// })
+
 export const registerSchema = Joi.object().keys({
   name: Joi.string().trim().min(2).max(30).required(),
   username: Joi.string()

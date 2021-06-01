@@ -1,5 +1,16 @@
 // Override default variables before the import
 // $body-bg: #000;  <--- Example
 
+.form-error {
+  border: 2px solid #ff6565 !important;
+}
+
+.form-error-message {
+  color: #ff6565;
+  padding: 0.5em 0.2em;
+  height: 1em;
+  font-size: 0.8em;
+}
+
 // Import Bootstrap and its default variables
-@import './theme.css';
+@import '~bootstrap/scss/bootstrap.scss';

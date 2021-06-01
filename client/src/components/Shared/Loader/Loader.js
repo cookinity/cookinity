@@ -1,11 +1,12 @@
 import React from 'react';
+import { Spinner } from 'react-bootstrap';
 
-import './styles.scss';
-
-const Loader = (props) => {
+const Loader = () => {
   return (
-    <div className="loader-container loader" {...props}>
-      <h3 className="loader-content">Loading..</h3>
+    <div className="text-center">
+      <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
     </div>
   );
 };
