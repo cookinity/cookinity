@@ -21,12 +21,15 @@ export const NavigationBar = () => {
   if (auth.isAuthenticated) {
     navBarContent = (
       <>
+        <LinkContainer to="/hostmanagement">
+          <Nav.Link>Host a Class</Nav.Link>
+        </LinkContainer>
         <LinkContainer to="/users">
           <Nav.Link>Users</Nav.Link>
         </LinkContainer>
         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
           <LinkContainer to={`/${auth.me.username}`}>
-            <NavDropdown.Item>Profile</NavDropdown.Item>
+            <NavDropdown.Item>Your Profile</NavDropdown.Item>
           </LinkContainer>
           {auth.me?.role === 'ADMIN' && (
             <LinkContainer to="/admin">
