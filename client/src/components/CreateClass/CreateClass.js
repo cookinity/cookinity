@@ -1,13 +1,14 @@
 import Layout from 'components/Layout/Layout';
-import { Formik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
-import { Button, Col, Form } from 'react-bootstrap';
+import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { compose } from 'redux';
 import requireAuth from '../../higherOrderComponents/requireAuth';
 import { CLASS_CATEGORIES } from './ClassCategories';
 
 import { useFormik } from 'formik';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
@@ -21,6 +22,10 @@ const validationSchema = Yup.object().shape({
 });
 
 const CreateClass = () => {
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const auth = useSelector((state) => state.auth);
+
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -33,8 +38,46 @@ const CreateClass = () => {
       street: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: (values, { setSubmitting, resetForm }) => {
+      const submit = async () => {
+        setSubmitting(true);
+        setIsError(false);
+        try {
+          const { title, category, description, country, city, zip, state, street } = values;
+          const token = auth.token;
+          const config = {
+            headers: {
+              'Content-type': 'application/json',
+            },
+          };
+          if (token) {
+            config.headers['x-auth-token'] = token;
+          }
+
+          const result = axios.post(
+            '/api/classes',
+            {
+              title,
+              category,
+              description,
+              meetingAddress: {
+                country,
+                city,
+                zip,
+                state,
+                street,
+              },
+            },
+            config,
+          );
+          resetForm();
+        } catch (err) {
+          setIsError(true);
+          setErrorMessage(err?.response?.data.message || err.message);
+        }
+        setSubmitting(false);
+      };
+      submit();
     },
   });
 
@@ -45,6 +88,19 @@ const CreateClass = () => {
   return (
     <Layout>
       <div className="mt-2">
+        {isError && (
+          <Alert
+            variant="danger"
+            onClose={() => {
+              setIsError(false);
+              setErrorMessage('');
+            }}
+            dismissible
+          >
+            {' '}
+            {errorMessage}
+          </Alert>
+        )}
         <h1>Host A New Cooking Class</h1>
         <Form className="mx-auto" onSubmit={formik.handleSubmit} noValidate>
           <Form.Group controlId="title">
@@ -175,14 +231,7 @@ const CreateClass = () => {
             ) : null}
           </Form.Group>
 
-          <Button
-            variant="primary"
-            type="submit"
-            onClick={(event) => {
-              event.preventDefault();
-              console.log(formik.values);
-            }}
-          >
+          <Button variant="primary" type="submit">
             Create Class
           </Button>
         </Form>
