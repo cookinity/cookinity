@@ -24,6 +24,7 @@ const validationSchema = Yup.object().shape({
 const CreateClass = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [classCreated, setClassCreated] = useState(false);
   const auth = useSelector((state) => state.auth);
 
   const formik = useFormik({
@@ -54,7 +55,7 @@ const CreateClass = () => {
             config.headers['x-auth-token'] = token;
           }
 
-          const result = axios.post(
+          await axios.post(
             '/api/classes',
             {
               title,
@@ -71,7 +72,9 @@ const CreateClass = () => {
             config,
           );
           resetForm();
+          setClassCreated(true);
         } catch (err) {
+          debugger;
           setIsError(true);
           setErrorMessage(err?.response?.data.message || err.message);
         }
@@ -99,6 +102,18 @@ const CreateClass = () => {
           >
             {' '}
             {errorMessage}
+          </Alert>
+        )}
+        {classCreated && (
+          <Alert
+            variant="success"
+            onClose={() => {
+              setClassCreated(false);
+            }}
+            dismissible
+          >
+            {' '}
+            Class created!
           </Alert>
         )}
         <h1>Host A New Cooking Class</h1>
