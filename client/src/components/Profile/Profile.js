@@ -11,6 +11,7 @@ import Layout from '../Layout/Layout';
 import Loader from '../Shared/Loader/Loader';
 import requireAuth from '../../higherOrderComponents/requireAuth';
 import { profileSchema } from './validation';
+import {Button, Form, Image} from 'react-bootstrap'
 
 import './styles.scss';
 
@@ -90,7 +91,7 @@ const Profile = ({
           <Loader />
         ) : (
           <div className="profile-info">
-            <img src={image ? image : profile.avatar} className="avatar" />
+            <Image src={image ? image : profile.avatar} className="avatar" rounded />
             <div className="info-container">
               <div>
                 <span className="label">Provider: </span>
@@ -119,14 +120,14 @@ const Profile = ({
                 </span>
               </div>
               <div>
-                <button
-                  className="btn"
+                <Button 
+                  variant="primary" 
                   type="button"
                   onClick={handleClickEdit}
                   disabled={!(me?.username === profile.username || me?.role === 'ADMIN')}
                 >
                   {isEdit ? 'Cancel' : 'Edit'}
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -138,79 +139,91 @@ const Profile = ({
           <div className="form">
             <form onSubmit={formik.handleSubmit}>
               <div>
-                <label>Avatar:</label>
-                <input name="image" type="file" onChange={onChange} />
+                <Form>
+                  <Form.Group>
+                    <Form.File label="Avatar:"name="image" type="file" onChange={onChange}/>
+                  </Form.Group>
+                </Form>
                 {image && (
-                  <button
-                    className="btn"
+                  <Button 
+                    style={{marginBottom: 5}}
+                    variant="primary"
+                    type="button"
                     onClick={() => {
                       setImage(null);
                       setAvatar(null);
                     }}
-                    type="button"
                   >
                     Remove Image
-                  </button>
+                  </Button>
                 )}
               </div>
               <input name="id" type="hidden" value={formik.values.id} />
               <div className="input-div">
-                <label>Name:</label>
-                <input
-                  placeholder="Name"
-                  name="name"
-                  className=""
-                  type="text"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.name}
-                />
+                <Form>
+                  <Form.Group controlId="nameInput">
+                    <Form.Label>Name:</Form.Label>
+                    <Form.Control placeholder="Name"
+                        name="name"
+                        className=""
+                        type="text"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.name} 
+                    />
+                  </Form.Group>
+                </Form>
                 {formik.touched.name && formik.errors.name ? (
                   <p className="error">{formik.errors.name}</p>
                 ) : null}
               </div>
               <div className="input-div">
-                <label>Username:</label>
-                <input
-                  placeholder="Username"
-                  name="username"
-                  className=""
-                  type="text"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.username}
-                />
+                <Form>
+                  <Form.Group controlId="userNameInput">
+                    <Form.Label>Username:</Form.Label>
+                    <Form.Control 
+                        placeholder="Username"
+                        name="username"
+                        className=""
+                        type="text"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.username}
+                    />
+                  </Form.Group>
+                </Form>
                 {formik.touched.username && formik.errors.username ? (
                   <p className="error">{formik.errors.username}</p>
                 ) : null}
               </div>
               {profile.provider === 'email' && (
-                <div className="input-div">
-                  <label>Password:</label>
-                  <input
-                    placeholder="Password"
-                    name="password"
-                    className=""
-                    type="password"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.password}
-                  />
+                <div className="input-div" style={{marginBottom: 10}}>
+                  <Form.Group controlId="userNameInput">
+                    <Form.Label>Password:</Form.Label>
+                    <Form.Control 
+                        placeholder="Password"
+                        name="password"
+                        className=""
+                        type="password"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.password}
+                    />
+                  </Form.Group>
                   {formik.touched.password && formik.errors.password ? (
                     <p className="error">{formik.errors.password}</p>
                   ) : null}
                 </div>
               )}
-              <button type="submit" className="btn">
+              <Button variant = "primary" type="submit">
                 Save
-              </button>
-              <button
+              </Button>
+              <Button
+                variant = "primary"
                 onClick={() => handleDeleteUser(profile.id, history)}
-                type="button"
-                className="btn"
               >
                 Delete profile
-              </button>
+              </Button>
             </form>
           </div>
         )}
