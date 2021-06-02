@@ -41,7 +41,7 @@ const Users = ({ getUsers, users: { users, isLoading } }) => {
             <>
               {users.map((user, index) => {
                 return (
-                  <Card border="primary" style={{ width: '18rem' }} className="pull-left mr-3">
+                  <Card border="primary" style={{ width: '18rem' }} className={"pull-left mr-3 mb-3"}>
                     <Card.Img variant="top" src={user.avatar} />
                     <Card.Body>
                       <Card.Text>
