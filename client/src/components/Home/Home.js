@@ -9,11 +9,18 @@ export const Home = () => {
 
   return (
     <Layout>
-      <Container>
-        <Row>
-          <Col>Hello World</Col>
-        </Row>
-      </Container>
+      <Row>
+        <Col> <div className="users" >
+          <p className="text-primary">
+            <p className="text-center">
+              <p className="font-weight-bold">
+                <h1>Cookinity</h1>
+              </p>
+            </p>
+          </p>
+        </div></Col>
+      </Row>
     </Layout>
+
   );
 };
