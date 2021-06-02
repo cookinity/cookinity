@@ -4,15 +4,15 @@ export const registerSchema = Yup.object({
   name: Yup.string()
     .min(2, 'Must be 2 characters at minimum')
     .max(30, 'Must be 30 characters or less')
-    .required('Required'),
+    .required('Name required'),
   username: Yup.string()
     .min(2, 'Must be 2 characters at minimum')
     .max(20, 'Must be 20 characters or less')
     .matches(/^[a-zA-Z0-9_]+$/, 'Invalid characters in username')
-    .required('Required'),
-  email: Yup.string().email('Invalid email address').required('Required'),
+    .required('Username required'),
+  email: Yup.string().email('Invalid email address').required('Email required'),
   password: Yup.string()
     .min(6, 'Must be 6 characters at minimum')
     .max(20, 'Must be 20 characters or less')
-    .required('Required'),
+    .required('Password required'),
 });
