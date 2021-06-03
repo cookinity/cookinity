@@ -1,5 +1,8 @@
 import Joi from 'joi';
 import mongoose from 'mongoose';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 const { Schema } = mongoose;
 import { CLASS_CATEGORIES } from './ClassCategories';
 
@@ -59,6 +62,7 @@ const classSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    bookableDates: [Date],
   },
   { timestamps: true },
 );
@@ -73,6 +77,10 @@ classSchema.methods.toJSON = function () {
     host: this.host.toJSON(),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
+    bookableDates: this.bookableDates.map((date) => {
+      // format as a string using dayjs (can be parsed on the frontend using dayjs) ! This will be also UTC --> convert it for display in frontend using dayjs if necessary
+      return dayjs(date).utc().toJSON();
+    }),
   };
 };
 
@@ -94,6 +102,7 @@ export const validateClass = (c) => {
       .required(),
     description: Joi.string().required(),
     meetingAddress: addressSchema,
+    bookableDates: Joi.array().items(Joi.date()),
   });
 
   return classSchema.validate(c);

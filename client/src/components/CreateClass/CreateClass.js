@@ -10,6 +10,13 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
+import { Calendar } from 'react-multi-date-picker';
+import DatePanel from 'react-multi-date-picker/plugins/date_panel';
+import TimePicker from 'react-multi-date-picker/plugins/time_picker';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+
 const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   category: Yup.string().required('Category is required'),
@@ -25,6 +32,9 @@ const CreateClass = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [classCreated, setClassCreated] = useState(false);
+  const [bookableDates, setBookableDates] = useState([]);
+  const [focusedDate, setFocusedDate] = useState();
+
   const auth = useSelector((state) => state.auth);
 
   const formik = useFormik({
@@ -45,6 +55,7 @@ const CreateClass = () => {
         setIsError(false);
         try {
           const { title, category, description, country, city, zip, state, street } = values;
+
           const token = auth.token;
           const config = {
             headers: {
@@ -68,10 +79,16 @@ const CreateClass = () => {
                 state,
                 street,
               },
+              // We convert to UTC before sending the dates to the backend
+              bookableDates: bookableDates.map((dateObject) =>
+                dayjs(dateObject.toDate()).utc().toJSON(),
+              ),
             },
             config,
           );
           resetForm();
+          setBookableDates([]);
+          setFocusedDate(undefined);
           setClassCreated(true);
         } catch (err) {
           setIsError(true);
@@ -230,7 +247,7 @@ const CreateClass = () => {
             </Form.Group>
           </Form.Row>
 
-          <Form.Group controlId="steet">
+          <Form.Group controlId="street">
             <Form.Label>Street</Form.Label>
             <Form.Control
               placeholder="TastyStreet 11"
@@ -244,7 +261,40 @@ const CreateClass = () => {
               <div className="form-error-message">{formik.errors.street}</div>
             ) : null}
           </Form.Group>
+          <hr></hr>
+          <Form.Group controlId="bookableDates">
+            <Form.Label>Bookable Dates</Form.Label>
+            <Calendar
+              format="DD/MM/YYYY HH:mm"
+              minDate={new Date()}
+              plugins={[
+                <DatePanel
+                  sort="date"
+                  position="bottom"
+                  header="Bookable Dates"
+                  markFocused
+                  focusedClassName="bg-green"
+                />,
+                <TimePicker hideSeconds position="right" />,
+              ]}
+              multiple
+              sort
+              onFocusedDateChange={setFocusedDate}
+              onClose={() => setFocusedDate(undefined)}
+              weekStartDayIndex={1}
+              value={bookableDates}
+              onChange={setBookableDates}
+              mapDays={({ date, isSameDate }) => {
+                let props = {};
 
+                if (!isSameDate(date, focusedDate)) return;
+
+                props.style = { backgroundColor: 'green' };
+
+                return props;
+              }}
+            />
+          </Form.Group>
           <Button variant="primary" type="submit">
             Create Class
           </Button>
