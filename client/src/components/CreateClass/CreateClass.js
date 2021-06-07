@@ -292,6 +292,7 @@ const CreateClass = () => {
           <Form.Group controlId="bookableDates">
             <Form.Label>Choose Dates for Which Your Class Can be Booked</Form.Label>
             <Calendar
+              className="mx-auto"
               format="DD/MM/YYYY HH:mm"
               minDate={new Date()}
               plugins={[
