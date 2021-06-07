@@ -34,6 +34,7 @@
     "express-list-endpoints": "^5.0.0",
     "faker": "^5.5.3",
     "joi": "^17.4.0",
+    "joi-oid": "^1.1.2",
     "jsonwebtoken": "^8.5.1",
     "mime": "^2.5.2",
     "mongoose": "^5.12.11",

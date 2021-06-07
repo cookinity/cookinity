@@ -66,25 +66,45 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', [requireJwtAuth, upload.single('coverPhoto')], async (req, res, next) => {
+router.post('/', [requireJwtAuth, upload.array('photos[]', 3)], async (req, res, next) => {
   req.body.bookableDates = JSON.parse(req.body.bookableDates);
-  const { error } = validateClass(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-  let coverPhoto = null;
-  if (req.file) {
-    coverPhoto = req.file.filename;
+  let coverPhoto = undefined;
+  let photoOne = undefined;
+  let photoTwo = undefined;
+  // cover photo is at position 0
+  // photo one is at position 1
+  // photo two is at position 2
+  if (req.files) {
+    if (req.files[0]) {
+      coverPhoto = req.files[0].filename;
+    }
+    if (req.files[1]) {
+      photoOne = req.files[1].filename;
+    }
+    if (req.files[2]) {
+      photoTwo = req.files[2].filename;
+    }
   }
+
+  const c = {
+    title: req.body.title,
+    coverPhoto: coverPhoto,
+    photoOne: photoOne,
+    photoTwo: photoTwo,
+    category: req.body.category,
+    description: req.body.description,
+    meetingAddress: req.body.meetingAddress,
+    host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
+    bookableDates: req.body.bookableDates.map((date) => dayjs(date).utc().toDate()),
+  };
+
+  Object.keys(c).forEach((key) => (c[key] === undefined ? delete c[key] : {}));
+
+  const { error } = validateClass(c);
+  if (error) return res.status(400).json({ message: error.details[0].message });
+
   try {
-    let newClass = await Class.create({
-      title: req.body.title,
-      coverPhoto: coverPhoto,
-      category: req.body.category,
-      description: req.body.description,
-      meetingAddress: req.body.meetingAddress,
-      host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
-      //
-      bookableDates: req.body.bookableDates.map((date) => dayjs(date).utc().toDate()),
-    });
+    let newClass = await Class.create(c);
     newClass = await newClass.populate('host').execPopulate();
     res.status(200).json({ class: newClass.toJSON() });
   } catch (err) {

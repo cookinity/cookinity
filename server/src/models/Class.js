@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from 'joi-oid';
 import mongoose from 'mongoose';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -52,6 +52,14 @@ const classSchema = new Schema(
       type: String,
       required: true,
     },
+    photoOne: {
+      type: String,
+      required: false,
+    },
+    photoTwo: {
+      type: String,
+      required: false,
+    },
     category: {
       type: String,
       enum: CLASS_CATEGORIES,
@@ -75,17 +83,34 @@ const classSchema = new Schema(
 );
 
 classSchema.methods.toJSON = function () {
+  // cover photo
   const absoluteCoverPhotoPath = `${join(__dirname, '../..', process.env.IMAGES_FOLDER_PATH)}${this.coverPhoto}`;
   let coverPhoto = undefined;
   if (!this.coverPhoto || !fs.existsSync(absoluteCoverPhotoPath)) {
-    coverPhoto = `${process.env.IMAGES_FOLDER_PATH}dummyCover.png`;
+    coverPhoto = `${process.env.IMAGES_FOLDER_PATH}dummyCover.png`; // actually not needed as there should always be one but just to be safe
   } else {
     coverPhoto = `${process.env.IMAGES_FOLDER_PATH}${this.coverPhoto}`;
   }
+  // photo one
+  const absolutePhotoOnePath = `${join(__dirname, '../..', process.env.IMAGES_FOLDER_PATH)}${this.photoOne}`;
+  let photoOne = undefined;
+  if (this.photoOne && fs.existsSync(absolutePhotoOnePath)) {
+    photoOne = `${process.env.IMAGES_FOLDER_PATH}${this.photoOne}`;
+  }
+
+  // photo two
+  const absolutePhotoTwoPath = `${join(__dirname, '../..', process.env.IMAGES_FOLDER_PATH)}${this.photoTwo}`;
+  let photoTwo = undefined;
+  if (this.photoTwo && fs.existsSync(absolutePhotoTwoPath)) {
+    photoTwo = `${process.env.IMAGES_FOLDER_PATH}${this.photoTwo}`;
+  }
+
   return {
     id: this._id,
     title: this.title,
     coverPhoto,
+    photoOne,
+    photoTwo,
     category: this.category,
     description: this.description,
     meetingAddress: this.meetingAddress.toJSON(),
@@ -112,6 +137,10 @@ export const validateClass = (c) => {
 
   const classSchema = Joi.object().keys({
     title: Joi.string().required(),
+    coverPhoto: Joi.string().required(),
+    host: Joi.objectId().required(),
+    photoOne: Joi.string(),
+    photoTwo: Joi.string(),
     category: Joi.string()
       .valid(...CLASS_CATEGORIES)
       .required(),

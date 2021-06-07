@@ -1,9 +1,10 @@
-#upload {
+.upload {
   opacity: 0;
 }
 
-#upload-label {
+.upload-label {
   position: absolute;
+  font-size: x-small;
   top: 50%;
   left: 1rem;
   transform: translateY(-50%);

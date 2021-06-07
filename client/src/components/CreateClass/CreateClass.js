@@ -1,6 +1,5 @@
 import Layout from 'components/Layout/Layout';
 import React, { useState } from 'react';
-import * as Yup from 'yup';
 import { Alert, Button, Col, Form } from 'react-bootstrap';
 import { compose } from 'redux';
 import requireAuth from '../../higherOrderComponents/requireAuth';
@@ -9,25 +8,14 @@ import { CLASS_CATEGORIES } from './ClassCategories';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-
+import { validationSchema } from './classValidation';
 import { Calendar } from 'react-multi-date-picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import './styles.scss';
+import ImageUpload from './ImageUpload';
 dayjs.extend(utc);
-
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required'),
-  category: Yup.string().required('Category is required'),
-  description: Yup.string().required('Description is required'),
-  country: Yup.string().required('Country is required'),
-  city: Yup.string().required('City is required'),
-  zip: Yup.string().required('Zip Code is required'),
-  state: Yup.string().required('State is required'),
-  street: Yup.string().required('Street is required'),
-});
 
 const CreateClass = () => {
   const [isError, setIsError] = useState(false);
@@ -35,15 +23,39 @@ const CreateClass = () => {
   const [classCreated, setClassCreated] = useState(false);
   const [bookableDates, setBookableDates] = useState([]);
   const [focusedDate, setFocusedDate] = useState();
+  // coverPhoto
   const [coverPhoto, setCoverPhoto] = useState(null);
-  const [coverImage, setCoverImage] = useState(null);
-
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState(null);
+  // photoOne
+  const [photoOne, setPhotoOne] = useState(null);
+  const [photoOneUrl, setPhotoOneUrl] = useState(null);
+  // photoTwo
+  const [photoTwo, setPhotoTwo] = useState(null);
+  const [photoTwoUrl, setPhotoTwoUrl] = useState(null);
   const auth = useSelector((state) => state.auth);
 
   const onCoverPhotoChange = (event) => {
-    formik.setFieldValue('coverPhoto', event.currentTarget.files[0]);
-    setCoverImage(URL.createObjectURL(event.target.files[0]));
-    setCoverPhoto(event.target.files[0]);
+    if (event.target.files.length !== 0) {
+      formik.setFieldValue('coverPhoto', event.currentTarget.files[0]);
+      setCoverPhotoUrl(URL.createObjectURL(event.target.files[0]));
+      setCoverPhoto(event.target.files[0]);
+    }
+  };
+
+  const onPhotoOneChange = (event) => {
+    if (event.target.files.length !== 0) {
+      formik.setFieldValue('photoOne', event.currentTarget.files[0]);
+      setPhotoOneUrl(URL.createObjectURL(event.target.files[0]));
+      setPhotoOne(event.target.files[0]);
+    }
+  };
+
+  const onPhotoTwoChange = (event) => {
+    if (event.target.files.length !== 0) {
+      formik.setFieldValue('photoTwo', event.currentTarget.files[0]);
+      setPhotoTwoUrl(URL.createObjectURL(event.target.files[0]));
+      setPhotoTwo(event.target.files[0]);
+    }
   };
 
   const formik = useFormik({
@@ -56,6 +68,9 @@ const CreateClass = () => {
       state: '',
       zip: '',
       street: '',
+      coverPhoto: null,
+      photoOne: null,
+      photoTwo: null,
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
@@ -63,7 +78,19 @@ const CreateClass = () => {
         setSubmitting(true);
         setIsError(false);
         try {
-          const { title, category, description, country, city, zip, state, street } = values;
+          const {
+            title,
+            category,
+            description,
+            country,
+            city,
+            zip,
+            state,
+            street,
+            coverPhoto,
+            photoOne,
+            photoTwo,
+          } = values;
           const data = {
             title,
             category,
@@ -87,6 +114,11 @@ const CreateClass = () => {
               formData.append(dataKey, data[dataKey]);
             }
           }
+          const photos = [coverPhoto, photoOne, photoTwo];
+          for (const photo of photos) {
+            formData.append('photos[]', photo);
+          }
+
           // We convert to UTC before sending the dates to the backend
           formData.append(
             'bookableDates',
@@ -94,8 +126,6 @@ const CreateClass = () => {
               bookableDates.map((dateObject) => dayjs(dateObject.toDate()).utc().toJSON()),
             ),
           );
-          // Adding the cover photo
-          formData.append('coverPhoto', coverPhoto);
           // adding the necessary security header
           const token = auth.token;
           const config = {
@@ -109,6 +139,12 @@ const CreateClass = () => {
 
           await axios.post('/api/classes', formData, config);
           resetForm();
+          setCoverPhoto(null);
+          setCoverPhotoUrl(null);
+          setPhotoOne(null);
+          setPhotoOneUrl(null);
+          setPhotoTwo(null);
+          setPhotoTwoUrl(null);
           setBookableDates([]);
           setFocusedDate(undefined);
           setClassCreated(true);
@@ -123,7 +159,7 @@ const CreateClass = () => {
   });
 
   const classCategories = CLASS_CATEGORIES.map((category) => {
-    return <option>{category}</option>;
+    return <option key={category}>{category}</option>;
   });
 
   return (
@@ -324,41 +360,51 @@ const CreateClass = () => {
             />
           </Form.Group>
           <hr></hr>
-          <Form.Group>
-            <Form.Label>Choose a Cover Photo For Your Class</Form.Label>
-            <div className="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
-              <input
-                id="upload"
-                type="file"
-                onChange={onCoverPhotoChange}
-                className="form-control border-0"
-              />
-              <label id="upload-label" htmlFor="upload" className="font-weight-light text-muted">
-                {coverPhoto ? coverPhoto.name : 'Choose a cover photo'}
-              </label>
-              <div className="input-group-append">
-                <label htmlFor="upload" className="btn btn-light m-0 rounded-pill px-4">
-                  {' '}
-                  <i className="fa fa-cloud-upload mr-2 text-muted"></i>
-                  <small className="text-uppercase font-weight-bold text-muted">Choose file</small>
-                </label>
-              </div>
-            </div>
 
-            <p className="font-italic text-center">
-              The image uploaded will be rendered inside the box below.
-            </p>
-            <div className="image-area mt-4">
-              <img
-                id="imageResult"
-                src={coverImage}
-                width="600px"
-                height="300px"
-                alt=""
-                className="img-fluid rounded shadow-sm mx-auto d-block"
-              />
-            </div>
-          </Form.Group>
+          <Form.Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>Choose a Cover Photo For Your Class</Form.Label>
+                <ImageUpload
+                  id="coverPhoto"
+                  onImageChange={onCoverPhotoChange}
+                  image={coverPhoto}
+                  imageUrl={coverPhotoUrl}
+                ></ImageUpload>
+                {formik.touched.coverPhoto && formik.errors.coverPhoto ? (
+                  <div className="form-error-message">{formik.errors.coverPhoto}</div>
+                ) : null}
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Choose an Additional Photo</Form.Label>
+                <ImageUpload
+                  id="photoOne"
+                  onImageChange={onPhotoOneChange}
+                  image={photoOne}
+                  imageUrl={photoOneUrl}
+                ></ImageUpload>
+                {formik.touched.photoOne && formik.errors.photoOne ? (
+                  <div className="form-error-message">{formik.errors.photoOne}</div>
+                ) : null}
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Choose an Additional Photo</Form.Label>
+                <ImageUpload
+                  id="photoTwo"
+                  onImageChange={onPhotoTwoChange}
+                  image={photoTwo}
+                  imageUrl={photoTwoUrl}
+                ></ImageUpload>
+                {formik.touched.photoTwo && formik.errors.photoTwo ? (
+                  <div className="form-error-message">{formik.errors.photoTwo}</div>
+                ) : null}
+              </Form.Group>
+            </Col>
+          </Form.Row>
           <hr></hr>
           <Button variant="primary" type="submit">
             Create Class
