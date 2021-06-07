@@ -15,6 +15,7 @@ import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import './styles.scss';
 dayjs.extend(utc);
 
 const validationSchema = Yup.object().shape({
@@ -35,11 +36,13 @@ const CreateClass = () => {
   const [bookableDates, setBookableDates] = useState([]);
   const [focusedDate, setFocusedDate] = useState();
   const [coverPhoto, setCoverPhoto] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
 
   const auth = useSelector((state) => state.auth);
 
   const onCoverPhotoChange = (event) => {
     formik.setFieldValue('coverPhoto', event.currentTarget.files[0]);
+    setCoverImage(URL.createObjectURL(event.target.files[0]));
     setCoverPhoto(event.target.files[0]);
   };
 
@@ -287,7 +290,7 @@ const CreateClass = () => {
           </Form.Group>
           <hr></hr>
           <Form.Group controlId="bookableDates">
-            <Form.Label>Bookable Dates</Form.Label>
+            <Form.Label>Choose Dates for Which Your Class Can be Booked</Form.Label>
             <Calendar
               format="DD/MM/YYYY HH:mm"
               minDate={new Date()}
@@ -321,12 +324,41 @@ const CreateClass = () => {
           </Form.Group>
           <hr></hr>
           <Form.Group>
-            <Form.Control
-              type="file"
-              name="coverPhoto"
-              onChange={onCoverPhotoChange}
-            ></Form.Control>
+            <Form.Label>Choose a Cover Photo For Your Class</Form.Label>
+            <div className="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+              <input
+                id="upload"
+                type="file"
+                onChange={onCoverPhotoChange}
+                className="form-control border-0"
+              />
+              <label id="upload-label" htmlFor="upload" className="font-weight-light text-muted">
+                {coverPhoto ? coverPhoto.name : 'Choose a cover photo'}
+              </label>
+              <div className="input-group-append">
+                <label htmlFor="upload" className="btn btn-light m-0 rounded-pill px-4">
+                  {' '}
+                  <i className="fa fa-cloud-upload mr-2 text-muted"></i>
+                  <small className="text-uppercase font-weight-bold text-muted">Choose file</small>
+                </label>
+              </div>
+            </div>
+
+            <p className="font-italic text-center">
+              The image uploaded will be rendered inside the box below.
+            </p>
+            <div className="image-area mt-4">
+              <img
+                id="imageResult"
+                src={coverImage}
+                width="600px"
+                height="300px"
+                alt=""
+                className="img-fluid rounded shadow-sm mx-auto d-block"
+              />
+            </div>
           </Form.Group>
+          <hr></hr>
           <Button variant="primary" type="submit">
             Create Class
           </Button>
