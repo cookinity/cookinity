@@ -2,6 +2,9 @@ import Joi from 'joi';
 import mongoose from 'mongoose';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { join } from 'path';
+import fs from 'fs';
+import { isValidUrl } from '../utils/utils';
 dayjs.extend(utc);
 const { Schema } = mongoose;
 import { CLASS_CATEGORIES } from './ClassCategories';
@@ -45,6 +48,10 @@ const classSchema = new Schema(
       type: String,
       required: true,
     },
+    coverPhoto: {
+      type: String,
+      required: true,
+    },
     category: {
       type: String,
       enum: CLASS_CATEGORIES,
@@ -68,9 +75,17 @@ const classSchema = new Schema(
 );
 
 classSchema.methods.toJSON = function () {
+  const absoluteCoverPhotoPath = `${join(__dirname, '../..', process.env.IMAGES_FOLDER_PATH)}${this.coverPhoto}`;
+  let coverPhoto = undefined;
+  if (!this.coverPhoto || !fs.existsSync(absoluteCoverPhotoPath)) {
+    coverPhoto = `${process.env.IMAGES_FOLDER_PATH}dummyCover.png`;
+  } else {
+    coverPhoto = `${process.env.IMAGES_FOLDER_PATH}${this.coverPhoto}`;
+  }
   return {
     id: this._id,
     title: this.title,
+    coverPhoto,
     category: this.category,
     description: this.description,
     meetingAddress: this.meetingAddress.toJSON(),

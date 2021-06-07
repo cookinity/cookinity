@@ -34,8 +34,14 @@ const CreateClass = () => {
   const [classCreated, setClassCreated] = useState(false);
   const [bookableDates, setBookableDates] = useState([]);
   const [focusedDate, setFocusedDate] = useState();
+  const [coverPhoto, setCoverPhoto] = useState(null);
 
   const auth = useSelector((state) => state.auth);
+
+  const onCoverPhotoChange = (event) => {
+    formik.setFieldValue('coverPhoto', event.currentTarget.files[0]);
+    setCoverPhoto(event.target.files[0]);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -55,7 +61,39 @@ const CreateClass = () => {
         setIsError(false);
         try {
           const { title, category, description, country, city, zip, state, street } = values;
-
+          const data = {
+            title,
+            category,
+            description,
+            meetingAddress: {
+              country,
+              city,
+              zip,
+              state,
+              street,
+            },
+          };
+          const formData = new FormData();
+          for (let dataKey in data) {
+            if (dataKey === 'meetingAddress') {
+              // append nested object
+              for (let addressKey in data[dataKey]) {
+                formData.append(`meetingAddress[${addressKey}]`, data[dataKey][addressKey]);
+              }
+            } else {
+              formData.append(dataKey, data[dataKey]);
+            }
+          }
+          // We convert to UTC before sending the dates to the backend
+          formData.append(
+            'bookableDates',
+            JSON.stringify(
+              bookableDates.map((dateObject) => dayjs(dateObject.toDate()).utc().toJSON()),
+            ),
+          );
+          // Adding the cover photo
+          formData.append('coverPhoto', coverPhoto);
+          // adding the necessary security header
           const token = auth.token;
           const config = {
             headers: {
@@ -66,26 +104,7 @@ const CreateClass = () => {
             config.headers['x-auth-token'] = token;
           }
 
-          await axios.post(
-            '/api/classes',
-            {
-              title,
-              category,
-              description,
-              meetingAddress: {
-                country,
-                city,
-                zip,
-                state,
-                street,
-              },
-              // We convert to UTC before sending the dates to the backend
-              bookableDates: bookableDates.map((dateObject) =>
-                dayjs(dateObject.toDate()).utc().toJSON(),
-              ),
-            },
-            config,
-          );
+          await axios.post('/api/classes', formData, config);
           resetForm();
           setBookableDates([]);
           setFocusedDate(undefined);
@@ -133,7 +152,12 @@ const CreateClass = () => {
           </Alert>
         )}
         <h1>Host A New Cooking Class</h1>
-        <Form className="mx-auto" onSubmit={formik.handleSubmit} noValidate>
+        <Form
+          className="mx-auto"
+          onSubmit={formik.handleSubmit}
+          noValidate
+          encType="multipart/form-data"
+        >
           <Form.Group controlId="title">
             <Form.Label>Title</Form.Label>
             <Form.Control
@@ -294,6 +318,14 @@ const CreateClass = () => {
                 return props;
               }}
             />
+          </Form.Group>
+          <hr></hr>
+          <Form.Group>
+            <Form.Control
+              type="file"
+              name="coverPhoto"
+              onChange={onCoverPhotoChange}
+            ></Form.Control>
           </Form.Group>
           <Button variant="primary" type="submit">
             Create Class

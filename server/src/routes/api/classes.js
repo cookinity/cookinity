@@ -1,11 +1,47 @@
 import { Router } from 'express';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import dayjs from 'dayjs';
+import multer from 'multer';
+import { resolve } from 'path';
+import crypto from 'crypto';
+import mime from 'mime';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import Class, { validateClass } from '../../models/Class';
 
 const router = Router();
+
+// Note : __dirname is an node js environment variable that
+// tells you the absolute path of the directory
+// containing the currently executing file.
+const storage = multer.diskStorage({
+  // tells multer where to store the uploaded images
+  destination: function (req, file, cb) {
+    cb(null, resolve(__dirname, '../../../public/images'));
+  },
+  // tells multer what names the uploaded images should have
+  filename: function (req, file, cb) {
+    const extension = mime.getExtension(file.mimetype);
+    crypto.randomBytes(16, function (err, raw) {
+      cb(null, raw.toString('hex') + Date.now() + '.' + extension);
+    });
+  },
+});
+
+const upload = multer({
+  storage,
+  // 5000000 bytes = 5 megabytes
+  limits: { fileSize: 5000000 },
+  fileFilter: (req, file, cb) => {
+    // only png jpg or jpeg are allowed, we determine this by the mimetype
+    if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+      cb(null, true); // accept file
+    } else {
+      cb(null, false); // reject file
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+    }
+  },
+});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -30,13 +66,18 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', requireJwtAuth, async (req, res, next) => {
+router.post('/', [requireJwtAuth, upload.single('coverPhoto')], async (req, res, next) => {
+  req.body.bookableDates = JSON.parse(req.body.bookableDates);
   const { error } = validateClass(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
-  debugger;
+  let coverPhoto = null;
+  if (req.file) {
+    coverPhoto = req.file.filename;
+  }
   try {
     let newClass = await Class.create({
       title: req.body.title,
+      coverPhoto: coverPhoto,
       category: req.body.category,
       description: req.body.description,
       meetingAddress: req.body.meetingAddress,
