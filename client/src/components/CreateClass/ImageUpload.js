@@ -7,7 +7,7 @@ const ImageUpload = ({ onImageChange, image, imageUrl, id }) => {
       <div>
         <label className="custom-file-upload">
           <input id={id} type="file" onChange={onImageChange} />
-          Custom Upload
+          Upload Photo
         </label>
       </div>
       <small className="form-text text-muted">jpg, jpeg, png | Max-File-Size: 5 Megabytes</small>
