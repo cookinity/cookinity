@@ -15,8 +15,6 @@ const ImageUpload = ({ onImageChange, image, imageUrl, id }) => {
         <img
           id="imageResult"
           src={imageUrl}
-          width="600px"
-          height="300px"
           alt=""
           className="img-fluid rounded shadow-sm mx-auto d-block"
         />

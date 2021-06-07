@@ -362,7 +362,7 @@ const CreateClass = () => {
           <hr></hr>
 
           <Form.Row>
-            <Col>
+            <Col sm={12} md={4}>
               <Form.Group>
                 <Form.Label>Choose a Cover Photo For Your Class</Form.Label>
                 <ImageUpload
@@ -376,7 +376,7 @@ const CreateClass = () => {
                 ) : null}
               </Form.Group>
             </Col>
-            <Col>
+            <Col sm={12} md={4}>
               <Form.Group>
                 <Form.Label>Choose an Additional Photo</Form.Label>
                 <ImageUpload
@@ -390,7 +390,7 @@ const CreateClass = () => {
                 ) : null}
               </Form.Group>
             </Col>
-            <Col>
+            <Col sm={12} md={4}>
               <Form.Group>
                 <Form.Label>Choose an Additional Photo</Form.Label>
                 <ImageUpload
