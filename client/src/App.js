@@ -17,6 +17,7 @@ import { loadMe } from './store/features/authentication/authActions';
 import { Home } from 'components/Home/Home';
 import HostManagement from 'components/HostManagement/HostManagement';
 import CreateClass from 'components/CreateClass/CreateClass';
+import ClassDetail from 'components/ClassDetail/ClassDetail';
 
 const App = ({ auth, loadMe }) => {
   useEffect(() => {
@@ -49,6 +50,7 @@ const App = ({ auth, loadMe }) => {
           <Route path="/admin" component={Admin} />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
+          <Route path="/classes/idTest" component={ClassDetail} exact />
           <Route exact path="/:username" component={Profile} />
           <Route exact path="/" component={Home} />
           <Route component={NotFound} />

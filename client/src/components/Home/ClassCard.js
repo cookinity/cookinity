@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import { run as runHolder } from 'holderjs/holder';
 import { useEffect } from 'react';
 export const ClassCard = ({ c }) => {
@@ -13,7 +14,9 @@ export const ClassCard = ({ c }) => {
       <Card.Body>
         <Card.Title>{c.title}</Card.Title>
         <Card.Text>{c.description}</Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+          <LinkContainer to="/classes/idTest">
+            <Button variant="primary">Go somewhere</Button>
+          </LinkContainer>
       </Card.Body>
     </Card>
   );
