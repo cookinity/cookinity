@@ -4,7 +4,8 @@ import axios from 'axios';
 import Layout from '../Layout/Layout';
 import { Alert, CardColumns, CardDeck } from 'react-bootstrap';
 
-import { ClassCard } from './ClassCard';
+import ClassCard from './ClassCard';
+import Filters from './Filters';
 import Loader from 'components/Shared/Loader/Loader';
 
 export const Home = () => {
@@ -57,6 +58,7 @@ export const Home = () => {
               {errorMessage}
             </Alert>
           )}
+          <Filters />
           <CardColumns>{classCards}</CardColumns>
         </div>
       </Layout>
