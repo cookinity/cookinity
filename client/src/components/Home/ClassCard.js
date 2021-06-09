@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { run as runHolder } from 'holderjs/holder';
 import { useEffect } from 'react';
-export const ClassCard = ({ c }) => {
+
+export default function ClassCard ({ c }) {
   useEffect(() => {
     runHolder('image-class-name');
   });
