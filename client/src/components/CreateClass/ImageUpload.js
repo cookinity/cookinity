@@ -5,8 +5,8 @@ const ImageUpload = ({ onImageChange, image, imageUrl, id }) => {
   return (
     <>
       <div>
-        <label className="custom-file-upload">
-          <input id={id} type="file" onChange={onImageChange} />
+        <label className="custom-file-upload-label">
+          <input className="custom-file-upload" id={id} type="file" onChange={onImageChange} />
           Upload Photo
         </label>
       </div>
