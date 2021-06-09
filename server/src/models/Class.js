@@ -69,6 +69,18 @@ const classSchema = new Schema(
       type: String,
       required: true,
     },
+    rating: {
+      type: String,
+      required: false,
+    },
+    price: {
+      type: Number,
+      required: false,
+    },
+    participants: {
+      type: Number,
+      required: false,
+    },
     meetingAddress: {
       type: addressSchema,
       required: true,
@@ -117,6 +129,7 @@ classSchema.methods.toJSON = function () {
     host: this.host.toJSON(),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
+    rating: this.rating,
     bookableDates: this.bookableDates.map((date) => {
       // format as a string using dayjs (can be parsed on the frontend using dayjs) ! This will be also UTC --> convert it for display in frontend using dayjs if necessary
       return dayjs(date).utc().toJSON();

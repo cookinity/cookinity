@@ -18,15 +18,12 @@ const Users = ({ getUsers, users: { users, isLoading } }) => {
     getUsers();
   }, []);
 
+
   return (
     <Layout>
-      <div className="users" >
-        <p className="text-primary">
-          <p className="text-center">
-            <p className="font-weight-bold">
-              <h1>USER</h1>
-            </p>
-          </p>
+      <div className={"users"} >
+        <p className={"text-primary text-center font-weight-bold"}>
+          <h1>USER</h1>
         </p>
 
         <p className="text-center">
@@ -78,7 +75,7 @@ const Users = ({ getUsers, users: { users, isLoading } }) => {
                   </Card>
 
                 );
-                //mapping ende 
+                //mapping ende
               })}
             </>
           )}
