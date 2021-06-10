@@ -4,6 +4,9 @@ import { compose } from 'redux';
 import requireAuth from '../../higherOrderComponents/requireAuth';
 import {Carousel, Container, Row, Col} from 'react-bootstrap'
 import './classDetail.scss';
+import { BsCalendar, BsClock, BsPeople, BsFillExclamationCircleFill} from "react-icons/bs";
+import { RiMoneyEuroCircleLine } from "react-icons/ri";
+import { MdLocationOn } from "react-icons/md";
 
 
 const mockClassDetail = {
@@ -19,7 +22,9 @@ const mockClassDetail = {
         ],
     time: "18:30",
     city: "Munich",
+    minParticipants: 2,
     maxParticipants: 4,
+    dietaryPreferences: "egg free, no peanuts",
     images: [
       {
         src: "http://lorempixel.com/800/400/food/1"
@@ -33,8 +38,15 @@ const mockClassDetail = {
     ]
 }
 
-const carouselImages = mockClassDetail.images.map(image =>
-    <Carousel.Item>
+function dateToString(date) {
+    var day = date.getUTCDate()
+    var month = date.getUTCMonth()
+    var year = date.getUTCFullYear()
+    return day + "/" + month + "/" + year
+  }
+
+const carouselImages = mockClassDetail.images.map((image, index) =>
+    <Carousel.Item key = {index} interval={3000} className = "carouselImage">
         <img
             className="d-block w-100"
             src= {image.src}
@@ -53,19 +65,20 @@ const ClassDetail = () => {
             </Carousel>
             <h1 className = "classTitle">Experience Japanese Course</h1>
             <Container>
-                <Row>
-                    <Col>1 of 2</Col>
-                    <Col>2 of 2</Col>
+                <Row className = "rowFormat">
+                    <Col className = "classDetail"><BsCalendar size={32} className = "iconPos"/> {dateToString(mockClassDetail.dates[0])}</Col>
+                    <Col className = "classDetail"><RiMoneyEuroCircleLine size={32} className = "iconPos"/> {mockClassDetail.price.toString()} € per person</Col>
+                </Row >
+                <Row className = "rowFormat">
+                    <Col className = "classDetail"><BsClock size={32} className = "iconPos"/> {mockClassDetail.time}</Col>
+                    <Col className = "classDetail"><BsPeople size={32} className = "iconPos"/> {mockClassDetail.minParticipants} - {mockClassDetail.maxParticipants} persons</Col>
                 </Row>
-                <Row>
-                    <Col>1 of 2</Col>
-                    <Col>2 of 2</Col>
-                </Row>
-                <Row>
-                    <Col>1 of 2</Col>
-                    <Col>2 of 2</Col>
+                <Row className = "rowFormat">
+                    <Col className = "classDetail"><MdLocationOn size={32} className = "iconPos"/> {mockClassDetail.city}</Col>
+                    <Col className = "classDetail"><BsFillExclamationCircleFill size={32} className = "iconPos"/> {mockClassDetail.dietaryPreferences}</Col>
                 </Row>
             </Container>
+            <Row className = "rowFormat">{mockClassDetail.classDescription}</Row>
         </Layout>
     )
   }
