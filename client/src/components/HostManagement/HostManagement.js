@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Layout from '../Layout/Layout';
 import { Accordion, Alert, Button, Card, Col, Nav, Row, Table } from 'react-bootstrap';
 
@@ -94,6 +95,12 @@ export const HostManagement = () => {
                   {errorMessage}
                 </Alert>
               )}
+              <LinkContainer to={`/hostmanagement/create-class`}>
+                <Button variant="success" className="mt-2">
+                  <FontAwesomeIcon icon={faPlus} /> Create a new class
+                </Button>
+              </LinkContainer>
+
               <h1 className="text-center">Upcoming Classes</h1>
               <ClassesTable classes={upcomingClasses}></ClassesTable>
               <hr></hr>
