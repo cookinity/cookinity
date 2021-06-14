@@ -73,6 +73,14 @@ const classSchema = new Schema(
       type: Number,
       required: true,
     },
+    minGuests: {
+      type: Number,
+      required: true,
+    },
+    maxGuests: {
+      type: Number,
+      required: true,
+    },
     meetingAddress: {
       type: addressSchema,
       required: true,
@@ -120,6 +128,8 @@ classSchema.methods.toJSON = function () {
     meetingAddress: this.meetingAddress.toJSON(),
     host: this.host.toJSON(),
     pricePerPerson: this.pricePerPerson,
+    minGuests: this.minGuests,
+    maxGuests: this.maxGuests,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     bookableDates: this.bookableDates.map((date) => {
@@ -151,6 +161,8 @@ export const validateClass = (c) => {
       .required(),
     description: Joi.string().required(),
     pricePerPerson: Joi.number().precision(2).positive(), // by default we assume in euro right now
+    minGuests: Joi.number().integer().min(1).max(100).positive().required(),
+    maxGuests: Joi.number().integer().min(1).max(100).positive().required(),
     meetingAddress: addressSchema,
     bookableDates: Joi.array().items(Joi.date()),
   });

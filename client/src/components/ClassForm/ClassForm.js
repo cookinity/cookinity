@@ -62,6 +62,8 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('zip', _.get(originalClass, 'meetingAddress.zip'));
       formik.setFieldValue('street', _.get(originalClass, 'meetingAddress.street'));
       formik.setFieldValue('pricePerPerson', _.get(originalClass, 'pricePerPerson'));
+      formik.setFieldValue('minGuests', _.get(originalClass, 'minGuests'));
+      formik.setFieldValue('maxGuests', _.get(originalClass, 'maxGuests'));
       const bookableDates = [];
       for (const date of _.get(originalClass, 'bookableDates')) {
         const dateObject = new DateObject(dayjs(date).toDate());
@@ -87,6 +89,8 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       zip: '',
       street: '',
       pricePerPerson: undefined,
+      minGuests: undefined,
+      maxGuests: undefined,
       coverPhoto: null,
       photoOne: null,
       photoTwo: null,
@@ -105,6 +109,8 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             state,
             street,
             pricePerPerson,
+            minGuests,
+            maxGuests,
             coverPhoto,
             photoOne,
             photoTwo,
@@ -113,6 +119,8 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             title,
             category,
             pricePerPerson,
+            minGuests,
+            maxGuests,
             description,
             meetingAddress: {
               country,
@@ -227,7 +235,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
         </Form.Group>
         <hr></hr>
         <Form.Row>
-          <Form.Group as={Col} xs={2} controlId="pricePerPerson">
+          <Form.Group as={Col} controlId="pricePerPerson">
             <Form.Label>Price Per Person</Form.Label>
             <InputGroup>
               <Form.Control
@@ -249,6 +257,50 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             </InputGroup>
             {formik.touched.pricePerPerson && formik.errors.pricePerPerson ? (
               <div className="form-error-message">{formik.errors.pricePerPerson}</div>
+            ) : null}
+          </Form.Group>
+          <Form.Group as={Col} controlId="minGuests">
+            <Form.Label>Minimum Number of Guests</Form.Label>
+            <InputGroup>
+              <Form.Control
+                type="number"
+                placeholder="1"
+                name="minGuests"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.minGuests}
+                className={
+                  formik.touched.minGuests && formik.errors.minGuests ? 'form-error' : null
+                }
+              />
+              <InputGroup.Append>
+                <InputGroup.Text>Guests</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+            {formik.touched.minGuests && formik.errors.minGuests ? (
+              <div className="form-error-message">{formik.errors.minGuests}</div>
+            ) : null}
+          </Form.Group>
+          <Form.Group as={Col} controlId="maxGuests">
+            <Form.Label>Maximum Number of Guests</Form.Label>
+            <InputGroup>
+              <Form.Control
+                type="number"
+                placeholder="1"
+                name="maxGuests"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.maxGuests}
+                className={
+                  formik.touched.maxGuests && formik.errors.maxGuests ? 'form-error' : null
+                }
+              />
+              <InputGroup.Append>
+                <InputGroup.Text>Guests</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+            {formik.touched.maxGuests && formik.errors.maxGuests ? (
+              <div className="form-error-message">{formik.errors.maxGuests}</div>
             ) : null}
           </Form.Group>
         </Form.Row>
