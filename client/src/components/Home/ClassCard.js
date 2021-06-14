@@ -23,7 +23,7 @@ export const ClassCard = ({ c }) => {
   });
 
   const readableDates = c.bookableDates.map(date => {
-    return dayjs(date).local().format('YYYY-MM-DD')
+    return dayjs(date).local().format('LLLL')
   })
 
   const readableTimes = c.bookableDates.map(date => {
@@ -46,10 +46,6 @@ export const ClassCard = ({ c }) => {
       <Card.Body>
         <Card.Title>{c.title}</Card.Title>
         <Card.Subtitle>
-          <div>
-            <span className="font-weight-bold">Rating: </span>
-            {c.rating}
-          </div>
         </Card.Subtitle>
         <Card.Text>
           <div>
@@ -62,16 +58,16 @@ export const ClassCard = ({ c }) => {
               <Card.Text>
                 <ListGroup variant="flush">
                   <ListGroup.Item>
+                    <span className="font-weight-bold">Rating: </span>
+                    {c.rating}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
                     <span className="font-weight-bold">Available Dates: </span>
                     {dates}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Prize: </span>
                     <div>10€</div>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <span className="font-weight-bold">Time: </span>
-                    {times}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Participants: </span>
