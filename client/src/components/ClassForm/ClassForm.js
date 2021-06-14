@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form } from 'react-bootstrap';
+import { Button, Col, Form, FormControl, InputGroup } from 'react-bootstrap';
 import { CLASS_CATEGORIES } from '../../constants/ClassCategories';
 
 import { useFormik } from 'formik';
@@ -61,6 +61,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('state', _.get(originalClass, 'meetingAddress.state'));
       formik.setFieldValue('zip', _.get(originalClass, 'meetingAddress.zip'));
       formik.setFieldValue('street', _.get(originalClass, 'meetingAddress.street'));
+      formik.setFieldValue('pricePerPerson', _.get(originalClass, 'pricePerPerson'));
       const bookableDates = [];
       for (const date of _.get(originalClass, 'bookableDates')) {
         const dateObject = new DateObject(dayjs(date).toDate());
@@ -85,6 +86,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       state: '',
       zip: '',
       street: '',
+      pricePerPerson: undefined,
       coverPhoto: null,
       photoOne: null,
       photoTwo: null,
@@ -102,6 +104,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             zip,
             state,
             street,
+            pricePerPerson,
             coverPhoto,
             photoOne,
             photoTwo,
@@ -109,6 +112,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
           const data = {
             title,
             category,
+            pricePerPerson,
             description,
             meetingAddress: {
               country,
@@ -221,6 +225,33 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             <div className="form-error-message">{formik.errors.description}</div>
           ) : null}
         </Form.Group>
+        <hr></hr>
+        <Form.Row>
+          <Form.Group as={Col} xs={2} controlId="pricePerPerson">
+            <Form.Label>Price Per Person</Form.Label>
+            <InputGroup>
+              <Form.Control
+                type="number"
+                placeholder="50,00"
+                name="pricePerPerson"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.pricePerPerson}
+                className={
+                  formik.touched.pricePerPerson && formik.errors.pricePerPerson
+                    ? 'form-error'
+                    : null
+                }
+              />
+              <InputGroup.Append>
+                <InputGroup.Text>€</InputGroup.Text>
+              </InputGroup.Append>
+            </InputGroup>
+            {formik.touched.pricePerPerson && formik.errors.pricePerPerson ? (
+              <div className="form-error-message">{formik.errors.pricePerPerson}</div>
+            ) : null}
+          </Form.Group>
+        </Form.Row>
         <hr></hr>
         <Form.Label>Public Meeting Address</Form.Label>
 

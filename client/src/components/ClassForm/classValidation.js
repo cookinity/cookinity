@@ -11,6 +11,14 @@ export const validationSchema = Yup.object().shape({
   zip: Yup.string().required('Zip Code is required'),
   state: Yup.string().required('State is required'),
   street: Yup.string().required('Street is required'),
+  pricePerPerson: Yup.number()
+    .required('Price is required')
+    .positive('Price must be positive')
+    .test(
+      'maxDigitsAfterDecimal',
+      'The prcie must have two digits after decimal or less',
+      (number) => /^\d+(\.\d{1,2})?$/.test(String(number)),
+    ),
   coverPhoto: Yup.mixed()
     .test('fileSize', 'File too large. Maximum is 5mb', (value) =>
       value ? value.size <= FILE_SIZE : true,

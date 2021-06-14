@@ -83,6 +83,7 @@ router.put('/:id', [requireJwtAuth, upload.array('photos[]', 3)], async (req, re
       category: req.body.category,
       description: req.body.description,
       meetingAddress: req.body.meetingAddress,
+      pricePerPerson: req.body.pricePerPerson,
       bookableDates: req.body.bookableDates
         ? req.body.bookableDates.map((date) => dayjs(date).utc().toDate())
         : undefined,
@@ -128,6 +129,7 @@ router.post('/', [requireJwtAuth, upload.array('photos[]', 3)], async (req, res,
     category: req.body.category,
     description: req.body.description,
     meetingAddress: req.body.meetingAddress,
+    pricePerPerson: req.body.pricePerPerson,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
     bookableDates: req.body.bookableDates
       ? req.body.bookableDates.map((date) => dayjs(date).utc().toDate())
