@@ -11,13 +11,33 @@ export const validationSchema = Yup.object().shape({
   zip: Yup.string().required('Zip Code is required'),
   state: Yup.string().required('State is required'),
   street: Yup.string().required('Street is required'),
-  coverPhoto: Yup.mixed()
-    .required('A cover photo is required!')
-    .test('fileSize', 'File too large. Maximum is 5mb', (value) => value && value.size <= FILE_SIZE)
+  minGuests: Yup.number()
+    .required('Min. Guests is required')
+    .positive('Min. Guests must be positive')
+    .min(1, 'Min. Guests minimum 1')
+    .max(100, 'Min. Guests maximum 100')
+    .integer('Min. Guests must be an integer'),
+  maxGuests: Yup.number()
+    .required('Min. Guests is required')
+    .positive('Min. Guests must be positive')
+    .min(1, 'Max. Guests minimum 1')
+    .max(100, 'Max. Guests maximum 100')
+    .integer('Min. Guests must be an integer')
+    .moreThan(Yup.ref('minGuests'), 'Max. Guests must be larger than Min. Guests'),
+  pricePerPerson: Yup.number()
+    .required('Price is required')
+    .positive('Price must be positive')
     .test(
-      'fileFormat',
-      'Unsupported Format. Please upload jpg, jpeg or png',
-      (value) => value && SUPPORTED_FORMATS.includes(value.type),
+      'maxDigitsAfterDecimal',
+      'The prcie must have two digits after decimal or less',
+      (number) => /^\d+(\.\d{1,2})?$/.test(String(number)),
+    ),
+  coverPhoto: Yup.mixed()
+    .test('fileSize', 'File too large. Maximum is 5mb', (value) =>
+      value ? value.size <= FILE_SIZE : true,
+    )
+    .test('fileFormat', 'Unsupported Format. Please upload jpg, jpeg or png', (value) =>
+      value ? SUPPORTED_FORMATS.includes(value.type) : true,
     ),
   photoOne: Yup.mixed()
     .test('fileSize', 'File too large. Maximum is 5mb', (value) =>

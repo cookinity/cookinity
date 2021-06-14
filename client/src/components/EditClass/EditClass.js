@@ -8,13 +8,34 @@ import { useSelector } from 'react-redux';
 import ClassForm from 'components/ClassForm/ClassForm';
 import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-const CreateClass = () => {
+const EditClass = () => {
+  const [c, setClass] = useState(undefined);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [classCreated, setClassCreated] = useState(false);
+  const [classEdited, setClassEdited] = useState(false);
   const auth = useSelector((state) => state.auth);
+  // id of the class in the route
+  let { classId } = useParams();
+
+  useEffect(() => {
+    const fetchClass = async () => {
+      setIsError(false);
+      setIsLoading(true);
+      try {
+        const result = await axios(`/api/classes/${classId}`);
+        setClass(result.data.class);
+      } catch (err) {
+        setIsError(true);
+        setErrorMessage(err?.response?.data.message || err.message);
+      }
+      setIsLoading(false);
+    };
+    fetchClass();
+  }, []);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -31,9 +52,9 @@ const CreateClass = () => {
         config.headers['x-auth-token'] = token;
       }
 
-      await axios.post('/api/classes', formData, config);
+      await axios.put(`/api/classes/${classId}`, formData, config);
       setIsLoading(false);
-      setClassCreated(true);
+      setClassEdited(true);
       return Promise.resolve(); // tell the form that there was not an error during submitting --> reset form
     } catch (err) {
       setIsError(true);
@@ -47,7 +68,6 @@ const CreateClass = () => {
     <Layout>
       <Row>
         <Col>
-          {' '}
           <div className="mt-2">
             {isError && (
               <Alert
@@ -62,27 +82,31 @@ const CreateClass = () => {
                 {errorMessage}
               </Alert>
             )}
-            {classCreated && (
+            {classEdited && (
               <Alert
                 variant="success"
                 onClose={() => {
-                  setClassCreated(false);
+                  setClassEdited(false);
                 }}
                 dismissible
               >
                 {' '}
-                Class created!
+                Class edited!
               </Alert>
             )}
             <div style={{ display: isLoading ? 'block' : 'none' }}>
               <Loader></Loader>
             </div>
             <div style={{ display: isLoading ? 'none' : 'block' }}>
-              <ClassForm
-                submitCallback={onSubmit}
-                isEditMode={false}
-                originalClass={undefined}
-              ></ClassForm>
+              {c ? (
+                <ClassForm
+                  submitCallback={onSubmit}
+                  isEditMode={true}
+                  originalClass={c}
+                ></ClassForm>
+              ) : (
+                <div>No class found!</div>
+              )}
             </div>
           </div>
         </Col>
@@ -91,4 +115,4 @@ const CreateClass = () => {
   );
 };
 
-export default compose(requireAuth)(CreateClass);
+export default compose(requireAuth)(EditClass);
