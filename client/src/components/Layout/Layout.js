@@ -9,7 +9,6 @@ const Layout = ({ children }) => {
     <>
       <NavigationBar />
       <Container className="mb-5">{children}</Container>
-      <div></div>
     </>
   );
 };

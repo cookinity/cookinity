@@ -14,11 +14,13 @@ import { LinkContainer } from 'react-router-bootstrap';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { ClassesTable } from './ClassesTable';
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
 export const HostManagement = () => {
-  const [classes, setClasses] = useState([]);
+  const [upcomingClasses, setUpcomingClasses] = useState([]);
+  const [pastClasses, setPastClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -33,22 +35,30 @@ export const HostManagement = () => {
         const result = await axios.get('/api/classes', { params: { hostId: auth.me.id } });
         const unformattedClasses = result.data.classes;
         const today = dayjs(new Date());
-        const formattedClasses = unformattedClasses.map((c) => {
-          c.pastDates = [];
-          c.futureDates = [];
+        const classesWithAFutureDate = [];
+        const classesWihoutAFutureDate = [];
+        unformattedClasses.forEach((c) => {
+          const cCopy = { ...c };
+          cCopy.pastDates = [];
+          cCopy.futureDates = [];
 
-          for (const dateString of c.bookableDates) {
+          for (const dateString of cCopy.bookableDates) {
             const date = dayjs(dateString);
             if (date.isBefore(today)) {
-              c.pastDates.push(date.format('llll'));
+              cCopy.pastDates.push(date.format('llll'));
             } else {
-              c.futureDates.push(date.format('llll'));
+              cCopy.futureDates.push(date.format('llll'));
             }
           }
-
-          return c;
+          if (cCopy.futureDates.length !== 0) {
+            classesWithAFutureDate.push(cCopy);
+          } else {
+            classesWihoutAFutureDate.push(cCopy);
+          }
         });
-        setClasses(formattedClasses);
+
+        setUpcomingClasses(classesWithAFutureDate);
+        setPastClasses(classesWihoutAFutureDate);
       } catch (err) {
         setIsError(true);
         setErrorMessage(err?.response?.data.message || err.message);
@@ -58,71 +68,6 @@ export const HostManagement = () => {
 
     fetchClasses();
   }, []);
-
-  const columns = (
-    <tr>
-      <th>Title</th>
-      <th>Category</th>
-      <th>Dates</th>
-      <th>Actions</th>
-    </tr>
-  );
-
-  const rows = classes.map((c) => {
-    return (
-      <tr key={c.id}>
-        <td>{c.title}</td>
-        <td>{c.category}</td>
-        <td>
-          <Accordion>
-            <Card>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                  Past Dates
-                </Accordion.Toggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  <ul>
-                    {c.pastDates.map((date) => (
-                      <li key={date}>{date}</li>
-                    ))}
-                  </ul>
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-            <Card>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                  Upcoming Dates
-                </Accordion.Toggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey="1">
-                <Card.Body>
-                  {' '}
-                  <ul>
-                    {c.futureDates.map((date) => (
-                      <li key={date}>{date}</li>
-                    ))}
-                  </ul>
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
-        </td>
-        <td>
-          <LinkContainer to={`/hostmanagement/edit-class/${c.id}`}>
-            <Button variant="primary">
-              <FontAwesomeIcon icon={faEdit} /> Edit
-            </Button>
-          </LinkContainer>
-          <Button variant="danger" className="ml-2">
-            <FontAwesomeIcon icon={faTrash} /> Delete
-          </Button>
-        </td>
-      </tr>
-    );
-  });
 
   if (isLoading) {
     return (
@@ -135,7 +80,6 @@ export const HostManagement = () => {
       <Layout>
         <Row>
           <Col>
-            <h1 className="text-center">Your Classes</h1>
             <div>
               {isError && (
                 <Alert
@@ -150,10 +94,11 @@ export const HostManagement = () => {
                   {errorMessage}
                 </Alert>
               )}
-              <Table striped bordered hover>
-                <thead>{columns}</thead>
-                <tbody>{rows}</tbody>
-              </Table>
+              <h1 className="text-center">Upcoming Classes</h1>
+              <ClassesTable classes={upcomingClasses}></ClassesTable>
+              <hr></hr>
+              <h1 className="text-center">Past Classes</h1>
+              <ClassesTable classes={pastClasses}></ClassesTable>
             </div>
           </Col>
         </Row>
