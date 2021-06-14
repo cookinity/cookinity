@@ -5,12 +5,22 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import Class, { validateClass } from '../../models/Class';
 import upload from '../../middleware/multer';
+var ObjectId = require('mongoose').Types.ObjectId;
 
 const router = Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const classes = await Class.find().populate('host');
+    const { hostId } = req.query;
+    let classes = [];
+    if (hostId) {
+      // classes by the specified host
+      classes = await Class.find({ host: new ObjectId(hostId) }).populate('host');
+    } else {
+      // all classes
+      classes = await Class.find().populate('host');
+    }
+
     res.json({
       classes: classes.map((c) => {
         return c.toJSON();

@@ -1,21 +1,20 @@
-import Layout from 'components/Layout/Layout';
-import React, { useCallback, useState } from 'react';
-import { Alert, Button, Col, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Form } from 'react-bootstrap';
 import { CLASS_CATEGORIES } from '../../constants/ClassCategories';
 
 import { useFormik } from 'formik';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { validationSchema } from './classValidation';
-import { Calendar } from 'react-multi-date-picker';
+import { Calendar, DateObject } from 'react-multi-date-picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import ImageUpload from './ImageUpload';
+import _ from 'lodash';
 dayjs.extend(utc);
 
-const ClassForm = ({ submitCallback }) => {
+const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
   const [bookableDates, setBookableDates] = useState([]);
   const [focusedDate, setFocusedDate] = useState();
   // coverPhoto
@@ -27,7 +26,6 @@ const ClassForm = ({ submitCallback }) => {
   // photoTwo
   const [photoTwo, setPhotoTwo] = useState(null);
   const [photoTwoUrl, setPhotoTwoUrl] = useState(null);
-  const auth = useSelector((state) => state.auth);
 
   const onCoverPhotoChange = (event) => {
     if (event.target.files.length !== 0) {
@@ -52,6 +50,30 @@ const ClassForm = ({ submitCallback }) => {
       setPhotoTwo(event.target.files[0]);
     }
   };
+
+  useEffect(() => {
+    if (isEditMode && originalClass) {
+      formik.setFieldValue('title', _.get(originalClass, 'title'));
+      formik.setFieldValue('category', _.get(originalClass, 'category'));
+      formik.setFieldValue('description', _.get(originalClass, 'description'));
+      formik.setFieldValue('country', _.get(originalClass, 'meetingAddress.country'));
+      formik.setFieldValue('city', _.get(originalClass, 'meetingAddress.city'));
+      formik.setFieldValue('state', _.get(originalClass, 'meetingAddress.state'));
+      formik.setFieldValue('zip', _.get(originalClass, 'meetingAddress.zip'));
+      formik.setFieldValue('street', _.get(originalClass, 'meetingAddress.street'));
+      const bookableDates = [];
+      for (const date of _.get(originalClass, 'bookableDates')) {
+        const dateObject = new DateObject(dayjs(date).toDate());
+        bookableDates.push(dateObject);
+      }
+      setBookableDates(bookableDates);
+
+      if (_.get(originalClass, 'coverPhoto')) {
+        const coverPhotoURL = _.get(originalClass, 'coverPhoto');
+        setCoverPhotoUrl(coverPhotoURL);
+      }
+    }
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -144,7 +166,7 @@ const ClassForm = ({ submitCallback }) => {
 
   return (
     <>
-      <h1>Host A New Cooking Class</h1>
+      {isEditMode ? <h1>Edit a Cooking Class</h1> : <h1>Host A New Cooking Class</h1>}
       <Form
         className="mx-auto"
         onSubmit={formik.handleSubmit}
@@ -284,7 +306,6 @@ const ClassForm = ({ submitCallback }) => {
           <Calendar
             className="mx-auto"
             format="DD/MM/YYYY HH:mm"
-            minDate={new Date()}
             plugins={[
               <DatePanel
                 sort="date"

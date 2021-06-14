@@ -12,12 +12,11 @@ export const validationSchema = Yup.object().shape({
   state: Yup.string().required('State is required'),
   street: Yup.string().required('Street is required'),
   coverPhoto: Yup.mixed()
-    .required('A cover photo is required!')
-    .test('fileSize', 'File too large. Maximum is 5mb', (value) => value && value.size <= FILE_SIZE)
-    .test(
-      'fileFormat',
-      'Unsupported Format. Please upload jpg, jpeg or png',
-      (value) => value && SUPPORTED_FORMATS.includes(value.type),
+    .test('fileSize', 'File too large. Maximum is 5mb', (value) =>
+      value ? value.size <= FILE_SIZE : true,
+    )
+    .test('fileFormat', 'Unsupported Format. Please upload jpg, jpeg or png', (value) =>
+      value ? SUPPORTED_FORMATS.includes(value.type) : true,
     ),
   photoOne: Yup.mixed()
     .test('fileSize', 'File too large. Maximum is 5mb', (value) =>
