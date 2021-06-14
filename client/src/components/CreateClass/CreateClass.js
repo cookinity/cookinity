@@ -6,7 +6,7 @@ import requireAuth from '../../higherOrderComponents/requireAuth';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import ClassForm from 'components/ClassForm/ClassForm';
-import { Alert } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
 
 const CreateClass = () => {
@@ -45,43 +45,48 @@ const CreateClass = () => {
 
   return (
     <Layout>
-      <div className="mt-2">
-        {isError && (
-          <Alert
-            variant="danger"
-            onClose={() => {
-              setIsError(false);
-              setErrorMessage('');
-            }}
-            dismissible
-          >
-            {' '}
-            {errorMessage}
-          </Alert>
-        )}
-        {classCreated && (
-          <Alert
-            variant="success"
-            onClose={() => {
-              setClassCreated(false);
-            }}
-            dismissible
-          >
-            {' '}
-            Class created!
-          </Alert>
-        )}
-        <div style={{ display: isLoading ? 'block' : 'none' }}>
-          <Loader></Loader>
-        </div>
-        <div style={{ display: isLoading ? 'none' : 'block' }}>
-          <ClassForm
-            submitCallback={onSubmit}
-            isEditMode={false}
-            originalClass={undefined}
-          ></ClassForm>
-        </div>
-      </div>
+      <Row>
+        <Col>
+          {' '}
+          <div className="mt-2">
+            {isError && (
+              <Alert
+                variant="danger"
+                onClose={() => {
+                  setIsError(false);
+                  setErrorMessage('');
+                }}
+                dismissible
+              >
+                {' '}
+                {errorMessage}
+              </Alert>
+            )}
+            {classCreated && (
+              <Alert
+                variant="success"
+                onClose={() => {
+                  setClassCreated(false);
+                }}
+                dismissible
+              >
+                {' '}
+                Class created!
+              </Alert>
+            )}
+            <div style={{ display: isLoading ? 'block' : 'none' }}>
+              <Loader></Loader>
+            </div>
+            <div style={{ display: isLoading ? 'none' : 'block' }}>
+              <ClassForm
+                submitCallback={onSubmit}
+                isEditMode={false}
+                originalClass={undefined}
+              ></ClassForm>
+            </div>
+          </div>
+        </Col>
+      </Row>
     </Layout>
   );
 };

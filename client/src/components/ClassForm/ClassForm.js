@@ -382,7 +382,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
         </Form.Row>
         <hr></hr>
         <Button variant="primary" type="submit">
-          Create Class
+          {isEditMode ? 'Edit Class' : 'Create Class'}
         </Button>
       </Form>
     </>
