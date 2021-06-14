@@ -7,6 +7,7 @@ import { RiMoneyEuroCircleLine } from 'react-icons/ri';
 import { MdLocationOn } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 const mockClassDetail = {
   id: 1,
@@ -47,6 +48,10 @@ const carouselImages = mockClassDetail.images.map((image, index) => (
   </Carousel.Item>
 ));
 
+function parseDate(dates) {
+  return dates.map(d => dayjs(d));
+}
+
 const ClassDetail = () => {
   const [c, setClass] = useState(undefined);
   const [isError, setIsError] = useState(false);
@@ -62,6 +67,9 @@ const ClassDetail = () => {
       setIsLoading(true);
       try {
         const result = await axios(`/api/classes/${classId}`);
+        //console.log("result:", result.data.class.bookableDates)
+        result.data.class.bookableDates = parseDate(result.data.class.bookableDates)
+        //console.log("result:", parseDate(result.data.class.bookableDates))
         setClass(result.data.class);
       } catch (err) {
         setIsError(true);
@@ -73,6 +81,7 @@ const ClassDetail = () => {
   }, []);
 
   if (c) {
+    console.log("object:", c)
     return (
       <Layout>
         <Carousel>{carouselImages}</Carousel>
