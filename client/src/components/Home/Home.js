@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Layout from '../Layout/Layout';
-import { Alert, CardColumns, CardDeck, Col, Row } from 'react-bootstrap';
+import { Alert, CardColumns, CardDeck } from 'react-bootstrap';
 
-import { ClassCard } from './ClassCard';
+import ClassCard from './ClassCard';
+import Filters from './Filters';
 import Loader from 'components/Shared/Loader/Loader';
 
 export const Home = () => {
@@ -31,10 +32,7 @@ export const Home = () => {
   }, []);
 
   const classCards = classes.map((c) => {
-    return (
-      <Col sm={12} md={6} lg={4}>
-        <ClassCard c={c} key={c.id}></ClassCard>
-      </Col>)
+    return <ClassCard c={c} key={c.id}></ClassCard>;
   });
 
   if (isLoading) {
@@ -60,11 +58,8 @@ export const Home = () => {
               {errorMessage}
             </Alert>
           )}
-          <Row><Col>
-            <div>Here Comes A Filter</div>
-          </Col>
-          </Row>
-          <Row>{classCards}</Row>
+          <Filters />
+          <CardColumns>{classCards}</CardColumns>
         </div>
       </Layout>
     );

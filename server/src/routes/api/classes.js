@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Model } from 'mongoose';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import dayjs from 'dayjs';
 import multer from 'multer';
@@ -110,6 +111,20 @@ router.post('/', [requireJwtAuth, upload.array('photos[]', 3)], async (req, res,
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong during the class creation.' });
   }
+});
+
+router.delete('/:id', requireJwtAuth, async (req, res) => {
+  try {
+    const cl = await Class.findById(req.params.id);
+    if (!cl) return res.status(404).json({ message: 'No such class.' });
+    if(!(cl.host.id === req.user.id || req.user.role === 'ADMIN'))
+      return res.status(400).json({ message: 'You do not have privilegies to delete that class.' })
+    const classToDelete = await Class.findByIdAndRemove(cl.id);
+    res.status(200).json({ classToDelete });
+  } catch (err) {
+    if(res.status === 500) res.status(500).json({ message: 'Something went wrong.' });
+    else if(res.status === 204) res.status(204).json({ message: 'Class successfully removed'});
+}
 });
 
 export default router;
