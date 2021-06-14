@@ -52,6 +52,10 @@ function parseDate(dates) {
   return dates.map(d => dayjs(d));
 }
 
+function formatAddress(adress) {
+  return adress.street + ', ' + adress.zip + ' ' + adress.city
+}
+
 const ClassDetail = () => {
   const [c, setClass] = useState(undefined);
   const [isError, setIsError] = useState(false);
@@ -67,9 +71,7 @@ const ClassDetail = () => {
       setIsLoading(true);
       try {
         const result = await axios(`/api/classes/${classId}`);
-        //console.log("result:", result.data.class.bookableDates)
         result.data.class.bookableDates = parseDate(result.data.class.bookableDates)
-        //console.log("result:", parseDate(result.data.class.bookableDates))
         setClass(result.data.class);
       } catch (err) {
         setIsError(true);
@@ -89,7 +91,7 @@ const ClassDetail = () => {
         <Container>
           <Row className="rowFormat">
             <Col className="classDetail">
-              <BsCalendar size={32} className="iconPos" /> {dateToString(mockClassDetail.dates[0])}
+              <BsCalendar size={32} className="iconPos" /> {c.bookableDates[0].format("DD/MM/YYYY")}
             </Col>
             <Col className="classDetail">
               <RiMoneyEuroCircleLine size={32} className="iconPos" />{' '}
@@ -98,7 +100,7 @@ const ClassDetail = () => {
           </Row>
           <Row className="rowFormat">
             <Col className="classDetail">
-              <BsClock size={32} className="iconPos" /> {mockClassDetail.time}
+              <BsClock size={32} className="iconPos" /> {c.bookableDates[0].format("HH:mm")}
             </Col>
             <Col className="classDetail">
               <BsPeople size={32} className="iconPos" /> {mockClassDetail.minParticipants} -{' '}
@@ -107,7 +109,7 @@ const ClassDetail = () => {
           </Row>
           <Row className="rowFormat">
             <Col className="classDetail">
-              <MdLocationOn size={32} className="iconPos" /> {mockClassDetail.city}
+              <MdLocationOn size={32} className="iconPos" /> {formatAddress(c.meetingAddress)}
             </Col>
             <Col className="classDetail">
               <BsFillExclamationCircleFill size={32} className="iconPos" />{' '}
@@ -115,7 +117,7 @@ const ClassDetail = () => {
             </Col>
           </Row>
         </Container>
-        <Row className="rowFormat">{mockClassDetail.classDescription}</Row>
+        <Row className="rowFormat">{c.description}</Row>
       </Layout>
     );
   } else {
