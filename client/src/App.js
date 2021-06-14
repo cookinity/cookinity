@@ -50,7 +50,7 @@ const App = ({ auth, loadMe }) => {
           <Route path="/admin" component={Admin} />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
-          <Route path="/classes/idTest" component={ClassDetail} exact />
+          <Route path="/classes/:classId" component={ClassDetail} exact />
           <Route exact path="/:username" component={Profile} />
           <Route exact path="/" component={Home} />
           <Route component={NotFound} />

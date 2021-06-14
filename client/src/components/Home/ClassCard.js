@@ -14,9 +14,9 @@ export const ClassCard = ({ c }) => {
       <Card.Body>
         <Card.Title>{c.title}</Card.Title>
         <Card.Text>{c.description}</Card.Text>
-          <LinkContainer to="/classes/idTest">
-            <Button variant="primary">Go somewhere</Button>
-          </LinkContainer>
+        <LinkContainer to={`/classes/${c.id}`}>
+          <Button variant="primary">Go somewhere</Button>
+        </LinkContainer>
       </Card.Body>
     </Card>
   );
