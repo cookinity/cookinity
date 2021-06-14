@@ -21,22 +21,26 @@ export const ClassesTable = ({ classes }) => {
         <td>{c.category}</td>
         <td>
           <Accordion>
-            <Card>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                  Past Dates
-                </Accordion.Toggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  <ul>
-                    {c.pastDates.map((date) => (
-                      <li key={date}>{date}</li>
-                    ))}
-                  </ul>
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
+            {c.pastDates.length !== 0 ? (
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    Past Dates
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    <ul>
+                      {c.pastDates.map((date) => (
+                        <li key={date}>{date}</li>
+                      ))}
+                    </ul>
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            ) : (
+              ''
+            )}
             {c.futureDates.length !== 0 ? (
               <Card>
                 <Card.Header>
