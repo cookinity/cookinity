@@ -7,32 +7,19 @@ import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { getUsers } from '../../store/features/users/usersActions';
-import { CardDeck, Col, Container, Row } from 'react-bootstrap';
 
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
-const truncateString = function (str, num) {
-    if (str.length > num) {
-        return str.slice(0, num) + "...";
-    } else {
-        return str;
-    }
-}
 
-
-export const HostCard = ({ c }) => {
+export default function HostCard({ c }) {
     useEffect(() => {
         runHolder('image-class-name');
     });
 
-
-    const shortdescription = c.description ? truncateString(c.description, 200) : '';
-
     return (
-        <Card border="primary" style={{ width: '18rem' }} className={"pull-left mr-3 mb-3"}>
-            <Card.Img variant="top" src={c.avatar} />
+        <Card border="primary" className={"mb-3"}>
+            <Card.Img className="image-class-name" variant="top" src={c.avatar} />
             <Card.Body>
                 <Card.Text>
                     <div>
@@ -60,7 +47,7 @@ export const HostCard = ({ c }) => {
                     <div>
                         <span className="font-weight-bold">Joined: </span>
                         <span className="info">
-                            {moment(c.createdAt).format('dddd, MMMM Do YYYY, H:mm:ss')}
+                            {dayjs(c.createdAt).local().format('MM.DD.YYYY hh:mm a')}
                         </span>
                     </div>
                 </Card.Text>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Layout from '../Layout/Layout';
-import { Alert, CardColumns, CardDeck } from 'react-bootstrap';
+import { Alert, CardColumns, CardDeck, Col, Row } from 'react-bootstrap';
 
 import ClassCard from './ClassCard';
 import Filters from './Filters';
@@ -31,8 +31,20 @@ export const Home = () => {
     fetchClasses();
   }, []);
 
+  //Darstellung aller Kurse ohne Filter
   const classCards = classes.map((c) => {
-    return <ClassCard c={c} key={c.id}></ClassCard>;
+    return (
+      <Col sm={12} md={6} lg={4}>
+        <ClassCard c={c} key={c.id}></ClassCard>
+      </Col>)
+  });
+
+  //mit Filter In CardsOverview oder hier (implementierung wenn filter geht)
+  const classCardsfilter = classes.map((c) => {
+    return (
+      <Col sm={12} md={6} lg={4}>
+        <ClassCard c={c} key={c.id}></ClassCard>
+      </Col>)
   });
 
   if (isLoading) {
@@ -58,8 +70,12 @@ export const Home = () => {
               {errorMessage}
             </Alert>
           )}
-          <Filters />
-          <CardColumns>{classCards}</CardColumns>
+          <Row><Col>
+            <Filters />
+          </Col>
+          </Row>
+          <p></p>
+          <Row>{classCards} </Row>
         </div>
       </Layout>
     );
