@@ -8,6 +8,8 @@ import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 //ToDo: Add Loading Bar, Add Alert Bar
+//ToDo: Bookable Dates Anzeigen mit Duration addiert (nur future dates)
+//ToDo: Add section mit essens zeug preferenzen (vegan stuff und so)
 function parseDate(dates) {
   return dates.map((d) => dayjs(d));
 }
