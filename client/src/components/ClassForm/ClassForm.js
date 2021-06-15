@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { validationSchema } from './classValidation';
 import { DateObject } from 'react-multi-date-picker';
@@ -16,6 +16,8 @@ import BasicInfoSection from './FormSections/BasicInfoSection';
 dayjs.extend(utc);
 
 const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
+  const history = useHistory();
+
   const [bookableDates, setBookableDates] = useState([]);
   const [focusedDate, setFocusedDate] = useState();
   // coverPhoto
@@ -198,6 +200,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
           setPhotoTwoUrl(null);
           setBookableDates([]);
           setFocusedDate(undefined);
+          history.push('/hostmanagement');
         } catch (err) {
           // error happened in parent component --> do not clear form
         }
