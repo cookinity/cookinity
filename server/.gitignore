@@ -12,6 +12,7 @@ package-lock.json
 !public/images
 public/images/*
 !public/images/avatar1.jpg
+!public/images/dummyCover.png
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/osx,windows,linux

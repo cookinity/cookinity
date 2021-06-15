@@ -1,33 +1,10 @@
 import { Router } from 'express';
-import multer from 'multer';
-import { resolve } from 'path';
+import upload from '../../middleware/multer';
 
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import User, { hashPassword, validateUser } from '../../models/User';
 
 const router = Router();
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, resolve(__dirname, '../../../public/images'));
-  },
-  filename: function (req, file, cb) {
-    const fileName = file.originalname.toLowerCase().split(' ').join('-');
-    cb(null, `avatar-${Date.now()}-${fileName}`);
-  },
-});
-
-const upload = multer({
-  storage: storage,
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
-      cb(null, true);
-    } else {
-      cb(null, false);
-      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-    }
-  },
-});
 
 router.put('/:id', [requireJwtAuth, upload.single('avatar')], async (req, res, next) => {
   try {
