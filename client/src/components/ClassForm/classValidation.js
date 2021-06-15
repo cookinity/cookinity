@@ -11,6 +11,9 @@ export const validationSchema = Yup.object().shape({
   zip: Yup.string().required('Zip Code is required'),
   state: Yup.string().required('State is required'),
   street: Yup.string().required('Street is required'),
+  veganFriendly: Yup.boolean(),
+  vegetarianFriendly: Yup.boolean(),
+  nutAllergyFriendly: Yup.boolean(),
   minGuests: Yup.number()
     .required('Min. Guests is required')
     .positive('Min. Guests must be positive')

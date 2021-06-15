@@ -83,9 +83,12 @@ router.put('/:id', [requireJwtAuth, upload.array('photos[]', 3)], async (req, re
       category: req.body.category,
       description: req.body.description,
       meetingAddress: req.body.meetingAddress,
-      pricePerPerson: Number(req.body.pricePerPerson),
-      minGuests: Number(req.body.minGuests),
-      maxGuests: Number(req.body.maxGuests),
+      pricePerPerson: req.body.pricePerPerson,
+      minGuests: req.body.minGuests,
+      maxGuests: req.body.maxGuests,
+      veganFriendly: req.body.veganFriendly,
+      vegetarianFriendly: req.body.vegetarianFriendly,
+      nutAllergyFriendly: req.body.nutAllergyFriendly,
       bookableDates: req.body.bookableDates
         ? req.body.bookableDates.map((date) => dayjs(date).utc().toDate())
         : undefined,
@@ -132,8 +135,11 @@ router.post('/', [requireJwtAuth, upload.array('photos[]', 3)], async (req, res,
     description: req.body.description,
     meetingAddress: req.body.meetingAddress,
     pricePerPerson: Number(req.body.pricePerPerson),
-    minGuests: Number(req.body.minGuests),
-    maxGuests: Number(req.body.maxGuests),
+    minGuests: req.body.minGuests,
+    maxGuests: req.body.maxGuests,
+    veganFriendly: req.body.veganFriendly,
+    vegetarianFriendly: req.body.vegetarianFriendly,
+    nutAllergyFriendly: req.body.nutAllergyFriendly,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
     bookableDates: req.body.bookableDates
       ? req.body.bookableDates.map((date) => dayjs(date).utc().toDate())

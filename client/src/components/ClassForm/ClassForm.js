@@ -64,6 +64,10 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('pricePerPerson', _.get(originalClass, 'pricePerPerson'));
       formik.setFieldValue('minGuests', _.get(originalClass, 'minGuests'));
       formik.setFieldValue('maxGuests', _.get(originalClass, 'maxGuests'));
+      formik.setFieldValue('veganFriendly', _.get(originalClass, 'veganFriendly'));
+      formik.setFieldValue('vegetarianFriendly', _.get(originalClass, 'vegetarianFriendly'));
+      formik.setFieldValue('nutAllergyFriendly', _.get(originalClass, 'nutAllergyFriendly'));
+
       const bookableDates = [];
       for (const date of _.get(originalClass, 'bookableDates')) {
         const dateObject = new DateObject(dayjs(date).toDate());
@@ -94,6 +98,9 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       coverPhoto: null,
       photoOne: null,
       photoTwo: null,
+      veganFriendly: false,
+      vegetarianFriendly: false,
+      nutAllergyFriendly: false,
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
@@ -114,6 +121,9 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             coverPhoto,
             photoOne,
             photoTwo,
+            veganFriendly,
+            vegetarianFriendly,
+            nutAllergyFriendly,
           } = values;
           const data = {
             title,
@@ -122,6 +132,9 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             minGuests,
             maxGuests,
             description,
+            veganFriendly,
+            vegetarianFriendly,
+            nutAllergyFriendly,
             meetingAddress: {
               country,
               city,
@@ -417,6 +430,66 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             }}
           />
         </Form.Group>
+        <hr></hr>
+        <Form.Label>Eating Habits You Can Accommodate</Form.Label>
+        <Form.Row>
+          <Form.Group as={Col} controlId="veganFriendly">
+            <Form.Check
+              label="Vegan"
+              type="checkbox"
+              value="true"
+              name="veganFriendly"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              checked={formik.values.veganFriendly}
+              className={
+                formik.touched.veganFriendly && formik.errors.veganFriendly ? 'form-error' : null
+              }
+            />
+            {formik.touched.veganFriendly && formik.errors.veganFriendly ? (
+              <div className="form-error-message">{formik.errors.veganFriendly}</div>
+            ) : null}
+          </Form.Group>
+          <Form.Group as={Col} controlId="vegetarianFriendly">
+            <Form.Check
+              label="Vegetarian"
+              type="checkbox"
+              value="true"
+              name="vegetarianFriendly"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              checked={formik.values.vegetarianFriendly}
+              className={
+                formik.touched.vegetarianFriendly && formik.errors.vegetarianFriendly
+                  ? 'form-error'
+                  : null
+              }
+            />
+            {formik.touched.vegetarianFriendly && formik.errors.vegetarianFriendly ? (
+              <div className="form-error-message">{formik.errors.vegetarianFriendly}</div>
+            ) : null}
+          </Form.Group>
+          <Form.Group as={Col} controlId="nutAllergyFriendly">
+            <Form.Check
+              label="Nut Allergy"
+              type="checkbox"
+              value="true"
+              name="nutAllergyFriendly"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              checked={formik.values.nutAllergyFriendly}
+              className={
+                formik.touched.nutAllergyFriendly && formik.errors.nutAllergyFriendly
+                  ? 'form-error'
+                  : null
+              }
+            />
+            {formik.touched.nutAllergyFriendly && formik.errors.nutAllergyFriendly ? (
+              <div className="form-error-message">{formik.errors.nutAllergyFriendly}</div>
+            ) : null}
+          </Form.Group>
+        </Form.Row>
+
         <hr></hr>
 
         <Form.Row>

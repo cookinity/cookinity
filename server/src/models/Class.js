@@ -90,6 +90,18 @@ const classSchema = new Schema(
       ref: 'User',
     },
     bookableDates: [Date],
+    veganFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    vegetarianFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    nutAllergyFriendly: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );
@@ -132,6 +144,9 @@ classSchema.methods.toJSON = function () {
     maxGuests: this.maxGuests,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
+    veganFriendly: this.veganFriendly,
+    vegetarianFriendly: this.vegetarianFriendly,
+    nutAllergyFriendly: this.nutAllergyFriendly,
     bookableDates: this.bookableDates.map((date) => {
       // format as a string using dayjs (can be parsed on the frontend using dayjs) ! This will be also UTC --> convert it for display in frontend using dayjs if necessary
       return dayjs(date).utc().toJSON();
@@ -165,6 +180,9 @@ export const validateClass = (c) => {
     maxGuests: Joi.number().integer().min(1).max(100).positive().required(),
     meetingAddress: addressSchema,
     bookableDates: Joi.array().items(Joi.date()),
+    veganFriendly: Joi.boolean(),
+    vegetarianFriendly: Joi.boolean(),
+    nutAllergyFriendly: Joi.boolean(),
   });
 
   return classSchema.validate(c);
