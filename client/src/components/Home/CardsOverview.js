@@ -1,24 +1,14 @@
 import React from 'react';
 import ClassCard from './ClassCard';
 
-export default function CardsOverview(props) {
+export default function CardsOverview({ classes }) {
+  let content;
 
-    const displayClasses = (props) => {
-        if (props.length > 0) {
-            return (
-                props.map((props) => {
-                    return (
-                        <ClassCard c={props.class} />
-                    )
-                })
-            )
-        } else {
-            return (<h3>No classes available</h3>)
-        }
-    }
+  if (classes.length > 0) {
+    content = classes.map((c) => <ClassCard c={c} />);
+  } else {
+    content = <h3>No classes available</h3>;
+  }
 
-    return (
-        <div>{displayClasses(props)}</div>
-    )
-
+  return <div>{content}</div>;
 }

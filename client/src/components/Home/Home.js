@@ -12,32 +12,33 @@ import { CITY_CATEGORIES } from 'constants/CityCategories';
 
 export const Home = () => {
   const [classes, setClasses] = useState([]);
-  const [filteredClasses, setFilteredClasses] = useState(classes);
+  const [filteredClasses, setFilteredClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const fetchClasses = async () => {
-      setIsError(false);
-      setIsLoading(true);
-      try {
-        const result = await axios('/api/classes');
-        setClasses(result.data.classes);
-      } catch (err) {
-        setIsError(true);
-        setErrorMessage(err?.response?.data.message || err.message);
-      }
-      setIsLoading(false);
-    };
-
-    fetchClasses();
+    fetchClasses(undefined); // no filter set --> pull in all classes
   }, []);
+
+  const fetchClasses = async (filters) => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      const result = await axios('/api/classes');
+      setClasses(result.data.classes);
+      setFilteredClasses(result.data.classes);
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err?.response?.data.message || err.message);
+    }
+    setIsLoading(false);
+  };
 
   const handleFilterCategory = (e) => {
     let value = e.target.value;
     let result = [];
-    result = filteredClasses.filter((data) => {
+    result = classes.filter((data) => {
       return data.category.search(value) != -1;
     });
     setFilteredClasses(result);
@@ -46,8 +47,8 @@ export const Home = () => {
   const handleFilterCity = (e) => {
     let value = e.target.value;
     let result = [];
-    result = filteredClasses.filter((data) => {
-      return data.city.search(value) != -1;
+    result = classes.filter((data) => {
+      return data.meetingAddress.city.search(value) != -1;
     });
     setFilteredClasses(result);
   };

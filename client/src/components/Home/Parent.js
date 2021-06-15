@@ -3,22 +3,22 @@ import axios from 'axios';
 import CardsOverview from './CardsOverview';
 
 export default function Parent() {
-    const [classes, getClasses] = useState('')
+  const [classes, getClasses] = useState([]);
 
-    useEffect( () => {
-        getAllClasses();
-    }, [])
+  useEffect(() => {
+    getAllClasses();
+  }, []);
 
-    const getAllClasses = () => {
-        axios.get('/api/classes')
-        .then((response) => {
-            const allClasses = response.data
-            getClasses(allClasses)
-        })
-        .catch(error => console.error('Error: ${error}'))
-    }
+  const getAllClasses = () => {
+    // please change to async / await
+    axios
+      .get('/api/classes')
+      .then((response) => {
+        const allClasses = response.data;
+        getClasses(allClasses);
+      })
+      .catch((error) => console.error('Error: ${error}'));
+  };
 
-    return(
-        <CardsOverview classes={classes} />
-    )
+  return <CardsOverview classes={classes} />;
 }
