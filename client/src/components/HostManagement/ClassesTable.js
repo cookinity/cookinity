@@ -4,7 +4,7 @@ import React from 'react';
 import { Accordion, Button, Card, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-export const ClassesTable = ({ classes }) => {
+export const ClassesTable = ({ classes, onDeleteCallback }) => {
   const columns = (
     <tr>
       <th>Title</th>
@@ -70,7 +70,7 @@ export const ClassesTable = ({ classes }) => {
               <FontAwesomeIcon icon={faEdit} /> Edit
             </Button>
           </LinkContainer>
-          <Button variant="danger" className="ml-2">
+          <Button variant="danger" className="ml-2" onClick={onDeleteCallback(c)}>
             <FontAwesomeIcon icon={faTrash} /> Delete
           </Button>
         </td>

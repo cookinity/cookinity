@@ -3,19 +3,18 @@ import axios from 'axios';
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Layout from '../Layout/Layout';
-import { Accordion, Alert, Button, Card, Col, Nav, Row, Table } from 'react-bootstrap';
+import { Alert, Button, Col, Row } from 'react-bootstrap';
 
 import Loader from 'components/Shared/Loader/Loader';
 import requireAuth from 'higherOrderComponents/requireAuth';
 import { compose } from 'redux';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { LinkContainer } from 'react-router-bootstrap';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { ClassesTable } from './ClassesTable';
+import { LinkContainer } from 'react-router-bootstrap';
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
@@ -28,47 +27,78 @@ export const HostManagement = () => {
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const fetchClasses = async () => {
-      setIsError(false);
-      setIsLoading(true);
-      try {
-        // load all classes for which the currently logged in user is host
-        const result = await axios.get('/api/classes', { params: { hostId: auth.me.id } });
-        const unformattedClasses = result.data.classes;
-        const today = dayjs(new Date());
-        const classesWithAFutureDate = [];
-        const classesWihoutAFutureDate = [];
-        unformattedClasses.forEach((c) => {
-          const cCopy = { ...c };
-          cCopy.pastDates = [];
-          cCopy.futureDates = [];
-
-          for (const dateString of cCopy.bookableDates) {
-            const date = dayjs(dateString);
-            if (date.isBefore(today)) {
-              cCopy.pastDates.push(date.format('llll'));
-            } else {
-              cCopy.futureDates.push(date.format('llll'));
-            }
-          }
-          if (cCopy.futureDates.length !== 0) {
-            classesWithAFutureDate.push(cCopy);
-          } else {
-            classesWihoutAFutureDate.push(cCopy);
-          }
-        });
-
-        setUpcomingClasses(classesWithAFutureDate);
-        setPastClasses(classesWihoutAFutureDate);
-      } catch (err) {
-        setIsError(true);
-        setErrorMessage(err?.response?.data.message || err.message);
-      }
-      setIsLoading(false);
-    };
-
     fetchClasses();
   }, []);
+
+  const fetchClasses = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      // load all classes for which the currently logged in user is host
+      const result = await axios.get('/api/classes', { params: { hostId: auth.me.id } });
+      const unformattedClasses = result.data.classes;
+      const today = dayjs(new Date());
+      const classesWithAFutureDate = [];
+      const classesWihoutAFutureDate = [];
+      unformattedClasses.forEach((c) => {
+        const cCopy = { ...c };
+        cCopy.pastDates = [];
+        cCopy.futureDates = [];
+
+        for (const dateString of cCopy.bookableDates) {
+          const date = dayjs(dateString);
+          if (date.isBefore(today)) {
+            cCopy.pastDates.push(date.format('llll'));
+          } else {
+            cCopy.futureDates.push(date.format('llll'));
+          }
+        }
+        if (cCopy.futureDates.length !== 0) {
+          classesWithAFutureDate.push(cCopy);
+        } else {
+          classesWihoutAFutureDate.push(cCopy);
+        }
+      });
+
+      setUpcomingClasses(classesWithAFutureDate);
+      setPastClasses(classesWihoutAFutureDate);
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err?.response?.data.message || err.message);
+    }
+    setIsLoading(false);
+  };
+
+  const deleteClass = async (c) => {
+    setIsLoading(true);
+    setIsError(false);
+    try {
+      // adding the necessary security header
+      const token = auth.token;
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+        },
+      };
+      if (token) {
+        config.headers['x-auth-token'] = token;
+      }
+
+      await axios.delete(`/api/classes/${c.id}`, config);
+      setIsLoading(false);
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err?.response?.data.message || err.message);
+      setIsLoading(false);
+    }
+  };
+
+  const onDeleteCallback = (c) => {
+    return async () => {
+      await deleteClass(c);
+      await fetchClasses();
+    };
+  };
 
   if (isLoading) {
     return (
@@ -102,10 +132,16 @@ export const HostManagement = () => {
               </LinkContainer>
 
               <h1 className="text-center">Upcoming Classes</h1>
-              <ClassesTable classes={upcomingClasses}></ClassesTable>
+              <ClassesTable
+                classes={upcomingClasses}
+                onDeleteCallback={onDeleteCallback}
+              ></ClassesTable>
               <hr></hr>
               <h1 className="text-center">Past Classes</h1>
-              <ClassesTable classes={pastClasses}></ClassesTable>
+              <ClassesTable
+                classes={pastClasses}
+                onDeleteCallback={onDeleteCallback}
+              ></ClassesTable>
             </div>
           </Col>
         </Row>
