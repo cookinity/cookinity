@@ -20,6 +20,12 @@ import CreateClass from 'components/CreateClass/CreateClass';
 import ClassDetail from 'components/ClassDetail/ClassDetail';
 import EditClass from 'components/EditClass/EditClass';
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fab, faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle)
+
 const App = ({ auth, loadMe }) => {
   useEffect(() => {
     loadMe();

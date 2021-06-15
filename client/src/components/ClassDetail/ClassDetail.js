@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../Layout/Layout';
 import { Carousel, Container, Row, Col } from 'react-bootstrap';
 import './classDetail.scss';
-import { BsCalendar, BsClock, BsPeople, BsFillExclamationCircleFill } from 'react-icons/bs';
-import { RiMoneyEuroCircleLine } from 'react-icons/ri';
-import { MdLocationOn } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const mockClassDetail = {
   id: 1,
@@ -56,6 +54,16 @@ function formatAddress(adress) {
   return adress.street + ', ' + adress.zip + ' ' + adress.city
 }
 
+const ColoredLine = ({ color }) => (
+  <hr
+      style={{
+          color: color,
+          backgroundColor: color,
+          height: 0.1 
+      }}
+  />
+);
+
 const ClassDetail = () => {
   const [c, setClass] = useState(undefined);
   const [isError, setIsError] = useState(false);
@@ -91,32 +99,35 @@ const ClassDetail = () => {
         <Container>
           <Row className="rowFormat">
             <Col className="classDetail">
-              <BsCalendar size={32} className="iconPos" /> {c.bookableDates[0].format("DD/MM/YYYY")}
+            <FontAwesomeIcon icon="calendar-alt" size="2x" className="iconPos fa-fw"/> {c.bookableDates[0].format("DD/MM/YYYY")}
             </Col>
             <Col className="classDetail">
-              <RiMoneyEuroCircleLine size={32} className="iconPos" />{' '}
-              {mockClassDetail.price.toString()} € per person
-            </Col>
-          </Row>
-          <Row className="rowFormat">
-            <Col className="classDetail">
-              <BsClock size={32} className="iconPos" /> {c.bookableDates[0].format("HH:mm")}
-            </Col>
-            <Col className="classDetail">
-              <BsPeople size={32} className="iconPos" /> {mockClassDetail.minParticipants} -{' '}
-              {mockClassDetail.maxParticipants} persons
+              <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw"/> {c.pricePerPerson} € per person
             </Col>
           </Row>
           <Row className="rowFormat">
             <Col className="classDetail">
-              <MdLocationOn size={32} className="iconPos" /> {formatAddress(c.meetingAddress)}
+            <FontAwesomeIcon icon="clock" size="2x" className="iconPos fa-fw"/> {c.bookableDates[0].format("HH:mm")}
             </Col>
             <Col className="classDetail">
-              <BsFillExclamationCircleFill size={32} className="iconPos" />{' '}
-              {mockClassDetail.dietaryPreferences}
+            <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw"/> {c.minGuests} -{' '}
+              {c.maxGuests} persons
+            </Col>
+          </Row>
+          <Row className="rowFormat">
+            <Col className="classDetail">
+            <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw"/> {formatAddress(c.meetingAddress)}
+            </Col>
+            <Col className="classDetail">
+            <FontAwesomeIcon icon="check-circle" size="2x" className="iconPos fa-fw"/>
+              {c.vegetarianFriendly? "vegetarian":""}, 
+              {c.veganFriendly? " vegan":""},
+              {c.nutAllergyFriendly? " nut free":""}
             </Col>
           </Row>
         </Container>
+        <ColoredLine color="gray" />
+        <h3>Description</h3>
         <Row className="rowFormat">{c.description}</Row>
       </Layout>
     );
