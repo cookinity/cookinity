@@ -69,17 +69,25 @@ const classSchema = new Schema(
       type: String,
       required: true,
     },
-    rating: {
+    toBring: {
       type: String,
-      required: false,
+      default: '',
     },
-    price: {
+    pricePerPerson: {
       type: Number,
-      required: false,
+      required: true,
     },
-    participants: {
+    durationInMinutes: {
       type: Number,
-      required: false,
+      required: true,
+    },
+    minGuests: {
+      type: Number,
+      required: true,
+    },
+    maxGuests: {
+      type: Number,
+      required: true,
     },
     meetingAddress: {
       type: addressSchema,
@@ -90,6 +98,18 @@ const classSchema = new Schema(
       ref: 'User',
     },
     bookableDates: [Date],
+    veganFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    vegetarianFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    nutAllergyFriendly: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );
@@ -125,11 +145,18 @@ classSchema.methods.toJSON = function () {
     photoTwo,
     category: this.category,
     description: this.description,
+    toBring: this.toBring,
     meetingAddress: this.meetingAddress.toJSON(),
     host: this.host.toJSON(),
+    pricePerPerson: this.pricePerPerson,
+    durationInMinutes: this.durationInMinutes,
+    minGuests: this.minGuests,
+    maxGuests: this.maxGuests,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
-    rating: this.rating,
+    veganFriendly: this.veganFriendly,
+    vegetarianFriendly: this.vegetarianFriendly,
+    nutAllergyFriendly: this.nutAllergyFriendly,
     bookableDates: this.bookableDates.map((date) => {
       // format as a string using dayjs (can be parsed on the frontend using dayjs) ! This will be also UTC --> convert it for display in frontend using dayjs if necessary
       return dayjs(date).utc().toJSON();
@@ -158,8 +185,16 @@ export const validateClass = (c) => {
       .valid(...CLASS_CATEGORIES)
       .required(),
     description: Joi.string().required(),
+    toBring: Joi.string(),
+    pricePerPerson: Joi.number().precision(2).positive(), // by default we assume in euro right now
+    durationInMinutes: Joi.number().integer().min(1).positive().required(),
+    minGuests: Joi.number().integer().min(1).max(100).positive().required(),
+    maxGuests: Joi.number().integer().min(1).max(100).positive().required(),
     meetingAddress: addressSchema,
     bookableDates: Joi.array().items(Joi.date()),
+    veganFriendly: Joi.boolean(),
+    vegetarianFriendly: Joi.boolean(),
+    nutAllergyFriendly: Joi.boolean(),
   });
 
   return classSchema.validate(c);

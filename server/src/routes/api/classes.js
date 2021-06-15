@@ -2,51 +2,32 @@ import { Router } from 'express';
 import { Model } from 'mongoose';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import dayjs from 'dayjs';
-import multer from 'multer';
-import { resolve } from 'path';
-import crypto from 'crypto';
-import mime from 'mime';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import Class, { validateClass } from '../../models/Class';
+import upload from '../../middleware/multer';
+var ObjectId = require('mongoose').Types.ObjectId;
 
 const router = Router();
 
-// Note : __dirname is an node js environment variable that
-// tells you the absolute path of the directory
-// containing the currently executing file.
-const storage = multer.diskStorage({
-  // tells multer where to store the uploaded images
-  destination: function (req, file, cb) {
-    cb(null, resolve(__dirname, '../../../public/images'));
-  },
-  // tells multer what names the uploaded images should have
-  filename: function (req, file, cb) {
-    const extension = mime.getExtension(file.mimetype);
-    crypto.randomBytes(16, function (err, raw) {
-      cb(null, raw.toString('hex') + Date.now() + '.' + extension);
-    });
-  },
-});
-
-const upload = multer({
-  storage,
-  // 5000000 bytes = 5 megabytes
-  limits: { fileSize: 5000000 },
-  fileFilter: (req, file, cb) => {
-    // only png jpg or jpeg are allowed, we determine this by the mimetype
-    if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
-      cb(null, true); // accept file
-    } else {
-      cb(null, false); // reject file
-      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-    }
-  },
-});
+var photosUpload = upload.fields([
+  { name: 'coverPhoto', maxCount: 1 },
+  { name: 'photoOne', maxCount: 1 },
+  { name: 'photoTwo', maxCount: 1 },
+]);
 
 router.get('/', async (req, res, next) => {
   try {
-    const classes = await Class.find().populate('host');
+    const { hostId } = req.query;
+    let classes = [];
+    if (hostId) {
+      // classes by the specified host
+      classes = await Class.find({ host: new ObjectId(hostId) }).populate('host');
+    } else {
+      // all classes
+      classes = await Class.find().populate('host');
+    }
+
     res.json({
       classes: classes.map((c) => {
         return c.toJSON();
@@ -67,23 +48,105 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', [requireJwtAuth, upload.array('photos[]', 3)], async (req, res, next) => {
-  req.body.bookableDates = JSON.parse(req.body.bookableDates);
+router.delete('/:id', [requireJwtAuth], async (req, res, next) => {
+  try {
+    const tempClass = await Class.findById(req.params.id).populate('host');
+    // check that the class exists in the database
+    if (!tempClass) {
+      return res.status(404).json({ message: 'Class not found!' });
+    }
+    // check that the user making the request is the host of the class or an admin
+    if (!(tempClass.host.id === req.user.id) || req.user.role === 'ADMIN') {
+      return res.status(400).json({ message: 'Only the host of a class can delete a class!' });
+    }
+
+    const c = await Class.findByIdAndDelete(tempClass._id);
+    res.status(200).json({ c });
+  } catch (err) {
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
+router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
+  try {
+    const tempClass = await Class.findById(req.params.id).populate('host');
+    // check that the class exists in the database
+    if (!tempClass) {
+      return res.status(404).json({ message: 'Class not found!' });
+    }
+    // check that the user making the request is the host of the class or an admin
+    if (!(tempClass.host.id === req.user.id) || req.user.role === 'ADMIN') {
+      return res.status(400).json({ message: 'Only the host of a class can edit a class!' });
+    }
+
+    // modifying the request body
+    if (req.body.bookableDates) {
+      req.body.bookableDates = JSON.parse(req.body.bookableDates);
+    }
+    let coverPhoto = undefined;
+    let photoOne = undefined;
+    let photoTwo = undefined;
+
+    if (req.files) {
+      if (req.files['coverPhoto'] && req.files['coverPhoto'][0]) {
+        coverPhoto = req.files['coverPhoto'][0].filename;
+      }
+      if (req.files['photoOne'] && req.files['photoOne'][0]) {
+        photoOne = req.files['photoOne'][0].filename;
+      }
+      if (req.files['photoTwo'] && req.files['photoTwo'][0]) {
+        photoTwo = req.files['photoTwo'][0].filename;
+      }
+    }
+
+    const updatedClass = {
+      title: req.body.title,
+      coverPhoto: coverPhoto,
+      photoOne: photoOne,
+      photoTwo: photoTwo,
+      category: req.body.category,
+      description: req.body.description,
+      toBring: req.body.toBring,
+      meetingAddress: req.body.meetingAddress,
+      pricePerPerson: req.body.pricePerPerson,
+      durationInMinutes: req.body.durationInMinutes,
+      minGuests: req.body.minGuests,
+      maxGuests: req.body.maxGuests,
+      veganFriendly: req.body.veganFriendly,
+      vegetarianFriendly: req.body.vegetarianFriendly,
+      nutAllergyFriendly: req.body.nutAllergyFriendly,
+      bookableDates: req.body.bookableDates
+        ? req.body.bookableDates.map((date) => dayjs(date).utc().toDate())
+        : undefined,
+    };
+
+    Object.keys(updatedClass).forEach((key) => (updatedClass[key] === undefined ? delete updatedClass[key] : {}));
+
+    const c = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
+
+    res.status(200).json({ c });
+  } catch (err) {
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
+router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
+  if (req.body.bookableDates) {
+    req.body.bookableDates = JSON.parse(req.body.bookableDates);
+  }
   let coverPhoto = undefined;
   let photoOne = undefined;
   let photoTwo = undefined;
-  // cover photo is at position 0
-  // photo one is at position 1
-  // photo two is at position 2
+
   if (req.files) {
-    if (req.files[0]) {
-      coverPhoto = req.files[0].filename;
+    if (req.files['coverPhoto'] && req.files['coverPhoto'][0]) {
+      coverPhoto = req.files['coverPhoto'][0].filename;
     }
-    if (req.files[1]) {
-      photoOne = req.files[1].filename;
+    if (req.files['photoOne'] && req.files['photoOne'][0]) {
+      photoOne = req.files['photoOne'][0].filename;
     }
-    if (req.files[2]) {
-      photoTwo = req.files[2].filename;
+    if (req.files['photoTwo'] && req.files['photoTwo'][0]) {
+      photoTwo = req.files['photoTwo'][0].filename;
     }
   }
 
@@ -94,9 +157,19 @@ router.post('/', [requireJwtAuth, upload.array('photos[]', 3)], async (req, res,
     photoTwo: photoTwo,
     category: req.body.category,
     description: req.body.description,
+    toBring: req.body.toBring,
     meetingAddress: req.body.meetingAddress,
+    pricePerPerson: req.body.pricePerPerson,
+    durationInMinutes: req.body.durationInMinutes,
+    minGuests: req.body.minGuests,
+    maxGuests: req.body.maxGuests,
+    veganFriendly: req.body.veganFriendly,
+    vegetarianFriendly: req.body.vegetarianFriendly,
+    nutAllergyFriendly: req.body.nutAllergyFriendly,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
-    bookableDates: req.body.bookableDates.map((date) => dayjs(date).utc().toDate()),
+    bookableDates: req.body.bookableDates
+      ? req.body.bookableDates.map((date) => dayjs(date).utc().toDate())
+      : undefined,
   };
 
   Object.keys(c).forEach((key) => (c[key] === undefined ? delete c[key] : {}));
