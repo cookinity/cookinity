@@ -1,10 +1,21 @@
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import { Accordion, Button, Card, Table } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 export const ClassesTable = ({ classes, onDeleteCallback }) => {
+  const [show, setShow] = useState(false);
+  const [selectedClass, setSelectedClass] = useState(undefined);
+
+  const handleClose = () => setShow(false);
+  const handleShow = (c) => {
+    return () => {
+      setSelectedClass(c);
+      setShow(true);
+    };
+  };
+
   const columns = (
     <tr>
       <th>Title</th>
@@ -70,7 +81,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
               <FontAwesomeIcon icon={faEdit} /> Edit
             </Button>
           </LinkContainer>
-          <Button variant="danger" className="ml-2" onClick={onDeleteCallback(c)}>
+          <Button variant="danger" className="ml-2" onClick={handleShow(c)}>
             <FontAwesomeIcon icon={faTrash} /> Delete
           </Button>
         </td>
@@ -79,9 +90,27 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
   });
 
   return (
-    <Table striped bordered hover>
-      <thead>{columns}</thead>
-      <tbody>{rows}</tbody>
-    </Table>
+    <>
+      <Table striped bordered hover>
+        <thead>{columns}</thead>
+        <tbody>{rows}</tbody>
+      </Table>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete {selectedClass ? selectedClass.title : ''}?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Do you really want to delete the class {selectedClass ? selectedClass.title : ''}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={onDeleteCallback(selectedClass)}>
+            Delete Class
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
