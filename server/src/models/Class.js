@@ -1,8 +1,14 @@
-import Joi from 'joi';
-import mongoose, { Model } from 'mongoose';
+import Joi from 'joi-oid';
+import mongoose from 'mongoose';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import { join } from 'path';
+import fs from 'fs';
+import { isValidUrl } from '../utils/utils';
+dayjs.extend(utc);
 const { Schema } = mongoose;
-import { CLASS_CATEGORIES } from './ClassCategories';
-import { CITY_CATEGORIES } from './CityCategories';
+import { CLASS_CATEGORIES } from '../constants/ClassCategories';
+import { CITY_CATEGORIES } from '../constants/CityCategories';
 
 const addressSchema = new Schema({
   country: {

@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { Model } from 'mongoose';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
