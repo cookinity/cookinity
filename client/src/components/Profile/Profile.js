@@ -11,7 +11,7 @@ import Layout from '../Layout/Layout';
 import Loader from '../Shared/Loader/Loader';
 import requireAuth from '../../higherOrderComponents/requireAuth';
 import { profileSchema } from './validation';
-import {Button, Form, Image} from 'react-bootstrap'
+import { Button, Form, Image } from 'react-bootstrap';
 
 import './styles.scss';
 
@@ -45,7 +45,7 @@ const Profile = ({
 
   const handleClickEdit = () => {
     retryCount.current = 0;
-    setIsEdit((oldIsEdit) => !oldIsEdit);
+    setIsEdit(!isEdit);
     setImage(null);
     setAvatar(null);
     formik.setFieldValue('id', profile.id);
@@ -120,8 +120,8 @@ const Profile = ({
                 </span>
               </div>
               <div>
-                <Button 
-                  variant="primary" 
+                <Button
+                  variant="primary"
                   type="button"
                   onClick={handleClickEdit}
                   disabled={!(me?.username === profile.username || me?.role === 'ADMIN')}
@@ -136,96 +136,84 @@ const Profile = ({
         {error && <p className="error">{error}</p>}
 
         {isEdit && (
-          <div className="form">
-            <form onSubmit={formik.handleSubmit}>
-              <div>
-                <Form>
-                  <Form.Group>
-                    <Form.File label="Avatar:"name="image" type="file" onChange={onChange}/>
-                  </Form.Group>
-                </Form>
-                {image && (
-                  <Button 
-                    style={{marginBottom: 5}}
-                    variant="primary"
-                    type="button"
-                    onClick={() => {
-                      setImage(null);
-                      setAvatar(null);
-                    }}
-                  >
-                    Remove Image
-                  </Button>
-                )}
-              </div>
-              <input name="id" type="hidden" value={formik.values.id} />
-              <div className="input-div">
-                <Form>
-                  <Form.Group controlId="nameInput">
-                    <Form.Label>Name:</Form.Label>
-                    <Form.Control placeholder="Name"
-                        name="name"
-                        className=""
-                        type="text"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.name} 
-                    />
-                  </Form.Group>
-                </Form>
-                {formik.touched.name && formik.errors.name ? (
-                  <p className="error">{formik.errors.name}</p>
-                ) : null}
-              </div>
-              <div className="input-div">
-                <Form>
-                  <Form.Group controlId="userNameInput">
-                    <Form.Label>Username:</Form.Label>
-                    <Form.Control 
-                        placeholder="Username"
-                        name="username"
-                        className=""
-                        type="text"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.username}
-                    />
-                  </Form.Group>
-                </Form>
-                {formik.touched.username && formik.errors.username ? (
-                  <p className="error">{formik.errors.username}</p>
-                ) : null}
-              </div>
-              {profile.provider === 'email' && (
-                <div className="input-div" style={{marginBottom: 10}}>
-                  <Form.Group controlId="userNameInput">
-                    <Form.Label>Password:</Form.Label>
-                    <Form.Control 
-                        placeholder="Password"
-                        name="password"
-                        className=""
-                        type="password"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.password}
-                    />
-                  </Form.Group>
-                  {formik.touched.password && formik.errors.password ? (
-                    <p className="error">{formik.errors.password}</p>
-                  ) : null}
-                </div>
-              )}
-              <Button variant = "primary" type="submit">
-                Save
-              </Button>
+          <Form onSubmit={formik.handleSubmit}>
+            <Form.Group>
+              <Form.File label="Avatar:" name="image" onChange={onChange} />
+            </Form.Group>
+            {image && (
               <Button
-                variant = "primary"
-                onClick={() => handleDeleteUser(profile.id, history)}
+                style={{ marginBottom: 5 }}
+                variant="primary"
+                type="button"
+                onClick={() => {
+                  setImage(null);
+                  setAvatar(null);
+                }}
               >
-                Delete profile
+                Remove Image
               </Button>
-            </form>
-          </div>
+            )}
+            <Form.Control name="id" type="hidden" value={formik.values.id} />
+            <div className="input-div">
+              <Form.Group controlId="nameInput">
+                <Form.Label>Name:</Form.Label>
+                <Form.Control
+                  placeholder="Name"
+                  name="name"
+                  className=""
+                  type="text"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.name}
+                />
+              </Form.Group>
+              {formik.touched.name && formik.errors.name ? (
+                <p className="error">{formik.errors.name}</p>
+              ) : null}
+            </div>
+            <div className="input-div">
+              <Form.Group controlId="userNameInput">
+                <Form.Label>Username:</Form.Label>
+                <Form.Control
+                  placeholder="Username"
+                  name="username"
+                  className=""
+                  type="text"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.username}
+                />
+              </Form.Group>
+              {formik.touched.username && formik.errors.username ? (
+                <p className="error">{formik.errors.username}</p>
+              ) : null}
+            </div>
+            {profile.provider === 'email' && (
+              <div className="input-div" style={{ marginBottom: 10 }}>
+                <Form.Group controlId="emailInput">
+                  <Form.Label>Password:</Form.Label>
+                  <Form.Control
+                    placeholder="Password"
+                    name="password"
+                    className=""
+                    type="password"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.password}
+                  />
+                </Form.Group>
+                {formik.touched.password && formik.errors.password ? (
+                  <p className="error">{formik.errors.password}</p>
+                ) : null}
+              </div>
+            )}
+            <Button variant="primary" type="submit">
+              Save
+            </Button>
+            <Button variant="primary" onClick={() => handleDeleteUser(profile.id, history)}>
+              Delete profile
+            </Button>
+          </Form>
         )}
       </div>
     </Layout>
