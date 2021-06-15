@@ -9,6 +9,12 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 const router = Router();
 
+var photosUpload = upload.fields([
+  { name: 'coverPhoto', maxCount: 1 },
+  { name: 'photoOne', maxCount: 1 },
+  { name: 'photoTwo', maxCount: 1 },
+]);
+
 router.get('/', async (req, res, next) => {
   try {
     const { hostId } = req.query;
@@ -41,7 +47,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', [requireJwtAuth, upload.array('photos[]', 3)], async (req, res, next) => {
+router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
   try {
     const tempClass = await Class.findById(req.params.id).populate('host');
     // check that the class exists in the database
@@ -60,18 +66,16 @@ router.put('/:id', [requireJwtAuth, upload.array('photos[]', 3)], async (req, re
     let coverPhoto = undefined;
     let photoOne = undefined;
     let photoTwo = undefined;
-    // cover photo is at position 0
-    // photo one is at position 1
-    // photo two is at position 2
+
     if (req.files) {
-      if (req.files[0]) {
-        coverPhoto = req.files[0].filename;
+      if (req.files['coverPhoto'] && req.files['coverPhoto'][0]) {
+        coverPhoto = req.files['coverPhoto'][0].filename;
       }
-      if (req.files[1]) {
-        photoOne = req.files[1].filename;
+      if (req.files['photoOne'] && req.files['photoOne'][0]) {
+        photoOne = req.files['photoOne'][0].filename;
       }
-      if (req.files[2]) {
-        photoTwo = req.files[2].filename;
+      if (req.files['photoTwo'] && req.files['photoTwo'][0]) {
+        photoTwo = req.files['photoTwo'][0].filename;
       }
     }
 
@@ -82,10 +86,14 @@ router.put('/:id', [requireJwtAuth, upload.array('photos[]', 3)], async (req, re
       photoTwo: photoTwo,
       category: req.body.category,
       description: req.body.description,
+      toBring: req.body.toBring,
       meetingAddress: req.body.meetingAddress,
-      pricePerPerson: Number(req.body.pricePerPerson),
-      minGuests: Number(req.body.minGuests),
-      maxGuests: Number(req.body.maxGuests),
+      pricePerPerson: req.body.pricePerPerson,
+      minGuests: req.body.minGuests,
+      maxGuests: req.body.maxGuests,
+      veganFriendly: req.body.veganFriendly,
+      vegetarianFriendly: req.body.vegetarianFriendly,
+      nutAllergyFriendly: req.body.nutAllergyFriendly,
       bookableDates: req.body.bookableDates
         ? req.body.bookableDates.map((date) => dayjs(date).utc().toDate())
         : undefined,
@@ -101,25 +109,23 @@ router.put('/:id', [requireJwtAuth, upload.array('photos[]', 3)], async (req, re
   }
 });
 
-router.post('/', [requireJwtAuth, upload.array('photos[]', 3)], async (req, res, next) => {
+router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
   if (req.body.bookableDates) {
     req.body.bookableDates = JSON.parse(req.body.bookableDates);
   }
   let coverPhoto = undefined;
   let photoOne = undefined;
   let photoTwo = undefined;
-  // cover photo is at position 0
-  // photo one is at position 1
-  // photo two is at position 2
+
   if (req.files) {
-    if (req.files[0]) {
-      coverPhoto = req.files[0].filename;
+    if (req.files['coverPhoto'] && req.files['coverPhoto'][0]) {
+      coverPhoto = req.files['coverPhoto'][0].filename;
     }
-    if (req.files[1]) {
-      photoOne = req.files[1].filename;
+    if (req.files['photoOne'] && req.files['photoOne'][0]) {
+      photoOne = req.files['photoOne'][0].filename;
     }
-    if (req.files[2]) {
-      photoTwo = req.files[2].filename;
+    if (req.files['photoTwo'] && req.files['photoTwo'][0]) {
+      photoTwo = req.files['photoTwo'][0].filename;
     }
   }
 
@@ -130,10 +136,14 @@ router.post('/', [requireJwtAuth, upload.array('photos[]', 3)], async (req, res,
     photoTwo: photoTwo,
     category: req.body.category,
     description: req.body.description,
+    toBring: req.body.toBring,
     meetingAddress: req.body.meetingAddress,
     pricePerPerson: Number(req.body.pricePerPerson),
-    minGuests: Number(req.body.minGuests),
-    maxGuests: Number(req.body.maxGuests),
+    minGuests: req.body.minGuests,
+    maxGuests: req.body.maxGuests,
+    veganFriendly: req.body.veganFriendly,
+    vegetarianFriendly: req.body.vegetarianFriendly,
+    nutAllergyFriendly: req.body.nutAllergyFriendly,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
     bookableDates: req.body.bookableDates
       ? req.body.bookableDates.map((date) => dayjs(date).utc().toDate())

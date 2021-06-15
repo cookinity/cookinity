@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, FormControl, InputGroup } from 'react-bootstrap';
-import { CLASS_CATEGORIES } from '../../constants/ClassCategories';
-
+import { Button, Form } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { useSelector } from 'react-redux';
 import { validationSchema } from './classValidation';
-import { Calendar, DateObject } from 'react-multi-date-picker';
-import DatePanel from 'react-multi-date-picker/plugins/date_panel';
-import TimePicker from 'react-multi-date-picker/plugins/time_picker';
+import { DateObject } from 'react-multi-date-picker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import ImageUpload from './ImageUpload';
 import _ from 'lodash';
+import AddressSection from './FormSections/AddressSection';
+import EatingHabitsSection from './FormSections/EatingHabitsSection';
+import PhotosSection from './FormSections/PhotosSection';
+import DatesSection from './FormSections/DatesSection';
+import GuestsSection from './FormSections/GuestsSection';
+import BasicInfoSection from './FormSections/BasicInfoSection';
 dayjs.extend(utc);
 
 const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
+  const history = useHistory();
+
   const [bookableDates, setBookableDates] = useState([]);
   const [focusedDate, setFocusedDate] = useState();
   // coverPhoto
@@ -56,6 +59,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('title', _.get(originalClass, 'title'));
       formik.setFieldValue('category', _.get(originalClass, 'category'));
       formik.setFieldValue('description', _.get(originalClass, 'description'));
+      formik.setFieldValue('toBring', _.get(originalClass, 'toBring'));
       formik.setFieldValue('country', _.get(originalClass, 'meetingAddress.country'));
       formik.setFieldValue('city', _.get(originalClass, 'meetingAddress.city'));
       formik.setFieldValue('state', _.get(originalClass, 'meetingAddress.state'));
@@ -64,6 +68,10 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('pricePerPerson', _.get(originalClass, 'pricePerPerson'));
       formik.setFieldValue('minGuests', _.get(originalClass, 'minGuests'));
       formik.setFieldValue('maxGuests', _.get(originalClass, 'maxGuests'));
+      formik.setFieldValue('veganFriendly', _.get(originalClass, 'veganFriendly'));
+      formik.setFieldValue('vegetarianFriendly', _.get(originalClass, 'vegetarianFriendly'));
+      formik.setFieldValue('nutAllergyFriendly', _.get(originalClass, 'nutAllergyFriendly'));
+
       const bookableDates = [];
       for (const date of _.get(originalClass, 'bookableDates')) {
         const dateObject = new DateObject(dayjs(date).toDate());
@@ -75,6 +83,16 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
         const coverPhotoURL = _.get(originalClass, 'coverPhoto');
         setCoverPhotoUrl(coverPhotoURL);
       }
+
+      if (_.get(originalClass, 'photoOne')) {
+        const photoOneUrl = _.get(originalClass, 'photoOne');
+        setPhotoOneUrl(photoOneUrl);
+      }
+
+      if (_.get(originalClass, 'photoTwo')) {
+        const photoTwoUrl = _.get(originalClass, 'photoTwo');
+        setPhotoTwoUrl(photoTwoUrl);
+      }
     }
   }, []);
 
@@ -83,17 +101,21 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       title: '',
       category: 'Asian',
       description: '',
+      toBring: '',
       country: '',
       city: '',
       state: '',
       zip: '',
       street: '',
-      pricePerPerson: undefined,
-      minGuests: undefined,
-      maxGuests: undefined,
+      pricePerPerson: '',
+      minGuests: '',
+      maxGuests: '',
       coverPhoto: null,
       photoOne: null,
       photoTwo: null,
+      veganFriendly: false,
+      vegetarianFriendly: false,
+      nutAllergyFriendly: false,
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
@@ -103,6 +125,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             title,
             category,
             description,
+            toBring,
             country,
             city,
             zip,
@@ -114,6 +137,9 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             coverPhoto,
             photoOne,
             photoTwo,
+            veganFriendly,
+            vegetarianFriendly,
+            nutAllergyFriendly,
           } = values;
           const data = {
             title,
@@ -122,6 +148,10 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             minGuests,
             maxGuests,
             description,
+            toBring,
+            veganFriendly,
+            vegetarianFriendly,
+            nutAllergyFriendly,
             meetingAddress: {
               country,
               city,
@@ -141,9 +171,15 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
               formData.append(dataKey, data[dataKey]);
             }
           }
-          const photos = [coverPhoto, photoOne, photoTwo];
-          for (const photo of photos) {
-            formData.append('photos[]', photo);
+          if (coverPhoto) {
+            formData.append('coverPhoto', coverPhoto);
+          }
+          if (photoOne) {
+            formData.append('photoOne', photoOne);
+          }
+
+          if (photoTwo) {
+            formData.append('photoTwo', photoTwo);
           }
 
           // We convert to UTC before sending the dates to the backend
@@ -164,16 +200,13 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
           setPhotoTwoUrl(null);
           setBookableDates([]);
           setFocusedDate(undefined);
+          history.push('/hostmanagement');
         } catch (err) {
           // error happened in parent component --> do not clear form
         }
       };
       submit();
     },
-  });
-
-  const classCategories = CLASS_CATEGORIES.map((category) => {
-    return <option key={category}>{category}</option>;
   });
 
   return (
@@ -185,284 +218,33 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
         noValidate
         encType="multipart/form-data"
       >
-        <Form.Group controlId="title">
-          <Form.Label>Title</Form.Label>
-          <Form.Control
-            placeholder="Title"
-            name="title"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.title}
-            className={formik.touched.title && formik.errors.title ? 'form-error' : null}
-          />
-          {formik.touched.title && formik.errors.title ? (
-            <div className="form-error-message">{formik.errors.title}</div>
-          ) : null}
-        </Form.Group>
-        <Form.Group controlId="category">
-          <Form.Label>Category</Form.Label>
-          <Form.Control
-            as="select"
-            name="category"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.category}
-            className={formik.touched.category && formik.errors.category ? 'form-error' : null}
-          >
-            {classCategories}
-          </Form.Control>
-          {formik.touched.category && formik.errors.category ? (
-            <div className="form-error-message">{formik.errors.category}</div>
-          ) : null}
-        </Form.Group>
+        <BasicInfoSection formik={formik}></BasicInfoSection>
         <hr></hr>
-        <Form.Group controlId="description">
-          <Form.Label>Class Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            name="description"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.description}
-            className={
-              formik.touched.description && formik.errors.description ? 'form-error' : null
-            }
-          />
-          {formik.touched.description && formik.errors.description ? (
-            <div className="form-error-message">{formik.errors.description}</div>
-          ) : null}
-        </Form.Group>
+        <GuestsSection formik={formik}></GuestsSection>
         <hr></hr>
-        <Form.Row>
-          <Form.Group as={Col} controlId="pricePerPerson">
-            <Form.Label>Price Per Person</Form.Label>
-            <InputGroup>
-              <Form.Control
-                type="number"
-                placeholder="50,00"
-                name="pricePerPerson"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.pricePerPerson}
-                className={
-                  formik.touched.pricePerPerson && formik.errors.pricePerPerson
-                    ? 'form-error'
-                    : null
-                }
-              />
-              <InputGroup.Append>
-                <InputGroup.Text>€</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-            {formik.touched.pricePerPerson && formik.errors.pricePerPerson ? (
-              <div className="form-error-message">{formik.errors.pricePerPerson}</div>
-            ) : null}
-          </Form.Group>
-          <Form.Group as={Col} controlId="minGuests">
-            <Form.Label>Minimum Number of Guests</Form.Label>
-            <InputGroup>
-              <Form.Control
-                type="number"
-                placeholder="1"
-                name="minGuests"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.minGuests}
-                className={
-                  formik.touched.minGuests && formik.errors.minGuests ? 'form-error' : null
-                }
-              />
-              <InputGroup.Append>
-                <InputGroup.Text>Guests</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-            {formik.touched.minGuests && formik.errors.minGuests ? (
-              <div className="form-error-message">{formik.errors.minGuests}</div>
-            ) : null}
-          </Form.Group>
-          <Form.Group as={Col} controlId="maxGuests">
-            <Form.Label>Maximum Number of Guests</Form.Label>
-            <InputGroup>
-              <Form.Control
-                type="number"
-                placeholder="1"
-                name="maxGuests"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.maxGuests}
-                className={
-                  formik.touched.maxGuests && formik.errors.maxGuests ? 'form-error' : null
-                }
-              />
-              <InputGroup.Append>
-                <InputGroup.Text>Guests</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-            {formik.touched.maxGuests && formik.errors.maxGuests ? (
-              <div className="form-error-message">{formik.errors.maxGuests}</div>
-            ) : null}
-          </Form.Group>
-        </Form.Row>
+        <AddressSection formik={formik}></AddressSection>
         <hr></hr>
-        <Form.Label>Public Meeting Address</Form.Label>
-
-        <Form.Group controlId="country">
-          <Form.Label>Country</Form.Label>
-          <Form.Control
-            placeholder="Germany"
-            name="country"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.country}
-            className={formik.touched.country && formik.errors.country ? 'form-error' : null}
-          />
-          {formik.touched.country && formik.errors.country ? (
-            <div className="form-error-message">{formik.errors.country}</div>
-          ) : null}
-        </Form.Group>
-
-        <Form.Row>
-          <Form.Group as={Col} controlId="city">
-            <Form.Label>City</Form.Label>
-            <Form.Control
-              placeholder="City"
-              name="city"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.city}
-              className={formik.touched.city && formik.errors.city ? 'form-error' : null}
-            />
-            {formik.touched.city && formik.errors.city ? (
-              <div className="form-error-message">{formik.errors.city}</div>
-            ) : null}
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="state">
-            <Form.Label>State</Form.Label>
-            <Form.Control
-              placeholder="State"
-              name="state"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.state}
-              className={formik.touched.state && formik.errors.state ? 'form-error' : null}
-            />
-            {formik.touched.state && formik.errors.state ? (
-              <div className="form-error-message">{formik.errors.state}</div>
-            ) : null}
-          </Form.Group>
-
-          <Form.Group as={Col} controlId="zip">
-            <Form.Label>Zip</Form.Label>
-            <Form.Control
-              placeholder="Zip"
-              name="zip"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.zip}
-              className={formik.touched.zip && formik.errors.zip ? 'form-error' : null}
-            />
-            {formik.touched.zip && formik.errors.zip ? (
-              <div className="form-error-message">{formik.errors.zip}</div>
-            ) : null}
-          </Form.Group>
-        </Form.Row>
-
-        <Form.Group controlId="street">
-          <Form.Label>Street</Form.Label>
-          <Form.Control
-            placeholder="TastyStreet 11"
-            name="street"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.street}
-            className={formik.touched.street && formik.errors.street ? 'form-error' : null}
-          />
-          {formik.touched.street && formik.errors.street ? (
-            <div className="form-error-message">{formik.errors.street}</div>
-          ) : null}
-        </Form.Group>
+        <DatesSection
+          bookableDates={bookableDates}
+          setBookableDates={setBookableDates}
+          focusedDate={focusedDate}
+          setFocusedDate={setFocusedDate}
+        ></DatesSection>
         <hr></hr>
-        <Form.Group controlId="bookableDates">
-          <Form.Label>Choose Dates for Which Your Class Can be Booked</Form.Label>
-          <Calendar
-            className="mx-auto"
-            format="DD/MM/YYYY HH:mm"
-            plugins={[
-              <DatePanel
-                sort="date"
-                position="bottom"
-                header="Bookable Dates"
-                markFocused
-                focusedClassName="bg-green"
-              />,
-              <TimePicker hideSeconds position="right" />,
-            ]}
-            multiple
-            sort
-            onFocusedDateChange={setFocusedDate}
-            onClose={() => setFocusedDate(undefined)}
-            weekStartDayIndex={1}
-            value={bookableDates}
-            onChange={setBookableDates}
-            mapDays={({ date, isSameDate }) => {
-              let props = {};
-
-              if (!isSameDate(date, focusedDate)) return;
-
-              props.style = { backgroundColor: 'green' };
-
-              return props;
-            }}
-          />
-        </Form.Group>
+        <EatingHabitsSection formik={formik}></EatingHabitsSection>
         <hr></hr>
-
-        <Form.Row>
-          <Col sm={12} md={4}>
-            <Form.Group>
-              <Form.Label>Choose a Cover Photo For Your Class</Form.Label>
-              <ImageUpload
-                id="coverPhoto"
-                onImageChange={onCoverPhotoChange}
-                image={coverPhoto}
-                imageUrl={coverPhotoUrl}
-              ></ImageUpload>
-              {formik.touched.coverPhoto && formik.errors.coverPhoto ? (
-                <div className="form-error-message">{formik.errors.coverPhoto}</div>
-              ) : null}
-            </Form.Group>
-          </Col>
-          <Col sm={12} md={4}>
-            <Form.Group>
-              <Form.Label>Choose an Additional Photo</Form.Label>
-              <ImageUpload
-                id="photoOne"
-                onImageChange={onPhotoOneChange}
-                image={photoOne}
-                imageUrl={photoOneUrl}
-              ></ImageUpload>
-              {formik.touched.photoOne && formik.errors.photoOne ? (
-                <div className="form-error-message">{formik.errors.photoOne}</div>
-              ) : null}
-            </Form.Group>
-          </Col>
-          <Col sm={12} md={4}>
-            <Form.Group>
-              <Form.Label>Choose an Additional Photo</Form.Label>
-              <ImageUpload
-                id="photoTwo"
-                onImageChange={onPhotoTwoChange}
-                image={photoTwo}
-                imageUrl={photoTwoUrl}
-              ></ImageUpload>
-              {formik.touched.photoTwo && formik.errors.photoTwo ? (
-                <div className="form-error-message">{formik.errors.photoTwo}</div>
-              ) : null}
-            </Form.Group>
-          </Col>
-        </Form.Row>
+        <PhotosSection
+          formik={formik}
+          coverPhoto={coverPhoto}
+          coverPhotoUrl={coverPhotoUrl}
+          onCoverPhotoChange={onCoverPhotoChange}
+          photoOne={photoOne}
+          photoOneUrl={photoOneUrl}
+          onPhotoOneChange={onPhotoOneChange}
+          photoTwo={photoTwo}
+          photoTwoUrl={photoTwoUrl}
+          onPhotoTwoChange={onPhotoTwoChange}
+        ></PhotosSection>
         <hr></hr>
         <Button variant="primary" type="submit">
           {isEditMode ? 'Edit Class' : 'Create Class'}

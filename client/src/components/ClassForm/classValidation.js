@@ -6,11 +6,15 @@ export const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   category: Yup.string().required('Category is required'),
   description: Yup.string().required('Description is required'),
+  toBring: Yup.string(),
   country: Yup.string().required('Country is required'),
   city: Yup.string().required('City is required'),
   zip: Yup.string().required('Zip Code is required'),
   state: Yup.string().required('State is required'),
   street: Yup.string().required('Street is required'),
+  veganFriendly: Yup.boolean(),
+  vegetarianFriendly: Yup.boolean(),
+  nutAllergyFriendly: Yup.boolean(),
   minGuests: Yup.number()
     .required('Min. Guests is required')
     .positive('Min. Guests must be positive')
@@ -20,10 +24,9 @@ export const validationSchema = Yup.object().shape({
   maxGuests: Yup.number()
     .required('Min. Guests is required')
     .positive('Min. Guests must be positive')
-    .min(1, 'Max. Guests minimum 1')
     .max(100, 'Max. Guests maximum 100')
     .integer('Min. Guests must be an integer')
-    .moreThan(Yup.ref('minGuests'), 'Max. Guests must be larger than Min. Guests'),
+    .min(Yup.ref('minGuests'), 'Max. Guests must be at least as large as Min. Guests'),
   pricePerPerson: Yup.number()
     .required('Price is required')
     .positive('Price must be positive')
