@@ -17,7 +17,14 @@ import { loadMe } from './store/features/authentication/authActions';
 import { Home } from 'components/Home/Home';
 import HostManagement from 'components/HostManagement/HostManagement';
 import CreateClass from 'components/CreateClass/CreateClass';
+import ClassDetail from 'components/ClassDetail/ClassDetail';
 import EditClass from 'components/EditClass/EditClass';
+
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fab, faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle)
 
 const App = ({ auth, loadMe }) => {
   useEffect(() => {
@@ -50,6 +57,7 @@ const App = ({ auth, loadMe }) => {
           <Route path="/admin" component={Admin} />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
+          <Route path="/classes/:classId" component={ClassDetail} exact />
           <Route path="/hostmanagement/edit-class/:classId" component={EditClass} exact />
           <Route exact path="/:username" component={Profile} />
           <Route exact path="/" component={Home} />
