@@ -47,6 +47,25 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.delete('/:id', [requireJwtAuth], async (req, res, next) => {
+  try {
+    const tempClass = await Class.findById(req.params.id).populate('host');
+    // check that the class exists in the database
+    if (!tempClass) {
+      return res.status(404).json({ message: 'Class not found!' });
+    }
+    // check that the user making the request is the host of the class or an admin
+    if (!(tempClass.host.id === req.user.id) || req.user.role === 'ADMIN') {
+      return res.status(400).json({ message: 'Only the host of a class can delete a class!' });
+    }
+
+    const c = await Class.findByIdAndDelete(tempClass._id);
+    res.status(200).json({ c });
+  } catch (err) {
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
 router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
   try {
     const tempClass = await Class.findById(req.params.id).populate('host');
@@ -89,6 +108,7 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       toBring: req.body.toBring,
       meetingAddress: req.body.meetingAddress,
       pricePerPerson: req.body.pricePerPerson,
+      durationInMinutes: req.body.durationInMinutes,
       minGuests: req.body.minGuests,
       maxGuests: req.body.maxGuests,
       veganFriendly: req.body.veganFriendly,
@@ -138,7 +158,8 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     description: req.body.description,
     toBring: req.body.toBring,
     meetingAddress: req.body.meetingAddress,
-    pricePerPerson: Number(req.body.pricePerPerson),
+    pricePerPerson: req.body.pricePerPerson,
+    durationInMinutes: req.body.durationInMinutes,
     minGuests: req.body.minGuests,
     maxGuests: req.body.maxGuests,
     veganFriendly: req.body.veganFriendly,

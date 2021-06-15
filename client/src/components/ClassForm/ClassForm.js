@@ -66,6 +66,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('zip', _.get(originalClass, 'meetingAddress.zip'));
       formik.setFieldValue('street', _.get(originalClass, 'meetingAddress.street'));
       formik.setFieldValue('pricePerPerson', _.get(originalClass, 'pricePerPerson'));
+      formik.setFieldValue('durationInMinutes', _.get(originalClass, 'durationInMinutes'));
       formik.setFieldValue('minGuests', _.get(originalClass, 'minGuests'));
       formik.setFieldValue('maxGuests', _.get(originalClass, 'maxGuests'));
       formik.setFieldValue('veganFriendly', _.get(originalClass, 'veganFriendly'));
@@ -108,6 +109,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       zip: '',
       street: '',
       pricePerPerson: '',
+      durationInMinutes: '',
       minGuests: '',
       maxGuests: '',
       coverPhoto: null,
@@ -132,6 +134,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             state,
             street,
             pricePerPerson,
+            durationInMinutes,
             minGuests,
             maxGuests,
             coverPhoto,
@@ -145,6 +148,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             title,
             category,
             pricePerPerson,
+            durationInMinutes,
             minGuests,
             maxGuests,
             description,
@@ -225,6 +229,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
         <AddressSection formik={formik}></AddressSection>
         <hr></hr>
         <DatesSection
+          formik={formik}
           bookableDates={bookableDates}
           setBookableDates={setBookableDates}
           focusedDate={focusedDate}
