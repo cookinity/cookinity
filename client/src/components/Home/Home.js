@@ -6,10 +6,9 @@ import { Alert, CardColumns, CardDeck, Col, Row } from 'react-bootstrap';
 
 import ClassCard from './ClassCard';
 import Filters from './Filters';
-import DatesFilter from './DatesFilter';
 import Loader from 'components/Shared/Loader/Loader';
-import { CLASS_CATEGORIES } from 'components/CreateClass/ClassCategories';
-import { CITY_CATEGORIES } from 'components/CreateClass/CityCategories';
+import { CLASS_CATEGORIES } from 'constants/ClassCategories';
+import { CITY_CATEGORIES } from 'constants/CityCategories';
 
 export const Home = () => {
   const [classes, setClasses] = useState([]);
@@ -17,7 +16,7 @@ export const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  
+
   useEffect(() => {
     const fetchClasses = async () => {
       setIsError(false);
@@ -39,26 +38,27 @@ export const Home = () => {
     let value = e.target.value;
     let result = [];
     result = filteredClasses.filter((data) => {
-        return data.category.search(value) != -1;
+      return data.category.search(value) != -1;
     });
     setFilteredClasses(result);
-}
+  };
 
-const handleFilterCity = (e) => {
-  let value = e.target.value;
-  let result = [];
-  result = filteredClasses.filter((data) => {
+  const handleFilterCity = (e) => {
+    let value = e.target.value;
+    let result = [];
+    result = filteredClasses.filter((data) => {
       return data.city.search(value) != -1;
-  });
-  setFilteredClasses(result);
-}
+    });
+    setFilteredClasses(result);
+  };
 
   //Darstellung aller Kurse ohne Filter
   const classCards = filteredClasses.map((c) => {
     return (
       <Col sm={12} md={6} lg={4}>
         <ClassCard c={c} key={c.id}></ClassCard>
-      </Col>)
+      </Col>
+    );
   });
 
   //mit Filter In CardsOverview oder hier (implementierung wenn filter geht)
@@ -92,11 +92,19 @@ const handleFilterCity = (e) => {
               {errorMessage}
             </Alert>
           )}
-          <Row><Col>
-          <Filters options = {CLASS_CATEGORIES} prompt ='Select category' fun={(event) => handleFilterCategory(event)} />
-          <Filters options = {CITY_CATEGORIES} prompt = 'Select city' fun={(event) => handleFilterCity(event)} />
-          
-          </Col>
+          <Row>
+            <Col>
+              <Filters
+                options={CLASS_CATEGORIES}
+                prompt="Select category"
+                fun={(event) => handleFilterCategory(event)}
+              />
+              <Filters
+                options={CITY_CATEGORIES}
+                prompt="Select city"
+                fun={(event) => handleFilterCity(event)}
+              />
+            </Col>
           </Row>
           <p></p>
           <Row> {classCards} </Row>

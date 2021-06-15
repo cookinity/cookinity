@@ -2,7 +2,7 @@ import Joi from 'joi';
 import mongoose, { Model } from 'mongoose';
 const { Schema } = mongoose;
 import { CLASS_CATEGORIES } from './ClassCategories';
-import {CITY_CATEGORIES } from './CityCategories';
+import { CITY_CATEGORIES } from './CityCategories';
 
 const addressSchema = new Schema({
   country: {
@@ -10,7 +10,8 @@ const addressSchema = new Schema({
     required: true,
   },
   city: {
-    type: CITY_CATEGORIES,
+    type: String,
+    enum: CITY_CATEGORIES,
     required: true,
   },
   zip: {
@@ -108,8 +109,6 @@ const classSchema = new Schema(
   },
   { timestamps: true },
 );
-
-classSchema.index({category: 'text'});
 
 classSchema.methods.toJSON = function () {
   // cover photo
