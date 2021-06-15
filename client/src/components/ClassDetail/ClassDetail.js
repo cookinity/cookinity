@@ -7,19 +7,13 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function dateToString(date) {
-  var day = date.getUTCDate();
-  var month = date.getUTCMonth();
-  var year = date.getUTCFullYear();
-  return day + '/' + month + '/' + year;
-}
-
+//ToDo: Add Loading Bar, Add Alert Bar
 function parseDate(dates) {
   return dates.map((d) => dayjs(d));
 }
 
-function formatAddress(adress) {
-  return adress.street + ', ' + adress.zip + ' ' + adress.city;
+function formatAddress(address) {
+  return address.street + ', ' + address.zip + ' ' + address.city;
 }
 
 const ColoredLine = ({ color }) => (
@@ -79,7 +73,6 @@ const ClassDetail = () => {
   }, []);
 
   if (c) {
-    console.log('object:', c);
     return (
       <Layout>
         <Carousel>{carouselImages}</Carousel>
