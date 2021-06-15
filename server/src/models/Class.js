@@ -1,13 +1,8 @@
-import Joi from 'joi-oid';
-import mongoose from 'mongoose';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import { join } from 'path';
-import fs from 'fs';
-import { isValidUrl } from '../utils/utils';
-dayjs.extend(utc);
+import Joi from 'joi';
+import mongoose, { Model } from 'mongoose';
 const { Schema } = mongoose;
 import { CLASS_CATEGORIES } from './ClassCategories';
+import {CITY_CATEGORIES } from './CityCategories';
 
 const addressSchema = new Schema({
   country: {
@@ -15,7 +10,7 @@ const addressSchema = new Schema({
     required: true,
   },
   city: {
-    type: String,
+    type: CITY_CATEGORIES,
     required: true,
   },
   zip: {
@@ -93,6 +88,8 @@ const classSchema = new Schema(
   },
   { timestamps: true },
 );
+
+classSchema.index({category: 'text'});
 
 classSchema.methods.toJSON = function () {
   // cover photo

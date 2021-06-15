@@ -5,16 +5,14 @@ import CardsOverview from './CardsOverview';
 export default function Parent() {
     const [classes, getClasses] = useState('')
 
-    const url = 'http://localhost:3000/'
-
     useEffect( () => {
         getAllClasses();
     }, [])
 
     const getAllClasses = () => {
-        axios.get('${url}api/classes')
+        axios.get('/api/classes')
         .then((response) => {
-            const allClasses = response.data.classes
+            const allClasses = response.data
             getClasses(allClasses)
         })
         .catch(error => console.error('Error: ${error}'))
