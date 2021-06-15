@@ -6,6 +6,7 @@ export const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   category: Yup.string().required('Category is required'),
   description: Yup.string().required('Description is required'),
+  toBring: Yup.string(),
   country: Yup.string().required('Country is required'),
   city: Yup.string().required('City is required'),
   zip: Yup.string().required('Zip Code is required'),

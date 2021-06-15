@@ -69,6 +69,10 @@ const classSchema = new Schema(
       type: String,
       required: true,
     },
+    toBring: {
+      type: String,
+      default: '',
+    },
     pricePerPerson: {
       type: Number,
       required: true,
@@ -137,6 +141,7 @@ classSchema.methods.toJSON = function () {
     photoTwo,
     category: this.category,
     description: this.description,
+    toBring: this.toBring,
     meetingAddress: this.meetingAddress.toJSON(),
     host: this.host.toJSON(),
     pricePerPerson: this.pricePerPerson,
@@ -175,6 +180,7 @@ export const validateClass = (c) => {
       .valid(...CLASS_CATEGORIES)
       .required(),
     description: Joi.string().required(),
+    toBring: Joi.string(),
     pricePerPerson: Joi.number().precision(2).positive(), // by default we assume in euro right now
     minGuests: Joi.number().integer().min(1).max(100).positive().required(),
     maxGuests: Joi.number().integer().min(1).max(100).positive().required(),

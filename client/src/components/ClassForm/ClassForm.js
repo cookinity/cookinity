@@ -57,6 +57,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('title', _.get(originalClass, 'title'));
       formik.setFieldValue('category', _.get(originalClass, 'category'));
       formik.setFieldValue('description', _.get(originalClass, 'description'));
+      formik.setFieldValue('toBring', _.get(originalClass, 'toBring'));
       formik.setFieldValue('country', _.get(originalClass, 'meetingAddress.country'));
       formik.setFieldValue('city', _.get(originalClass, 'meetingAddress.city'));
       formik.setFieldValue('state', _.get(originalClass, 'meetingAddress.state'));
@@ -88,6 +89,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       title: '',
       category: 'Asian',
       description: '',
+      toBring: '',
       country: '',
       city: '',
       state: '',
@@ -111,6 +113,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             title,
             category,
             description,
+            toBring,
             country,
             city,
             zip,
@@ -133,6 +136,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             minGuests,
             maxGuests,
             description,
+            toBring,
             veganFriendly,
             vegetarianFriendly,
             nutAllergyFriendly,

@@ -53,6 +53,21 @@ const BasicInfoSection = ({ formik }) => {
           <div className="form-error-message">{formik.errors.description}</div>
         ) : null}
       </Form.Group>
+      <Form.Group controlId="toBring">
+        <Form.Label>Things Guests Need To Bring</Form.Label>
+        <Form.Control
+          as="textarea"
+          rows={3}
+          name="toBring"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.toBring}
+          className={formik.touched.toBring && formik.errors.toBring ? 'form-error' : null}
+        />
+        {formik.touched.toBring && formik.errors.toBring ? (
+          <div className="form-error-message">{formik.errors.description}</div>
+        ) : null}
+      </Form.Group>
     </>
   );
 };
