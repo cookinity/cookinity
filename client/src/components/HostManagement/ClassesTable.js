@@ -23,6 +23,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
       <th>Price</th>
       <th>Min Guests</th>
       <th>Max Guests</th>
+      <th>Duration</th>
       <th>Dates</th>
       <th>Actions</th>
     </tr>
@@ -36,6 +37,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
         <td>{c.pricePerPerson} Euro</td>
         <td>{c.minGuests} Guests</td>
         <td>{c.maxGuests} Guests</td>
+        <td>{c.durationInMinutes} Minutes</td>
         <td>
           <Accordion>
             {c.pastDates.length !== 0 ? (

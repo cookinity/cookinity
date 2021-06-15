@@ -35,6 +35,10 @@ export const validationSchema = Yup.object().shape({
       'The prcie must have two digits after decimal or less',
       (number) => /^\d+(\.\d{1,2})?$/.test(String(number)),
     ),
+  durationInMinutes: Yup.number()
+    .required('Duration is required')
+    .positive('Duration must be positive')
+    .integer('Duration must be an integer'),
   coverPhoto: Yup.mixed()
     .test('fileSize', 'File too large. Maximum is 5mb', (value) =>
       value ? value.size <= FILE_SIZE : true,
