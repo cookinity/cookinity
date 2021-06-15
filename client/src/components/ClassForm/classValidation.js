@@ -24,10 +24,9 @@ export const validationSchema = Yup.object().shape({
   maxGuests: Yup.number()
     .required('Min. Guests is required')
     .positive('Min. Guests must be positive')
-    .min(1, 'Max. Guests minimum 1')
     .max(100, 'Max. Guests maximum 100')
     .integer('Min. Guests must be an integer')
-    .moreThan(Yup.ref('minGuests'), 'Max. Guests must be larger than Min. Guests'),
+    .min(Yup.ref('minGuests'), 'Max. Guests must be at least as large as Min. Guests'),
   pricePerPerson: Yup.number()
     .required('Price is required')
     .positive('Price must be positive')

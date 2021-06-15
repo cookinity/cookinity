@@ -81,6 +81,16 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
         const coverPhotoURL = _.get(originalClass, 'coverPhoto');
         setCoverPhotoUrl(coverPhotoURL);
       }
+
+      if (_.get(originalClass, 'photoOne')) {
+        const photoOneUrl = _.get(originalClass, 'photoOne');
+        setPhotoOneUrl(photoOneUrl);
+      }
+
+      if (_.get(originalClass, 'photoTwo')) {
+        const photoTwoUrl = _.get(originalClass, 'photoTwo');
+        setPhotoTwoUrl(photoTwoUrl);
+      }
     }
   }, []);
 
@@ -159,9 +169,15 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
               formData.append(dataKey, data[dataKey]);
             }
           }
-          const photos = [coverPhoto, photoOne, photoTwo];
-          for (const photo of photos) {
-            formData.append('photos[]', photo);
+          if (coverPhoto) {
+            formData.append('coverPhoto', coverPhoto);
+          }
+          if (photoOne) {
+            formData.append('photoOne', photoOne);
+          }
+
+          if (photoTwo) {
+            formData.append('photoTwo', photoTwo);
           }
 
           // We convert to UTC before sending the dates to the backend
