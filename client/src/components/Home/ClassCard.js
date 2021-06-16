@@ -96,7 +96,7 @@ export default function ClassCard({ c }) {
           </div>
         </Card.Text>
         <LinkContainer to={`/classes/${c.id}`}>
-          <Button variant="primary">Go somewhere</Button>
+          <Button variant="primary" block>Go to course</Button>
         </LinkContainer>
       </Card.Body>
     </Card>
