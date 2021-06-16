@@ -55,7 +55,7 @@ export default function ClassCard({ c }) {
   const shortdescription = c.description ? truncateString(c.description, 200) : '';
 
   return (
-    <Card border="primary" className={'mb-3'}>
+    <Card border="primary" className="mb-3 shadow classCard">
       <Card.Img className="image-class-name" variant="top" src={c.coverPhoto} />
       <Card.Body>
         <Card.Title>{c.title}</Card.Title>
