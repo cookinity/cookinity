@@ -33,7 +33,11 @@ router.get('/', async (req, res, next) => {
       }),
     });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -43,20 +47,29 @@ router.get('/:id', async (req, res) => {
     if (!c) return res.status(404).json({ message: 'No class found.' });
     res.json({ class: c.toJSON() });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
 router.delete('/:id', requireJwtAuth, async (req, res) => {
+  debugger;
   try {
-    const cl = await Class.findById(req.params.id);
+    const cl = await Class.findById(req.params.id).populate('host');
     if (!cl) return res.status(404).json({ message: 'No such class.' });
     if (!(cl.host.id === req.user.id || req.user.role === 'ADMIN'))
       return res.status(400).json({ message: 'You do not have privilegies to delete that class.' });
     const classToDelete = await Class.findByIdAndRemove(cl.id);
     res.status(200).json({ classToDelete });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -119,7 +132,11 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
 
     res.status(200).json({ c });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -176,7 +193,11 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     newClass = await newClass.populate('host').execPopulate();
     res.status(200).json({ class: newClass.toJSON() });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
