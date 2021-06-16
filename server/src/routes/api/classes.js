@@ -124,6 +124,7 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
 });
 
 router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
+  debugger;
   if (req.body.bookableDates) {
     req.body.bookableDates = JSON.parse(req.body.bookableDates);
   }
@@ -171,13 +172,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
   if (error) return res.status(400).json({ message: error.details[0].message });
 
   try {
-    let newClass = await Class.create({
-      title: req.body.title,
-      category: req.body.category,
-      description: req.body.description,
-      meetingAddress: req.body.meetingAddress,
-      host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
-    });
+    let newClass = await Class.create(c);
     newClass = await newClass.populate('host').execPopulate();
     res.status(200).json({ class: newClass.toJSON() });
   } catch (err) {
