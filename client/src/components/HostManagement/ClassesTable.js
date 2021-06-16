@@ -1,7 +1,7 @@
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
+import { Accordion, Button, Card, Col, Container, Modal, Row, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 export const ClassesTable = ({ classes, onDeleteCallback }) => {
@@ -84,14 +84,16 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
           </Accordion>
         </td>
         <td>
-          <LinkContainer to={`/hostmanagement/edit-class/${c.id}`}>
-            <Button variant="primary">
-              <FontAwesomeIcon icon={faEdit} /> Edit
+          <div className="text-center">
+            <LinkContainer to={`/hostmanagement/edit-class/${c.id}`}>
+              <Button variant="primary">
+                <FontAwesomeIcon icon={faEdit} />
+              </Button>
+            </LinkContainer>
+            <Button variant="danger" onClick={handleShow(c)}>
+              <FontAwesomeIcon icon={faTrash} />
             </Button>
-          </LinkContainer>
-          <Button variant="danger" className="ml-2" onClick={handleShow(c)}>
-            <FontAwesomeIcon icon={faTrash} /> Delete
-          </Button>
+          </div>
         </td>
       </tr>
     );
@@ -99,7 +101,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
 
   return (
     <>
-      <Table striped bordered hover>
+      <Table striped bordered responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>
