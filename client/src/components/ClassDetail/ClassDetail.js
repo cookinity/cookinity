@@ -44,6 +44,7 @@ const ClassDetail = () => {
   ));
 
   // id of the class in the route
+  // @ts-ignore
   let { classId } = useParams();
 
   useEffect(() => {
