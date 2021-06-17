@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../Layout/Layout';
-import { Carousel, Container, Row, Col, Image, Button } from 'react-bootstrap';
+import { Alert, Carousel, Container, Row, Col, Image, Button } from 'react-bootstrap';
 import './classDetail.scss';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import Loader from 'components/Shared/Loader/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-//ToDo: Add Loading Bar, Add Alert Bar
+
 //ToDo: Bookable Dates Anzeigen mit Duration addiert (nur future dates)
 //ToDo: Add section mit essens zeug preferenzen (vegan stuff und so)
 function parseDate(dates) {
@@ -74,9 +75,30 @@ const ClassDetail = () => {
     fetchClass();
   }, []);
 
+  if (isLoading) {
+    return (
+      <Layout>
+        <Loader></Loader>
+      </Layout>
+    );
+  }
   if (c) {
     return (
       <Layout>
+        <div className="mt-2">
+          {isError && (
+            <Alert
+              variant="danger"
+              onClose={() => {
+                setIsError(false);
+                setErrorMessage('');
+              }}
+              dismissible
+            >
+              {' '}
+              {errorMessage}
+            </Alert>
+          )}
         <Carousel>{carouselImages}</Carousel>
         <h1 className="classTitle">{c.title}</h1>
         <Container>
@@ -146,6 +168,7 @@ const ClassDetail = () => {
           <Button variant="primary" size="lg">
             Book Now
           </Button>
+        </div>
         </div>
       </Layout>
     );
