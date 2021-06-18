@@ -19,6 +19,10 @@ function formatAddress(address) {
   return address.street + ', ' + address.zip + ' ' + address.city;
 }
 
+function dateWithDuration(date, duration) {
+  return date.add(duration, 'minute')
+}
+
 const ColoredLine = ({ color }) => (
   <hr
     style={{
@@ -115,52 +119,43 @@ const ClassDetail = () => {
         <Carousel>{carouselImages}</Carousel>
         <h1 className="classTitle">{c.title}</h1>
         <Container>
-          <Row className="rowFormat">
-            <Col className="classDetail" xs={8}>
-              <FontAwesomeIcon icon="calendar-alt" size="2x" className="iconPos fa-fw" />{' '}
-              {c.bookableDates[0].format('DD/MM/YYYY')}
-            </Col>
-            <Col className="classDetail" xs={4}>
-              <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />{' '}
+          <Row>
+            <Col className="classDetail">
+              <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />
               {c.pricePerPerson} € per person
             </Col>
-          </Row>
-          <Row className="rowFormat">
-            <Col className="classDetail" xs={8}>
-              <FontAwesomeIcon icon="clock" size="2x" className="iconPos fa-fw" />{' '}
-              {c.bookableDates[0].format('HH:mm')}
-            </Col>
-            <Col className="classDetail" xs={4}>
-              <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" /> {c.minGuests} -{' '}
+            <Col className="classDetail">
+              <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" />{c.minGuests} -{' '}
               {c.maxGuests} persons
             </Col>
-          </Row>
-          <Row className="rowFormat">
-            <Col className="classDetail" xs={8}>
-              <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />{' '}
+            <Col className="classDetail">
+              <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />
               {formatAddress(c.meetingAddress)}
-            </Col>
-            <Col className="classDetail" xs={4}>
-              <FontAwesomeIcon icon="check-circle" size="2x" className="iconPos fa-fw" />
-              {c.vegetarianFriendly ? 'vegetarian, ' : ''}
-              {c.veganFriendly ? 'vegan, ' : ''}
-              {c.nutAllergyFriendly ? 'nut free' : ''}
             </Col>
           </Row>
         </Container>
         <ColoredLine color="gray" />
+        <h3>Upcoming Dates <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" /></h3>
         <ul>
           {futureDates.map((date) => (
-            <li key={date}>{date.format('DD/MM/YYYY HH:mm')}</li>
+            <li key={date}>{date.format('dddd, DD MMM, h:mm A')} - {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}</li>
           ))}
         </ul>
-        <p>   {c.durationInMinutes} Minutes</p>
         <ColoredLine color="gray" />
-        <h3>Description</h3>
+        <h3>Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" /></h3>
         <Row className="rowFormat">{c.description}</Row>
         <ColoredLine color="gray" />
-        <h3>What to bring</h3>
+        <h3>What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" /></h3>
         <Row className="rowFormat">{c.toBring}</Row>
+        <ColoredLine color="gray" />
+        <h3>Dietary preferences</h3>
+        <Container>
+          <Row>
+            <Col><FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />{c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'} </Col>
+            <Col> <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />{c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'} </Col>
+            <Col> <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />{c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'} </Col>
+          </Row>
+        </Container>
         <ColoredLine color="gray" />
         <Container>
           <Row>

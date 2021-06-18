@@ -22,9 +22,9 @@ import EditClass from 'components/EditClass/EditClass';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle, faInfoCircle, faUtensils, faSeedling, faCarrot, faCookie } from '@fortawesome/free-solid-svg-icons'
 
-library.add(fab, faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle)
+library.add(fab, faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle, faInfoCircle, faUtensils, faSeedling, faCarrot, faCookie)
 
 const App = ({ auth, loadMe }) => {
   useEffect(() => {
