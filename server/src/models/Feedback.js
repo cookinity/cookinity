@@ -84,18 +84,18 @@ classSchema.methods.toJSON = function () {
 
 export const validateClass = (c) => {
     const classSchema = Joi.object().keys({
-        overallrankingstars: Joi.string(),
-        overallranking: Joi.number().integer().min(1).max(5).positive().required(),
+        overallrankingstars: Joi.number().integer().min(1).max(5).positive().required(),
+        overallranking: Joi.string().required(),
         hostrankingstars: Joi.number().integer().min(1).max(5).positive().required(),
-        hostranking: Joi.string(),
+        hostranking: Joi.string().required(),
         tasterankingstars: Joi.number().integer().min(1).max(5).positive().required(),
-        tasteranking: Joi.string(),
+        tasteranking: Joi.string().required(),
         locationratingstars: Joi.number().integer().min(1).max(5).positive().required(),
-        locationrating: Joi.string(),
+        locationrating: Joi.string().required(),
         vtmrrankingstars: Joi.number().integer().min(1).max(5).positive().required(),
-        vtmrranking: Joi.string(),
+        vtmrranking: Joi.string().required(),
         experiencerankingstars: tJoi.number().integer().min(1).max(5).positive().required(),
-        experienceranking: Joi.string(),
+        experienceranking: Joi.string().required(),
     });
     return classSchema.validate(c);
 };

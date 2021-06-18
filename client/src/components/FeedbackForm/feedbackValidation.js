@@ -1,42 +1,46 @@
 import * as Yup from 'yup';
-const FILE_SIZE = 5000000; // 5mb
-const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 
 export const validationSchema = Yup.object().shape({
-    title: Yup.string().required('Title is required'),
-    category: Yup.string().required('Category is required'),
-    description: Yup.string().required('Description is required'),
-    toBring: Yup.string(),
-    country: Yup.string().required('Country is required'),
-    city: Yup.string().required('City is required'),
-    zip: Yup.string().required('Zip Code is required'),
-    state: Yup.string().required('State is required'),
-    street: Yup.string().required('Street is required'),
-    veganFriendly: Yup.boolean(),
-    vegetarianFriendly: Yup.boolean(),
-    nutAllergyFriendly: Yup.boolean(),
-    minGuests: Yup.number()
-        .required('Min. Guests is required')
-        .positive('Min. Guests must be positive')
-        .min(1, 'Min. Guests minimum 1')
-        .max(100, 'Min. Guests maximum 100')
-        .integer('Min. Guests must be an integer'),
-    maxGuests: Yup.number()
-        .required('Min. Guests is required')
-        .positive('Min. Guests must be positive')
-        .max(100, 'Max. Guests maximum 100')
-        .integer('Min. Guests must be an integer')
-        .min(Yup.ref('minGuests'), 'Max. Guests must be at least as large as Min. Guests'),
-    pricePerPerson: Yup.number()
-        .required('Price is required')
-        .positive('Price must be positive')
-        .test(
-            'maxDigitsAfterDecimal',
-            'The prcie must have two digits after decimal or less',
-            (number) => /^\d+(\.\d{1,2})?$/.test(String(number)),
-        ),
-    durationInMinutes: Yup.number()
-        .required('Duration is required')
-        .positive('Duration must be positive')
-        .integer('Duration must be an integer'),
+    overallrankingstars: Yup.number()
+        .required('Overall Ranking is required')
+        .positive('Overall Rankings must be positive')
+        .min(1, 'Overall Ranking minimum 1')
+        .max(5, 'Overall Ranking maximum 5')
+        .integer('Overall Ranking must be an integer'),
+    overallranking: Yup.string().required('Additional Text is required'),
+    hostrankingstars: Yup.number()
+        .required('Ranking of the host is required')
+        .positive('Ranking of the host must be positive')
+        .min(1, 'Ranking of the host minimum 1')
+        .max(5, 'Ranking of the host maximum 5')
+        .integer('Ranking of the host must be an integer'),
+    hostranking: Yup.string().required('Additional Text is required'),
+    tasterankingstars: Yup.number()
+        .required('Ranking of the taste is required')
+        .positive('Ranking of the taste must be positive')
+        .min(1, 'Ranking of the taste minimum 1')
+        .max(5, 'Ranking of the taste maximum 5')
+        .integer('Ranking of the taste must be an integer'),
+    tasteranking: Yup.string().required('Additional Text is required'),
+    locationratingstars: Yup.number()
+        .required('Ranking of the location is required')
+        .positive('Ranking of the location must be positive')
+        .min(1, 'Ranking of the location minimum 1')
+        .max(5, 'Ranking of the location maximum 5')
+        .integer('Ranking of the location must be an integer'),
+    locationrating: Yup.string().required('Additional Text is required'),
+    vtmrrankingstars: Yup.number()
+        .required('Ranking of the Value to Money Ratio is required')
+        .positive('Ranking of the Value to Money Ratio must be positive')
+        .min(1, 'Ranking of the Value to Money Ratio minimum 1')
+        .max(5, 'Ranking of the Value to Money Ratio maximum 5')
+        .integer('Ranking of the Value to Money Ratio must be an integer'),
+    vtmrranking: Yup.string().required('Additional Text is required'),
+    experiencerankingstars: Yup.number()
+        .required('Ranking of the experience is required')
+        .positive('Ranking of the experience must be positive')
+        .min(1, 'Ranking of the experience minimum 1')
+        .max(5, 'Ranking of the experience maximum 5')
+        .integer('Ranking of the experience must be an integer'),
+    experienceranking: Yup.string().required('Additional Text is required'),
 });
