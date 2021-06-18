@@ -1,15 +1,11 @@
 import Layout from 'components/Layout/Layout';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import dayjs from 'dayjs';
-import { Alert, Card, Col, Row } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
-import ClassForm from 'components/FeedbackForm/FeedbackForm';
-
-function parseDate(dates) {
-  return dates.map((d) => dayjs(d));
-}
+import { useSelector } from 'react-redux';
+import FeedbackForm from 'components/FeedbackForm/FeedbackForm';
 
 const FeedbackUser = () => {
   const [c, setClass] = useState(undefined);
@@ -17,27 +13,39 @@ const FeedbackUser = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [feedbackCreated, setFeedbackCreated] = useState(false);
-
+  // @ts-ignore
+  const auth = useSelector((state) => state.auth);
   // id of the class in the route
   // @ts-ignore
   let { classId } = useParams();
 
-  useEffect(() => {
-    const fetchClass = async () => {
-      setIsError(false);
-      setIsLoading(true);
-      try {
-        const result = await axios(`/api/classes/${classId}`);
-        result.data.class.bookableDates = parseDate(result.data.class.bookableDates);
-        setClass(result.data.class);
-      } catch (err) {
-        setIsError(true);
-        setErrorMessage(err?.response?.data.message || err.message);
+
+  const onSubmitFeedback = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      // adding the necessary security header
+      const token = auth.token;
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+        },
+      };
+      if (token) {
+        config.headers['x-auth-token'] = token;
       }
+
+      await axios.post('/api/feedback', config);
       setIsLoading(false);
-    };
-    fetchClass();
-  }, []);
+      setFeedbackCreated(true);
+      return Promise.resolve(); // tell the form that there was not an error during submitting --> reset form
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err?.response?.data.message || err.message);
+      setIsLoading(false);
+      return Promise.reject(); // tell the form that there was a error during submitting --> do not reset form
+    }
+  };
 
   if (c) {
     return (
@@ -68,18 +76,20 @@ const FeedbackUser = () => {
                   dismissible
                 >
                   {' '}
-                  Class created!
+                  Feedback created!
                 </Alert>
               )}
               <div style={{ display: isLoading ? 'block' : 'none' }}>
                 <Loader></Loader>
               </div>
               <div style={{ display: isLoading ? 'none' : 'block' }}>
-                <ClassForm
+                <Row> Test </Row>
+                <p></p>
+                <FeedbackForm
                   submitCallback={FeedbackUser}
                   isEditMode={false}
                   originalClass={undefined}
-                ></ClassForm>
+                ></FeedbackForm>
               </div>
             </div>
           </Col>
@@ -87,7 +97,7 @@ const FeedbackUser = () => {
       </Layout>
     );
   } else {
-    return <div>Class not found!</div>;
+    return <div>Feedback not found!</div>;
   }
 };
 

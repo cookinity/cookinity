@@ -15,44 +15,11 @@ import GuestsSection from './FormSections/GuestsSection';
 import BasicInfoSection from './FormSections/BasicInfoSection';
 dayjs.extend(utc);
 
-const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
+const FeedbackForm = ({ submitCallback, isEditMode, originalClass }) => {
     const history = useHistory();
 
     const [bookableDates, setBookableDates] = useState([]);
     const [focusedDate, setFocusedDate] = useState();
-    // coverPhoto
-    const [coverPhoto, setCoverPhoto] = useState(null);
-    const [coverPhotoUrl, setCoverPhotoUrl] = useState(null);
-    // photoOne
-    const [photoOne, setPhotoOne] = useState(null);
-    const [photoOneUrl, setPhotoOneUrl] = useState(null);
-    // photoTwo
-    const [photoTwo, setPhotoTwo] = useState(null);
-    const [photoTwoUrl, setPhotoTwoUrl] = useState(null);
-
-    const onCoverPhotoChange = (event) => {
-        if (event.target.files.length !== 0) {
-            formik.setFieldValue('coverPhoto', event.currentTarget.files[0]);
-            setCoverPhotoUrl(URL.createObjectURL(event.target.files[0]));
-            setCoverPhoto(event.target.files[0]);
-        }
-    };
-
-    const onPhotoOneChange = (event) => {
-        if (event.target.files.length !== 0) {
-            formik.setFieldValue('photoOne', event.currentTarget.files[0]);
-            setPhotoOneUrl(URL.createObjectURL(event.target.files[0]));
-            setPhotoOne(event.target.files[0]);
-        }
-    };
-
-    const onPhotoTwoChange = (event) => {
-        if (event.target.files.length !== 0) {
-            formik.setFieldValue('photoTwo', event.currentTarget.files[0]);
-            setPhotoTwoUrl(URL.createObjectURL(event.target.files[0]));
-            setPhotoTwo(event.target.files[0]);
-        }
-    };
 
     useEffect(() => {
         if (isEditMode && originalClass) {
@@ -80,20 +47,6 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             }
             setBookableDates(bookableDates);
 
-            if (_.get(originalClass, 'coverPhoto')) {
-                const coverPhotoURL = _.get(originalClass, 'coverPhoto');
-                setCoverPhotoUrl(coverPhotoURL);
-            }
-
-            if (_.get(originalClass, 'photoOne')) {
-                const photoOneUrl = _.get(originalClass, 'photoOne');
-                setPhotoOneUrl(photoOneUrl);
-            }
-
-            if (_.get(originalClass, 'photoTwo')) {
-                const photoTwoUrl = _.get(originalClass, 'photoTwo');
-                setPhotoTwoUrl(photoTwoUrl);
-            }
         }
     }, []);
 
@@ -196,12 +149,6 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
                     // calling submit callback from parent component
                     await submitCallback(formData);
                     resetForm();
-                    setCoverPhoto(null);
-                    setCoverPhotoUrl(null);
-                    setPhotoOne(null);
-                    setPhotoOneUrl(null);
-                    setPhotoTwo(null);
-                    setPhotoTwoUrl(null);
                     setBookableDates([]);
                     setFocusedDate(undefined);
                     history.push('/hostmanagement');
@@ -232,4 +179,4 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
     );
 };
 
-export default ClassForm;
+export default FeedbackForm;

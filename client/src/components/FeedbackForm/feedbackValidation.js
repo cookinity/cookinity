@@ -43,4 +43,5 @@ export const validationSchema = Yup.object().shape({
         .max(5, 'Ranking of the experience maximum 5')
         .integer('Ranking of the experience must be an integer'),
     experienceranking: Yup.string().required('Additional Text is required'),
+    //Classid missing
 });

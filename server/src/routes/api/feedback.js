@@ -54,6 +54,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
 
     const c = {
         host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
+        //classid missing
         overallrankingstars: req.body.overallrankingstars,
         overallranking: req.body.overallranking,
         hostrankingstars: req.body.hostrankingstars,

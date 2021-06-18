@@ -6,6 +6,7 @@ const { Schema } = mongoose;
 
 const classSchema = new Schema(
     {
+        //Class ID missing
         //Stars
         OverallRankingStars: {
             type: Number,
@@ -67,6 +68,7 @@ const classSchema = new Schema(
 classSchema.methods.toJSON = function () {
     return {
         id: this._id,
+        //classidfeedback: this.ClassIDFeedback,
         overallrankingstars: this.OverallRankingStars,
         overallranking: this.OverallRanking,
         hostrankingstars: this.HostRankingStars,
@@ -86,6 +88,7 @@ export const validateClass = (c) => {
     const classSchema = Joi.object().keys({
         overallrankingstars: Joi.number().integer().min(1).max(5).positive().required(),
         overallranking: Joi.string().required(),
+        //classid
         hostrankingstars: Joi.number().integer().min(1).max(5).positive().required(),
         hostranking: Joi.string().required(),
         tasterankingstars: Joi.number().integer().min(1).max(5).positive().required(),
