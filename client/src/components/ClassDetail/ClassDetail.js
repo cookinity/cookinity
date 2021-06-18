@@ -35,9 +35,10 @@ const ClassDetail = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [photos, setPhotos] = useState([]);
+  const [futureDates, setFutureDates] = useState([]);
 
   const carouselImages = photos.map((src) => (
-    <Carousel.Item interval={3000}>
+    <Carousel.Item interval={3000} key={src}>
       <div className="photoFrame">
         <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration" />
       </div>
@@ -55,6 +56,7 @@ const ClassDetail = () => {
         const result = await axios(`/api/classes/${classId}`);
         result.data.class.bookableDates = parseDate(result.data.class.bookableDates);
         setClass(result.data.class);
+        //set available photos
         const p = [];
         if (result.data.class.coverPhoto) {
           p.push(result.data.class.coverPhoto);
@@ -66,6 +68,15 @@ const ClassDetail = () => {
           p.push(result.data.class.photoTwo);
         }
         setPhotos(p);
+        //set future dates
+        const d = []
+        const today = dayjs(new Date());
+        for (const date of result.data.class.bookableDates) {
+          if (date.isAfter(today)) {
+            d.push(date);
+          }
+        }
+        setFutureDates(d)
       } catch (err) {
         setIsError(true);
         setErrorMessage(err?.response?.data.message || err.message);
@@ -75,6 +86,7 @@ const ClassDetail = () => {
     fetchClass();
   }, []);
 
+
   if (isLoading) {
     return (
       <Layout>
@@ -83,6 +95,7 @@ const ClassDetail = () => {
     );
   }
   if (c) {
+    console.log(c)
     return (
       <Layout>
         <div className="mt-2">
@@ -135,6 +148,13 @@ const ClassDetail = () => {
             </Col>
           </Row>
         </Container>
+        <ColoredLine color="gray" />
+        <ul>
+          {futureDates.map((date) => (
+            <li key={date}>{date.format('DD/MM/YYYY HH:mm')}</li>
+          ))}
+        </ul>
+        <p>   {c.durationInMinutes} Minutes</p>
         <ColoredLine color="gray" />
         <h3>Description</h3>
         <Row className="rowFormat">{c.description}</Row>
