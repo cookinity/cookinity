@@ -65,7 +65,7 @@ const Profile = ({
       name: '',
       username: '',
       password: '',
-      description: ''
+      description: '',
     },
     validationSchema: profileSchema,
     onSubmit: (values) => {
@@ -216,15 +216,17 @@ const Profile = ({
             )}
             <div className="input-div">
               <Form.Group controlId="descriptionInput">
-                <Form.Label>Description:</Form.Label>
+                <Form.Label>Description: </Form.Label>
                 <Form.Control
-                  placeholder="Description"
+                  as="textarea"
+                  rows={3}
                   name="description"
-                  className=""
-                  type="text"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.description || ''}
+                  value={formik.values.description}
+                  className={
+                    formik.touched.description && formik.errors.description ? 'error' : null
+                  }
                 />
               </Form.Group>
               {formik.touched.description && formik.errors.description ? (
