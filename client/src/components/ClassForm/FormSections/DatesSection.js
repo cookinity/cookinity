@@ -4,10 +4,9 @@ import { Calendar } from 'react-multi-date-picker';
 import DatePanel from 'react-multi-date-picker/plugins/date_panel';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
-const DatesSection = ({ formik, bookableDates, setBookableDates, focusedDate, setFocusedDate }) => {
+const DatesSection = ({ formik }) => {
   return (
     <>
-      <Form.Label>Choose Dates for Which Your Class Can be Booked</Form.Label>
       <Form.Group controlId="durationInMinutes">
         <Form.Label>Class Duration In Minutes</Form.Label>
         <InputGroup>
@@ -29,38 +28,6 @@ const DatesSection = ({ formik, bookableDates, setBookableDates, focusedDate, se
         {formik.touched.durationInMinutes && formik.errors.durationInMinutes ? (
           <div className="form-error-message">{formik.errors.durationInMinutes}</div>
         ) : null}
-      </Form.Group>
-      <Form.Group controlId="bookableDates">
-        <Calendar
-          className="mx-auto"
-          format="DD/MM/YYYY HH:mm"
-          plugins={[
-            <DatePanel
-              sort="date"
-              position="bottom"
-              header="Bookable Dates"
-              markFocused
-              focusedClassName="bg-green"
-            />,
-            <TimePicker hideSeconds position="right" />,
-          ]}
-          multiple
-          sort
-          onFocusedDateChange={setFocusedDate}
-          onClose={() => setFocusedDate(undefined)}
-          weekStartDayIndex={1}
-          value={bookableDates}
-          onChange={setBookableDates}
-          mapDays={({ date, isSameDate }) => {
-            let props = {};
-
-            if (!isSameDate(date, focusedDate)) return;
-
-            props.style = { backgroundColor: 'green' };
-
-            return props;
-          }}
-        />
       </Form.Group>
     </>
   );
