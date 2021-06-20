@@ -31,7 +31,13 @@ router.put('/:id', [requireJwtAuth, upload.single('avatar')], async (req, res, n
       return res.status(400).json({ message: 'Username already taken.' });
     }
 
-    const updatedUser = { avatar: avatarPath, name: req.body.name, username: req.body.username, password, description: req.body.description };
+    const updatedUser = {
+      avatar: avatarPath,
+      name: req.body.name,
+      username: req.body.username,
+      password,
+      description: req.body.description,
+    };
     Object.keys(updatedUser).forEach((k) => !updatedUser[k] && updatedUser[k] !== undefined && delete updatedUser[k]);
     const user = await User.findByIdAndUpdate(tempUser.id, { $set: updatedUser }, { new: true });
 
