@@ -24,7 +24,6 @@ const TimeManagement = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [newDate, setNewDate] = useState(new DateObject().add(1, 'day'));
-  const [dateAdded, setDateAdded] = useState(false);
   const auth = useSelector((state) => state.auth);
   // id of the class in the route
   let { classId } = useParams();
@@ -84,8 +83,7 @@ const TimeManagement = () => {
 
       await axios.post(`/api/classes/${c.id}/timeslots`, timeSlot, config);
       setIsLoading(false);
-      setDateAdded(true);
-      setNewDate(new DateObject());
+      setNewDate(new DateObject().add(1, 'day'));
       fetchClass();
     } catch (err) {
       setIsError(true);

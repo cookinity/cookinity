@@ -2,9 +2,11 @@ import { Router } from 'express';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import isBetween from 'dayjs/plugin/isBetween';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 dayjs.extend(utc);
-dayjs.extend(isBetween);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 import Class, { validateClass, validateTimeSlot } from '../../models/Class';
 import upload from '../../middleware/multer';
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -170,17 +172,15 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
     const { error } = validateTimeSlot(newTimeSlot);
     if (error) return res.status(400).json({ message: error.details[0].message });
     const durationInMinutes = tempClass.durationInMinutes ? tempClass.durationInMinutes : 0;
-    const beginningOfNewTimeSlot = dayjs(newTimeSlot.date);
-    const endOfNewTimeSlot = beginningOfNewTimeSlot.add(durationInMinutes, 'minutes');
+
+    const newTimeSlotBeginning = dayjs(newTimeSlot.date);
+    const newTimeSlotEnd = newTimeSlotBeginning.add(durationInMinutes, 'minutes');
 
     for (var i = 0; i < tempClass.timeSlots.length; i++) {
-      const beginningOfTimeSlot = dayjs(tempClass.timeSlots[i].date);
-      const endOfTimeSlot = beginningOfTimeSlot.add(durationInMinutes, 'minutes');
+      const oldTimeSlotBeginning = dayjs(tempClass.timeSlots[i].date);
+      const oldTimeSlotEnd = oldTimeSlotBeginning.add(durationInMinutes, 'minutes');
 
-      if (
-        beginningOfNewTimeSlot.isBetween(beginningOfTimeSlot, endOfTimeSlot, null, '[]') ||
-        endOfNewTimeSlot.isBetween(beginningOfTimeSlot, endOfTimeSlot, null, '[]')
-      ) {
+      if (oldTimeSlotBeginning.isSameOrBefore(newTimeSlotEnd) && oldTimeSlotEnd.isSameOrAfter(newTimeSlotBeginning)) {
         return res.status(400).json({ message: 'The new time slot overlaps with another time slot of the same class' });
       }
     }
