@@ -51,6 +51,7 @@ const Profile = ({
     formik.setFieldValue('id', profile.id);
     formik.setFieldValue('name', profile.name);
     formik.setFieldValue('username', profile.username);
+    formik.setFieldValue('description', profile.description);
   };
 
   const handleDeleteUser = (id, history) => {
@@ -64,6 +65,7 @@ const Profile = ({
       name: '',
       username: '',
       password: '',
+      description: '',
     },
     validationSchema: profileSchema,
     onSubmit: (values) => {
@@ -74,6 +76,7 @@ const Profile = ({
       if (profile.provider === 'email') {
         formData.append('password', values.password);
       }
+      formData.append('description', values.description);
       editUser(values.id, formData, history);
       //setIsEdit(false);
     },
@@ -118,6 +121,10 @@ const Profile = ({
                 <span className="info">
                   {moment(profile.createdAt).format('dddd, MMMM Do YYYY, H:mm:ss')}
                 </span>
+              </div>
+              <div>
+                <span className="label">Description: </span>
+                <span className="info">{profile.description}</span>
               </div>
               <div>
                 <Button
@@ -207,6 +214,25 @@ const Profile = ({
                 ) : null}
               </div>
             )}
+            <div className="input-div">
+              <Form.Group controlId="descriptionInput">
+                <Form.Label>Description: </Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="description"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.description}
+                  className={
+                    formik.touched.description && formik.errors.description ? 'error' : null
+                  }
+                />
+              </Form.Group>
+              {formik.touched.description && formik.errors.description ? (
+                <p className="error">{formik.errors.description}</p>
+              ) : null}
+            </div>
             <Button variant="primary" type="submit">
               Save
             </Button>

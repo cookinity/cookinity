@@ -13,4 +13,7 @@ export const profileSchema = Yup.object({
   password: Yup.string()
     .min(6, 'Must be 6 characters at minimum')
     .max(20, 'Must be 20 characters or less'),
+  description: Yup.string()
+    .min(2, 'Must be 2 characters at minimum')
+    .max(1000, 'Must be 1000 characters or less')
 });
