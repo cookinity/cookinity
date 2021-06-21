@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { join } from 'path';
 import fs from 'fs';
-import { isValidUrl } from '../utils/utils';
 dayjs.extend(utc);
 const { Schema } = mongoose;
 import { CLASS_CATEGORIES } from './ClassCategories';
@@ -31,6 +30,25 @@ const addressSchema = new Schema({
     required: true,
   },
 });
+
+const timeSlotSchema = new Schema({
+  date: {
+    type: Date,
+    required: true,
+  },
+  isBooked: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+timeSlotSchema.methods.toJSON = function () {
+  return {
+    id: this._id,
+    date: dayjs(this.date).utc().toJSON(),
+    isBooked: this.isBooked, // only time slots that are not yet booked can be deleted by the user again
+  };
+};
 
 addressSchema.methods.toJSON = function () {
   return {
@@ -97,7 +115,7 @@ const classSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-    bookableDates: [Date],
+    timeSlots: [timeSlotSchema],
     veganFriendly: {
       type: Boolean,
       default: false,
@@ -157,25 +175,30 @@ classSchema.methods.toJSON = function () {
     veganFriendly: this.veganFriendly,
     vegetarianFriendly: this.vegetarianFriendly,
     nutAllergyFriendly: this.nutAllergyFriendly,
-    bookableDates: this.bookableDates.map((date) => {
-      // format as a string using dayjs (can be parsed on the frontend using dayjs) ! This will be also UTC --> convert it for display in frontend using dayjs if necessary
-      return dayjs(date).utc().toJSON();
+    timeSlots: this.timeSlots.map((timeSlot) => {
+      return timeSlot.toJSON();
     }),
   };
 };
 
-export const validateClass = (c) => {
-  const addressSchema = Joi.object()
-    .keys({
-      country: Joi.string().required(),
-      city: Joi.string().required(),
-      zip: Joi.string().required(),
-      state: Joi.string().required(),
-      street: Joi.string().required(),
-    })
-    .required();
+const timeSlotJoiSchema = Joi.object().keys({
+  date: Joi.date().required(),
+  isBooked: Joi.boolean(),
+});
 
-  const classSchema = Joi.object().keys({
+const addressJoiSchema = Joi.object().keys({
+  country: Joi.string().required(),
+  city: Joi.string().required(),
+  zip: Joi.string().required(),
+  state: Joi.string().required(),
+  street: Joi.string().required(),
+});
+
+export const validateTimeSlot = (ts) => {
+  return timeSlotJoiSchema.validate(ts);
+};
+export const validateClass = (c) => {
+  const classJoiSchema = Joi.object().keys({
     title: Joi.string().required(),
     coverPhoto: Joi.string().required(),
     host: Joi.objectId().required(),
@@ -190,14 +213,14 @@ export const validateClass = (c) => {
     durationInMinutes: Joi.number().integer().min(1).positive().required(),
     minGuests: Joi.number().integer().min(1).max(100).positive().required(),
     maxGuests: Joi.number().integer().min(1).max(100).positive().required(),
-    meetingAddress: addressSchema,
-    bookableDates: Joi.array().items(Joi.date()),
+    meetingAddress: addressJoiSchema.required(),
+    timeSlots: Joi.array().items(timeSlotJoiSchema),
     veganFriendly: Joi.boolean(),
     vegetarianFriendly: Joi.boolean(),
     nutAllergyFriendly: Joi.boolean(),
   });
 
-  return classSchema.validate(c);
+  return classJoiSchema.validate(c);
 };
 
 const Class = mongoose.model('Class', classSchema);

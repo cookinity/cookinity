@@ -45,8 +45,8 @@ export const HostManagement = () => {
         cCopy.pastDates = [];
         cCopy.futureDates = [];
 
-        for (const dateString of cCopy.bookableDates) {
-          const date = dayjs(dateString);
+        for (const ts of cCopy.timeSlots) {
+          const date = dayjs(ts.date);
           if (date.isBefore(today)) {
             cCopy.pastDates.push(date.format('llll'));
           } else {

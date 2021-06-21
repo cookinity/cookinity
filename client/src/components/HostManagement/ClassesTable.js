@@ -1,4 +1,4 @@
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
@@ -24,7 +24,6 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
       <th>Min Guests</th>
       <th>Max Guests</th>
       <th>Duration</th>
-      <th>Dates</th>
       <th>Actions</th>
     </tr>
   );
@@ -92,6 +91,12 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
           <Button variant="danger" className="ml-2" onClick={handleShow(c)}>
             <FontAwesomeIcon icon={faTrash} /> Delete
           </Button>
+          <LinkContainer to={`/hostmanagement/edit-class/${c.id}/times`}>
+            <Button variant="secondary">
+              <FontAwesomeIcon icon={faClock} />
+              Manage Bookable Times
+            </Button>
+          </LinkContainer>
         </td>
       </tr>
     );
