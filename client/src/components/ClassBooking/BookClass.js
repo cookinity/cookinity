@@ -4,13 +4,14 @@ import Layout from 'components/Layout/Layout';
 import Loader from 'components/Shared/Loader/Loader';
 import { isError } from 'holderjs';
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Col, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { compose } from 'redux';
 import requireAuth from '../../higherOrderComponents/requireAuth';
+import BookingForm from './BookingForm';
 
 const BookClass = () => {
   const [c, setClass] = useState(undefined);
@@ -62,7 +63,7 @@ const BookClass = () => {
                   {errorMessage}
                 </Alert>
               )}
-              <div>{c ? <>{c.title}</> : <div>No class found!</div>}</div>
+              <div>{c ? <BookingForm c={c}></BookingForm> : <div>No class found!</div>}</div>
             </div>
           </Col>
         </Row>
