@@ -71,9 +71,9 @@ const ClassDetail = () => {
         //set future dates
         const d = []
         const today = dayjs(new Date());
-        for (const date of result.data.class.bookableDates) {
-          if (date.isAfter(today)) {
-            d.push(date);
+        for (const timeslot of result.data.class.timeSlots) {
+          if (dayjs(timeslot.date).isAfter(today)) {
+            d.push(dayjs(timeslot.date));
           }
         }
         setFutureDates(d)
@@ -163,14 +163,7 @@ const ClassDetail = () => {
             <Col xs={12} md={9}>
               <h3>Get to know your host: {c.host.name}</h3>
               <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
-                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-                ipsum dolor sit amet.
+                {c.host.description}
               </p>
             </Col>
           </Row>
