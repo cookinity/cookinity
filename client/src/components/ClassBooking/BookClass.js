@@ -1,17 +1,17 @@
 import axios from 'axios';
-import { TimeSlotTable } from 'components/HostManagement/TimeManagement/TimeSlotTable';
 import Layout from 'components/Layout/Layout';
 import Loader from 'components/Shared/Loader/Loader';
-import { isError } from 'holderjs';
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Col, Container, Row } from 'react-bootstrap';
-import DatePicker, { DateObject } from 'react-multi-date-picker';
-import TimePicker from 'react-multi-date-picker/plugins/time_picker';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { compose } from 'redux';
 import requireAuth from '../../higherOrderComponents/requireAuth';
 import BookingForm from './BookingForm';
+import { loadStripe } from '@stripe/stripe-js';
+import { PUBLIC_STRIPE_KEY } from 'constants/StripeKey';
+
+const stripePromise = loadStripe(PUBLIC_STRIPE_KEY);
 
 const BookClass = () => {
   const [c, setClass] = useState(undefined);
@@ -21,6 +21,42 @@ const BookClass = () => {
   const auth = useSelector((state) => state.auth);
   // id of the class in the route
   let { classId } = useParams();
+
+  const submitCallback = (timeSlot, numberOfGuests) => {
+    return async () => {
+      const stripe = await stripePromise;
+
+      // adding the necessary security header
+      const token = auth.token;
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+        },
+        params: {
+          classId: c.id,
+          timeSlotId: timeSlot.id,
+          numberOfGuests: numberOfGuests,
+        },
+      };
+      if (token) {
+        config.headers['x-auth-token'] = token;
+      }
+
+      const response = await axios.post('/api/payment/create-checkout-session', null, config);
+      const session = response.data.session;
+      debugger;
+
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        // If `redirectToCheckout` fails due to a browser or network
+        // error, display the localized error message to your customer
+        // using `result.error.message`.
+      }
+    };
+  };
 
   useEffect(() => {
     const fetchClass = async () => {
@@ -63,7 +99,13 @@ const BookClass = () => {
                   {errorMessage}
                 </Alert>
               )}
-              <div>{c ? <BookingForm c={c}></BookingForm> : <div>No class found!</div>}</div>
+              <div>
+                {c ? (
+                  <BookingForm c={c} submitCallback={submitCallback}></BookingForm>
+                ) : (
+                  <div>No class found!</div>
+                )}
+              </div>
             </div>
           </Col>
         </Row>

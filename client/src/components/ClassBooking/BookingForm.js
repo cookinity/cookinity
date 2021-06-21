@@ -3,17 +3,18 @@ import { Button, Form } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import _, { times } from 'lodash';
+import _ from 'lodash';
 import NumberFormat from 'react-number-format';
+
+import axios from 'axios';
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
-const BookingForm = ({ c }) => {
+const BookingForm = ({ c, submitCallback }) => {
   const [timeSlot, setTimeSlot] = useState(undefined);
   const [timeSlots, setTimeSlots] = useState([]);
   const [numberOfGuestsPossible, setSelectedNumberOfGuestsPossible] = useState([]);
   const [numberOfGuests, setNumberOfGuests] = useState(undefined);
-  const [isBooking, setIsBooking] = useState(false);
 
   const [totalPrice, setTotalPrice] = useState(undefined);
   const [marketPlaceFee, setMarketPlaceFee] = useState(undefined);
@@ -60,10 +61,6 @@ const BookingForm = ({ c }) => {
     const tP = Number(cP) + Number(mP);
     setTotalPrice(tP);
   }, [c]);
-
-  const handleBookingStartClick = () => {
-    setIsBooking(true);
-  };
 
   //guest options
   let guestOptions = numberOfGuestsPossible.map((number) => <option key={number}>{number}</option>);
@@ -135,7 +132,7 @@ const BookingForm = ({ c }) => {
         </span>
         <hr></hr>
         <div>
-          <Button variant="primary" onClick={handleBookingStartClick}>
+          <Button variant="primary" onClick={submitCallback(timeSlot, numberOfGuests)}>
             Book now
           </Button>
         </div>
