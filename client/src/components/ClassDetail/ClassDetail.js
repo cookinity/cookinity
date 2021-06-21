@@ -11,9 +11,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 //ToDo: Bookable Dates Anzeigen mit Duration addiert (nur future dates)
 //ToDo: Add section mit essens zeug preferenzen (vegan stuff und so)
-function parseDate(dates) {
-  return dates.map((d) => dayjs(d));
-}
 
 function formatAddress(address) {
   return address.street + ', ' + address.zip + ' ' + address.city;
@@ -58,7 +55,6 @@ const ClassDetail = () => {
       setIsLoading(true);
       try {
         const result = await axios(`/api/classes/${classId}`);
-        result.data.class.bookableDates = parseDate(result.data.class.bookableDates);
         setClass(result.data.class);
         //set available photos
         const p = [];

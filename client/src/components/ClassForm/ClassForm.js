@@ -17,9 +17,6 @@ dayjs.extend(utc);
 
 const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
   const history = useHistory();
-
-  const [bookableDates, setBookableDates] = useState([]);
-  const [focusedDate, setFocusedDate] = useState();
   // coverPhoto
   const [coverPhoto, setCoverPhoto] = useState(null);
   const [coverPhotoUrl, setCoverPhotoUrl] = useState(null);
@@ -72,13 +69,6 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('veganFriendly', _.get(originalClass, 'veganFriendly'));
       formik.setFieldValue('vegetarianFriendly', _.get(originalClass, 'vegetarianFriendly'));
       formik.setFieldValue('nutAllergyFriendly', _.get(originalClass, 'nutAllergyFriendly'));
-
-      const bookableDates = [];
-      for (const date of _.get(originalClass, 'bookableDates')) {
-        const dateObject = new DateObject(dayjs(date).toDate());
-        bookableDates.push(dateObject);
-      }
-      setBookableDates(bookableDates);
 
       if (_.get(originalClass, 'coverPhoto')) {
         const coverPhotoURL = _.get(originalClass, 'coverPhoto');
@@ -186,13 +176,6 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             formData.append('photoTwo', photoTwo);
           }
 
-          // We convert to UTC before sending the dates to the backend
-          formData.append(
-            'bookableDates',
-            JSON.stringify(
-              bookableDates.map((dateObject) => dayjs(dateObject.toDate()).utc().toJSON()),
-            ),
-          );
           // calling submit callback from parent component
           await submitCallback(formData);
           resetForm();
@@ -202,8 +185,6 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
           setPhotoOneUrl(null);
           setPhotoTwo(null);
           setPhotoTwoUrl(null);
-          setBookableDates([]);
-          setFocusedDate(undefined);
           history.push('/hostmanagement');
         } catch (err) {
           // error happened in parent component --> do not clear form
@@ -228,13 +209,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
         <hr></hr>
         <AddressSection formik={formik}></AddressSection>
         <hr></hr>
-        <DatesSection
-          formik={formik}
-          bookableDates={bookableDates}
-          setBookableDates={setBookableDates}
-          focusedDate={focusedDate}
-          setFocusedDate={setFocusedDate}
-        ></DatesSection>
+        <DatesSection formik={formik}></DatesSection>
         <hr></hr>
         <EatingHabitsSection formik={formik}></EatingHabitsSection>
         <hr></hr>
