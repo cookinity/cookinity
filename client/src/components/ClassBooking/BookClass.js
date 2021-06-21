@@ -44,7 +44,6 @@ const BookClass = () => {
 
       const response = await axios.post('/api/payment/create-checkout-session', null, config);
       const session = response.data.session;
-      debugger;
 
       const result = await stripe.redirectToCheckout({
         sessionId: session.id,

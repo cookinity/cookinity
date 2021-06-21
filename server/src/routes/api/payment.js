@@ -3,6 +3,7 @@ const express = require('express');
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import { Router } from 'express';
 import Class from '../../models/Class';
+import Order from '../../models/Order';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -13,9 +14,9 @@ dayjs.extend(localizedFormat);
 const router = Router();
 
 // Stripe will contact this endpoint throughout the payment lifecycle
-router.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
-  const payload = request.body;
-  const sig = request.headers['stripe-signature'];
+router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const payload = req.body;
+  const sig = req.headers['stripe-signature'];
 
   let event;
 
@@ -23,16 +24,36 @@ router.post('/webhook', express.raw({ type: 'application/json' }), (request, res
   try {
     event = stripe.webhooks.constructEvent(payload, sig, process.env.STRIPE_ENDPOINT_SECRET);
   } catch (err) {
-    return response.status(400).send(`Webhook Error: ${err.message}`);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   // Handle the checkout.session.completed event --> customer payment for the cooking class
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const { userId, classId, timeSlotId } = session.metadata;
+
+    const order = {
+      customer: userId,
+      class: classId,
+      timeSlot: timeSlotId,
+      stripeSession: session,
+    };
+
+    try {
+      // 1. Create New Order
+      let newOrder = await Order.create(order);
+      // 2. Set Time Slot IsBooked
+      const c = await Class.findById(classId).populate('host');
+      // set time slot to booked
+      c.timeSlots.id(timeSlotId).isBooked = true;
+      await c.save();
+      res.status(200).json({ class: newOrder.toJSON() });
+    } catch (err) {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 
-  response.status(200);
+  res.status(200);
 });
 
 router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
