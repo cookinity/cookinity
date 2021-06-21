@@ -110,8 +110,8 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.CLIENT_URL_DEV}?success=true`,
-      cancel_url: `${process.env.CLIENT_URL_DEV}?canceled=true`,
+      success_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?success=true`,
+      cancel_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?canceled=true`,
     });
     res.json({ session });
   } catch (err) {}
