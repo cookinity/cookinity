@@ -1,14 +1,39 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const express = require('express');
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import { Router } from 'express';
 import Class from '../../models/Class';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
 const router = Router();
+
+// Stripe will contact this endpoint throughout the payment lifecycle
+router.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
+  const payload = request.body;
+  const sig = request.headers['stripe-signature'];
+
+  let event;
+
+  // verify that request really came from stripe
+  try {
+    event = stripe.webhooks.constructEvent(payload, sig, process.env.STRIPE_ENDPOINT_SECRET);
+  } catch (err) {
+    return response.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the checkout.session.completed event --> customer payment for the cooking class
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const { userId, classId, timeSlotId } = session.metadata;
+  }
+
+  response.status(200);
+});
 
 router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
   try {
@@ -32,8 +57,12 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
     // calculate prices
     const eventPrice = (c.pricePerPerson * Number(numberOfGuests)).toFixed(2);
     const cookinityFee = (Number(eventPrice) * 0.1).toFixed(2); // we take 10%
-    debugger;
     const session = await stripe.checkout.sessions.create({
+      metadata: {
+        userId: req.user.id,
+        classId: classId,
+        timeSlotId: timeSlotId,
+      },
       payment_method_types: ['card'],
       line_items: [
         {
