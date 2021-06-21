@@ -1,1 +1,2 @@
-export const PUBLIC_STRIPE_KEY = '<Insert Your Public Stripe Key Here and rename to StripeKey.js>';
+//Copy this file to constants/StripeKey.js and enter your real publishable stripe key in StripeKey.js
+export const PUBLIC_STRIPE_KEY = '<PublishableStripeKey>';
