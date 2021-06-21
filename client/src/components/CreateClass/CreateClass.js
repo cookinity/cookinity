@@ -14,6 +14,7 @@ const CreateClass = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [classCreated, setClassCreated] = useState(false);
+  // @ts-ignore
   const auth = useSelector((state) => state.auth);
 
   const onSubmit = async (formData) => {

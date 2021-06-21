@@ -2,10 +2,12 @@ import Layout from 'components/Layout/Layout';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { compose } from 'redux';
 import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
 import { useSelector } from 'react-redux';
 import FeedbackForm from 'components/FeedbackForm/FeedbackForm';
+import requireAuth from '../../higherOrderComponents/requireAuth';
 
 const FeedbackUser = () => {
   const [c, setClass] = useState(undefined);
@@ -86,7 +88,7 @@ const FeedbackUser = () => {
                 <Row> Test </Row>
                 <p></p>
                 <FeedbackForm
-                  submitCallback={FeedbackUser}
+                  submitCallback={onSubmitFeedback}
                   isEditMode={false}
                   originalClass={undefined}
                 ></FeedbackForm>
@@ -101,4 +103,4 @@ const FeedbackUser = () => {
   }
 };
 
-export default FeedbackUser;
+export default compose(requireAuth)(FeedbackUser);
