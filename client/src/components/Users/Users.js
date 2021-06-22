@@ -16,17 +16,17 @@ const Users = ({ getUsers, users: { users, isLoading } }) => {
   //ohne Filter
   const hCards = users.map((c) => {
     return (
-      <Col sm={12} md={6} lg={4}>
-        <HostCard c={c} key={c.id}></HostCard>
+      <Col key={c.id} sm={12} md={6} lg={4}>
+        <HostCard c={c} ></HostCard>
       </Col>)
   });
 
   return (
     <Layout>
       <div className={"users"} >
-        <p className={"text-primary text-center font-weight-bold"}>
+        <div className={"text-primary text-center font-weight-bold"}>
           <h1>HOSTS</h1>
-        </p>
+        </div>
 
         <p className="text-center">
           This is the Hosts page. Here are listed all of the users of the app with at least one offered cooking course. Click the avatar (not supported yet) or

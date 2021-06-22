@@ -6,27 +6,27 @@ const BasicInfoSection = ({ formik }) => {
 
   return (
     <>
-      <Form.Group as={Col} controlId="overallrankingstars">
+      <Form.Group as={Col} controlId="overallRatingStars">
+        <Form.Label>Overall</Form.Label>
         <InputGroup>
           <Form.Control
             type="number"
             placeholder="1"
-            name="overallrankingstars"
+            name="overallRatingStars"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            value={formik.values.overallrankingstars}
+            value={formik.values.overallRatingStars}
             className={
-              formik.touched.overallrankingstars && formik.errors.overallrankingstars ? 'form-error' : null
+              formik.touched.overallRatingStars && formik.errors.overallRatingStars ? 'form-error' : null
             }
           />
         </InputGroup>
-        {formik.touched.overallrankingstars && formik.errors.overallrankingstars ? (
-          <div className="form-error-message">{formik.errors.overallrankingstars}</div>
+        {formik.touched.overallRatingStars && formik.errors.overallRatingStars ? (
+          <div className="form-error-message">{formik.errors.overallRatingStars}</div>
         ) : null}
       </Form.Group>
 
       <Form.Group as={Col} controlId="overallRating">
-        <Form.Label>Overall</Form.Label>
         <Form.Control
           placeholder="Give a short description about your overall experience"
           as="textarea"
@@ -42,8 +42,27 @@ const BasicInfoSection = ({ formik }) => {
         ) : null}
       </Form.Group>
 
-      <Form.Group as={Col} controlId="hostRating">
+      <Form.Group as={Col} controlId="hostRatingStars">
         <Form.Label>Host</Form.Label>
+        <InputGroup>
+          <Form.Control
+            type="number"
+            placeholder="1"
+            name="hostRatingStars"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.hostRatingStars}
+            className={
+              formik.touched.hostRatingStars && formik.errors.hostRatingStars ? 'form-error' : null
+            }
+          />
+        </InputGroup>
+        {formik.touched.hostRatingStars && formik.errors.hostRatingStars ? (
+          <div className="form-error-message">{formik.errors.hostRatingStars}</div>
+        ) : null}
+      </Form.Group>
+
+      <Form.Group as={Col} controlId="hostRating">
         <Form.Control
           placeholder="Give a short feedback about the host"
           as="textarea"
@@ -59,8 +78,27 @@ const BasicInfoSection = ({ formik }) => {
         ) : null}
       </Form.Group>
 
-      <Form.Group as={Col} controlId="tasteRating">
+      <Form.Group as={Col} controlId="tasteRatingStars">
         <Form.Label>Taste</Form.Label>
+        <InputGroup>
+          <Form.Control
+            type="number"
+            placeholder="1"
+            name="tasteRatingStars"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.tasteRatingStars}
+            className={
+              formik.touched.tasteRatingStars && formik.errors.tasteRatingStars ? 'form-error' : null
+            }
+          />
+        </InputGroup>
+        {formik.touched.tasteRatingStars && formik.errors.tasteRatingStars ? (
+          <div className="form-error-message">{formik.errors.tasteRatingStars}</div>
+        ) : null}
+      </Form.Group>
+
+      <Form.Group as={Col} controlId="tasteRating">
         <Form.Control
           placeholder="Give a short feedback about the taste of the food"
           as="textarea"
@@ -76,8 +114,27 @@ const BasicInfoSection = ({ formik }) => {
         ) : null}
       </Form.Group>
 
-      <Form.Group as={Col} controlId="locationRating">
+      <Form.Group as={Col} controlId="locationRatingStars">
         <Form.Label>Location</Form.Label>
+        <InputGroup>
+          <Form.Control
+            type="number"
+            placeholder="1"
+            name="locationRatingStars"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.locationRatingStars}
+            className={
+              formik.touched.locationRatingStars && formik.errors.locationRatingStars ? 'form-error' : null
+            }
+          />
+        </InputGroup>
+        {formik.touched.locationRatingStars && formik.errors.locationRatingStars ? (
+          <div className="form-error-message">{formik.errors.locationRatingStars}</div>
+        ) : null}
+      </Form.Group>
+
+      <Form.Group as={Col} controlId="locationRating">
         <Form.Control
           placeholder="Give a short feedback about the location"
           as="textarea"
@@ -93,8 +150,27 @@ const BasicInfoSection = ({ formik }) => {
         ) : null}
       </Form.Group>
 
+      <Form.Group as={Col} controlId="vtmrRatingStars">
+        <Form.Label>Value to Money Ratio</Form.Label>
+        <InputGroup>
+          <Form.Control
+            type="number"
+            placeholder="1"
+            name="vtmrRatingStars"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.vtmrRatingStars}
+            className={
+              formik.touched.vtmrRatingStars && formik.errors.vtmrRatingStars ? 'form-error' : null
+            }
+          />
+        </InputGroup>
+        {formik.touched.vtmrRatingStars && formik.errors.vtmrRatingStars ? (
+          <div className="form-error-message">{formik.errors.vtmrRatingStars}</div>
+        ) : null}
+      </Form.Group>
+
       <Form.Group as={Col} controlId="vtmrRating">
-        <Form.Label>Value to money Ratio</Form.Label>
         <Form.Control
           placeholder="Give a short feedback about the Value to money Ratio"
           as="textarea"
@@ -110,8 +186,27 @@ const BasicInfoSection = ({ formik }) => {
         ) : null}
       </Form.Group>
 
-      <Form.Group as={Col} controlId="experienceRating">
+      <Form.Group as={Col} controlId="experienceRatingStars">
         <Form.Label>Experience</Form.Label>
+        <InputGroup>
+          <Form.Control
+            type="number"
+            placeholder="1"
+            name="experienceRatingStars"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.experienceRatingStars}
+            className={
+              formik.touched.experienceRatingStars && formik.errors.experienceRatingStars ? 'form-error' : null
+            }
+          />
+        </InputGroup>
+        {formik.touched.experienceRatingStars && formik.errors.experienceRatingStars ? (
+          <div className="form-error-message">{formik.errors.experienceRatingStars}</div>
+        ) : null}
+      </Form.Group>
+
+      <Form.Group as={Col} controlId="experienceRating">
         <Form.Control
           placeholder="Give a short feedback about your gained cooking experience"
           as="textarea"

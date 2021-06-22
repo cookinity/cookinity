@@ -14,12 +14,12 @@ const Filters = ({ options, prompt, fun }) => {
         id="select-criteria"
         data-live-search="true"
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           {prompt}
         </option>
         for (let i of options){' '}
         {options.map((i) => (
-          <option>{i}</option>
+          <option key={i}>{i}</option>
         ))}
       </select>
     </div>

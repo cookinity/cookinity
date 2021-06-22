@@ -56,19 +56,11 @@ export const Home = () => {
   //Darstellung aller Kurse ohne Filter
   const classCards = filteredClasses.map((c) => {
     return (
-      <Col sm={12} md={6} lg={4}>
-        <ClassCard c={c} key={c.id}></ClassCard>
+      <Col key={c.id} sm={12} md={6} lg={4}>
+        <ClassCard c={c} ></ClassCard>
       </Col>
     );
   });
-
-  //mit Filter In CardsOverview oder hier (implementierung wenn filter geht)
-  // const classCardsfilter = filteredClasses.map((c) => {
-  //  return (
-  //    <Col sm={12} md={6} lg={4}>
-  //      <ClassCard c={c} key={c.id}></ClassCard>
-  //    </Col>)
-  // });
 
   if (isLoading) {
     return (

@@ -3,14 +3,10 @@ import { Button, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { validationSchema } from './feedbackValidation';
-import { DateObject } from 'react-multi-date-picker';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import _ from 'lodash';
 import BasicInfoSection from './FormSections/BasicInfoSection';
-dayjs.extend(utc);
 
-const FeedbackForm = ({ submitCallback, isEditMode, originalClass }) => {
+const FeedbackForm = ({ submitCallback, originalClass }) => {
     const history = useHistory();
 
     useEffect(() => {

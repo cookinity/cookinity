@@ -1,5 +1,5 @@
 import Layout from 'components/Layout/Layout';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import requireAuth from '../../higherOrderComponents/requireAuth';
 
@@ -8,14 +8,36 @@ import { useSelector } from 'react-redux';
 import FeedbackForm from 'components/FeedbackForm/FeedbackForm';
 import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
+import { useParams } from 'react-router-dom';
 
 const FeedbackUser = () => {
+  const [c, setClass] = useState(undefined);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [feedbackCreated, setFeedbackCreated] = useState(false);
   // @ts-ignore
   const auth = useSelector((state) => state.auth);
+
+  // id of the class in the route
+  // @ts-ignore
+  let { classId } = useParams();
+
+  useEffect(() => {
+    const fetchClass = async () => {
+      setIsError(false);
+      setIsLoading(true);
+      try {
+        const result = await axios(`/api/classes/${classId}`);
+        setClass(result.data.class);
+      } catch (err) {
+        setIsError(true);
+        setErrorMessage(err?.response?.data.message || err.message);
+      }
+      setIsLoading(false);
+    };
+    fetchClass();
+  }, []);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -32,7 +54,7 @@ const FeedbackUser = () => {
         config.headers['x-auth-token'] = token;
       }
 
-      await axios.post('/api/feedback', formData, config);
+      await axios.post('/api/classes/:id/feedbacks', formData, config);
       setIsLoading(false);
       setFeedbackCreated(true);
       return Promise.resolve(); // tell the form that there was not an error during submitting --> reset form
@@ -81,7 +103,6 @@ const FeedbackUser = () => {
             <div style={{ display: isLoading ? 'none' : 'block' }}>
               <FeedbackForm
                 submitCallback={onSubmit}
-                isEditMode={false}
                 originalClass={undefined}
               ></FeedbackForm>
             </div>

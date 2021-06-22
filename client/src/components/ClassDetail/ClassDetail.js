@@ -4,7 +4,6 @@ import { Carousel, Container, Row, Col, Image, Button } from 'react-bootstrap';
 import './classDetail.scss';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 //ToDo: Add Loading Bar, Add Alert Bar
@@ -80,7 +79,7 @@ const ClassDetail = () => {
           <Row className="rowFormat">
             <Col className="classDetail" xs={8}>
               <FontAwesomeIcon icon="calendar-alt" size="2x" className="iconPos fa-fw" />{' '}
-              {dayjs(c.timeSlots[0].date).format('DD/MM/YYYY')}
+              Dates Missing
             </Col>
             <Col className="classDetail" xs={4}>
               <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />{' '}
@@ -90,7 +89,7 @@ const ClassDetail = () => {
           <Row className="rowFormat">
             <Col className="classDetail" xs={8}>
               <FontAwesomeIcon icon="clock" size="2x" className="iconPos fa-fw" />{' '}
-              {dayjs(c.timeSlots[0].date).format('HH:mm')}
+              dayjs(c.timeSlots[0].date).format('HH:mm')
             </Col>
             <Col className="classDetail" xs={4}>
               <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" /> {c.minGuests} -{' '}

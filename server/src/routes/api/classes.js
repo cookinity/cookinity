@@ -9,6 +9,7 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 import Class, { validateClass, validateTimeSlot } from '../../models/Class';
 import upload from '../../middleware/multer';
+import validateFeedback from '../../models/Feedback';
 var ObjectId = require('mongoose').Types.ObjectId;
 
 const router = Router();
@@ -184,7 +185,6 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
         return res.status(400).json({ message: 'The new time slot overlaps with another time slot of the same class' });
       }
     }
-
     tempClass.timeSlots.push(newTimeSlot);
     let updatedClass = {
       timeSlots: tempClass.timeSlots,
@@ -196,6 +196,44 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
     res.status(500).json({ message: 'Something went wrong.' });
   }
 });
+
+router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
+  try {
+    const tempClass = await Class.findById(req.params.id).populate('host');
+    // check that the class exists in the database
+    if (!tempClass) {
+      return res.status(404).json({ message: 'Class not found!' });
+    }
+
+    const newFeedback = {
+      overallRatingStars: req.body.overallRatingStars,
+      overallRating: req.body.overallRating,
+      hostRatingStars: req.body.hostRatingStars,
+      hostRating: req.body.hostRating,
+      tasteRatingStars: req.body.tasterankingstars,
+      tasteRating: req.body.tasteranking,
+      locationRatingStars: req.body.locationRatingStars,
+      locationRating: req.body.locationRating,
+      vtmrRatingStars: req.body.vtmrRatingStars,
+      vtmrRating: req.body.vtmrRating,
+      experienceRatingStars: req.body.experienceRatingStars,
+      experienceRating: req.body.experienceRating,
+    };
+
+    const { error } = validateFeedback(newFeedback);
+    if (error) return res.status(400).json({ message: error.details[0].message });
+    tempClass.feedbacks.push(newFeedback);
+    let updatedClass = {
+      feedbacks: tempClass.feedbacks,
+    };
+    updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
+
+    res.status(200).json({ updatedClass });
+  } catch (err) {
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
 router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
   let coverPhoto = undefined;
   let photoOne = undefined;

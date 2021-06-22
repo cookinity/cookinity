@@ -95,3 +95,7 @@ export const feedbackJoiSchema = Joi.object().keys({
     experienceRatingStars: Joi.number().min(1).max(5).positive().required(),
     experienceRating: Joi.string().required(),
 });
+
+export const validatSchema = (f) => {
+    return feedbackJoiSchema.validate(f)
+}

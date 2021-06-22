@@ -18,8 +18,9 @@ import { Home } from 'components/Home/Home';
 import HostManagement from 'components/HostManagement/HostManagement';
 import CreateClass from 'components/CreateClass/CreateClass';
 import ClassDetail from 'components/ClassDetail/ClassDetail';
-import FeedbackUser from 'components/FeedbackUser/FeedbackUser';
 import EditClass from 'components/EditClass/EditClass';
+
+import FeedbackUser from 'components/FeedbackUser/FeedbackUser';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -67,7 +68,7 @@ const App = ({ auth, loadMe }) => {
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
           <Route path="/classes/:classId" component={ClassDetail} exact />
-          <Route path="/create-feedback" component={FeedbackUser} exact />
+          <Route path="/classes/:classId/create-feedback" component={FeedbackUser} exact />
           <Route path="/hostmanagement/edit-class/:classId" component={EditClass} exact />
           <Route
             path="/hostmanagement/edit-class/:classId/times"

@@ -17,8 +17,10 @@ const EditClass = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [classEdited, setClassEdited] = useState(false);
+  // @ts-ignore
   const auth = useSelector((state) => state.auth);
   // id of the class in the route
+  // @ts-ignore
   let { classId } = useParams();
 
   useEffect(() => {
