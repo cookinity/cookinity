@@ -9,6 +9,7 @@ dayjs.extend(utc);
 const { Schema } = mongoose;
 import { CLASS_CATEGORIES } from '../constants/ClassCategories';
 import { CITY_CATEGORIES } from '../constants/CityCategories';
+import { feedbackJoiSchema, feedbackSchema } from './Feedback';
 
 const addressSchema = new Schema({
   country: {
@@ -104,6 +105,7 @@ const classSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    feedbacks: [feedbackSchema],
     vegetarianFriendly: {
       type: Boolean,
       default: false,
@@ -163,6 +165,9 @@ classSchema.methods.toJSON = function () {
       // format as a string using dayjs (can be parsed on the frontend using dayjs) ! This will be also UTC --> convert it for display in frontend using dayjs if necessary
       return dayjs(date).utc().toJSON();
     }),
+    feedbacks: this.feedbacks.map((feedback) => {
+      return feedback.toJSON();
+    }),
   };
 };
 
@@ -197,6 +202,7 @@ export const validateClass = (c) => {
     veganFriendly: Joi.boolean(),
     vegetarianFriendly: Joi.boolean(),
     nutAllergyFriendly: Joi.boolean(),
+    feedbacks: Joi.array().items(feedbackJoiSchema),
   });
 
   return classSchema.validate(c);

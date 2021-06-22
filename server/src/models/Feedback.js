@@ -2,10 +2,8 @@ import Joi from 'joi-oid';
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-const classSchema = new Schema(
+export const feedbackSchema = new Schema(
     {
-        //Class ID missing
-
         //Stars
         overallRatingStars: {
             type: Number,
@@ -64,10 +62,9 @@ const classSchema = new Schema(
     { timestamps: true },
 );
 
-classSchema.methods.toJSON = function () {
+feedbackSchema.methods.toJSON = function () {
     return {
         id: this._id,
-        //classIDFeedback: this.classIDFeedback,
         overallRatingStars: this.overallRatingStars,
         overallRating: this.overallRating,
         hostRatingStars: this.hostRatingStars,
@@ -83,25 +80,18 @@ classSchema.methods.toJSON = function () {
     };
 };
 
-export const validateClass = (c) => {
-    const classSchema = Joi.object().keys({
-        //classIDFeedback: Joi.string().required(),
-        overallRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
-        overallRating: Joi.string().required(),
-        hostRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
-        hostRating: Joi.string().required(),
-        tasteRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
-        tasteRating: Joi.string().required(),
-        locationRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
-        locationRating: Joi.string().required(),
-        vtmrRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
-        vtmrRating: Joi.string().required(),
-        experienceRatingStars: tJoi.number().integer().min(1).max(5).positive().required(),
-        experienceRating: Joi.string().required(),
-    });
-    return classSchema.validate(c);
-};
 
-const Class = mongoose.model('Feedback', classSchema);
-
-export default Class;
+export const feedbackJoiSchema = Joi.object().keys({
+    overallRatingStars: Joi.number().min(1).max(5).positive().required(),
+    overallRating: Joi.string().required(),
+    hostRatingStars: Joi.number().min(1).max(5).positive().required(),
+    hostRating: Joi.string().required(),
+    tasteRatingStars: Joi.number().min(1).max(5).positive().required(),
+    tasteRating: Joi.string().required(),
+    locationRatingStars: Joi.number().min(1).max(5).positive().required(),
+    locationRating: Joi.string().required(),
+    vtmrRatingStars: Joi.number().min(1).max(5).positive().required(),
+    vtmrRating: Joi.string().required(),
+    experienceRatingStars: Joi.number().min(1).max(5).positive().required(),
+    experienceRating: Joi.string().required(),
+});
