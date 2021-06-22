@@ -90,7 +90,11 @@ We are using Stripe as an Payment Provider. Please follow the following steps to
     You can get your personal secret by executing `stripe listen --print-secret`. Your
     secret starts with `whsec_`. Please put it in the `.env` as `STRIPE_ENDPOINT_SECRET=`. This is described in the `.env.example`.
   - We need the publishable stripe key on the client. Your publishable test key starts with
-    `pk_test_`.
+    `pk_test_`. Please copy the file `src/constants/StripeKeyTEMPLATE.js` into
+    `src/constants/StripeKey.js` and enter your own publishable test key into the file.
+  - We are now completely setup. **If you want to know test Cookinity with payment enabled, you have to have the
+    Stripe CLI running while developing so stripe can communicate with our server. You can start the
+    stripe cli in the listening mode with `stripe listen --forward-to https://localhost:5000/api/payment/webhook --skip-verify`**. This command can also be run on the server side with `npm run stripe`
 
 ## Deployment on Heroku
 
