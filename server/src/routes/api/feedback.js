@@ -55,18 +55,18 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     const c = {
         host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
         //classid missing
-        overallrankingstars: req.body.overallrankingstars,
-        overallranking: req.body.overallranking,
-        hostrankingstars: req.body.hostrankingstars,
-        hostranking: req.body.hostranking,
-        tasterankingstars: req.body.tasterankingstars,
-        tasteranking: req.body.tasteranking,
-        locationratingstars: req.body.locationratingstars,
-        locationrating: req.body.locationrating,
-        vtmrrankingstars: req.body.vtmrrankingstars,
-        vtmrranking: req.body - vtmrranking,
-        experiencerankingstars: req.body.experiencerankingstars,
-        experienceranking: req.body.experienceranking,
+        overallRatingStars: req.body.overallRatingStars,
+        overallRating: req.body.overallRating,
+        hostRatingStars: req.body.hostRatingStars,
+        hostRating: req.body.hostRating,
+        tasteRatingStars: req.body.tasteRatingStars,
+        tasteRating: req.body.tasteRating,
+        locationRatingStars: req.body.locationRatingStars,
+        locationRating: req.body.locationRating,
+        vtmrRatingStars: req.body.vtmrRatingStars,
+        vtmrRating: req.body.vtmrRating,
+        experienceRatingStars: req.body.experienceRatingStars,
+        experienceRating: req.body.experienceRating,
     };
 
     Object.keys(c).forEach((key) => (c[key] === undefined ? delete c[key] : {}));

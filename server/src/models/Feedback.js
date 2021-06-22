@@ -1,63 +1,62 @@
 import Joi from 'joi-oid';
 import mongoose from 'mongoose';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 const { Schema } = mongoose;
 
 const classSchema = new Schema(
     {
         //Class ID missing
+
         //Stars
-        OverallRankingStars: {
+        overallRatingStars: {
             type: Number,
             required: true,
         },
-        HostRankingStars: {
+        hostRatingStars: {
             type: Number,
             required: true,
         },
-        TasteRankingStars: {
+        tasteRatingStars: {
             type: Number,
             required: true,
         },
-        LocationRankingStars: {
+        locationRatingStars: {
             type: Number,
             required: true,
         },
-        VTMRRankingStars: {
+        vtmrRatingStars: {
             type: Number,
             required: true,
         },
-        ExperienceRankingStars: {
+        experienceRatingStars: {
             type: Number,
             required: true,
         },
 
         //Description 
-        OverallRanking: {
+        overallRating: {
             type: String,
             default: '',
         },
 
-        HostRanking: {
+        hostRating: {
             type: String,
             default: '',
         },
 
-        TasteRanking: {
+        tasteRating: {
             type: String,
             default: '',
         },
 
-        LocationRanking: {
+        locationRating: {
             type: String,
             default: '',
         },
-        VTMRRanking: {
+        vtmrRating: {
             type: String,
             default: '',
         },
-        ExperienceRanking: {
+        experienceRating: {
             type: String,
             default: '',
         },
@@ -68,37 +67,37 @@ const classSchema = new Schema(
 classSchema.methods.toJSON = function () {
     return {
         id: this._id,
-        //classidfeedback: this.ClassIDFeedback,
-        overallrankingstars: this.OverallRankingStars,
-        overallranking: this.OverallRanking,
-        hostrankingstars: this.HostRankingStars,
-        hostranking: this.HostRanking,
-        tasterankingstars: this.TasteRankingStars,
-        tasteranking: this.TasteTanking,
-        locationratingstars: this.LocationRankingStars,
-        locationrating: this.LocationRanking,
-        vtmrrankingstars: this.VTMRRankingStars,
-        vtmrranking: this.VTMRRanking,
-        experiencerankingstars: this.ExperienceRankingStars,
-        experienceranking: this.ExperienceRanking,
+        //classIDFeedback: this.classIDFeedback,
+        overallRatingStars: this.overallRatingStars,
+        overallRating: this.overallRating,
+        hostRatingStars: this.hostRatingStars,
+        hostRating: this.hostRating,
+        tasteRatingStars: this.tasterankingstars,
+        tasteRating: this.tasteranking,
+        locationRatingStars: this.locationRatingStars,
+        locationRating: this.locationRating,
+        vtmrRatingStars: this.vtmrRatingStars,
+        vtmrRating: this.vtmrRating,
+        experienceRatingStars: this.experienceRatingStars,
+        experienceRating: this.experienceRating,
     };
 };
 
 export const validateClass = (c) => {
     const classSchema = Joi.object().keys({
-        overallrankingstars: Joi.number().integer().min(1).max(5).positive().required(),
-        overallranking: Joi.string().required(),
-        //classid
-        hostrankingstars: Joi.number().integer().min(1).max(5).positive().required(),
-        hostranking: Joi.string().required(),
-        tasterankingstars: Joi.number().integer().min(1).max(5).positive().required(),
-        tasteranking: Joi.string().required(),
-        locationratingstars: Joi.number().integer().min(1).max(5).positive().required(),
-        locationrating: Joi.string().required(),
-        vtmrrankingstars: Joi.number().integer().min(1).max(5).positive().required(),
-        vtmrranking: Joi.string().required(),
-        experiencerankingstars: tJoi.number().integer().min(1).max(5).positive().required(),
-        experienceranking: Joi.string().required(),
+        //classIDFeedback: Joi.string().required(),
+        overallRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
+        overallRating: Joi.string().required(),
+        hostRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
+        hostRating: Joi.string().required(),
+        tasteRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
+        tasteRating: Joi.string().required(),
+        locationRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
+        locationRating: Joi.string().required(),
+        vtmrRatingStars: Joi.number().integer().min(1).max(5).positive().required(),
+        vtmrRating: Joi.string().required(),
+        experienceRatingStars: tJoi.number().integer().min(1).max(5).positive().required(),
+        experienceRating: Joi.string().required(),
     });
     return classSchema.validate(c);
 };

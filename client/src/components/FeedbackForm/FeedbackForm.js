@@ -14,71 +14,71 @@ const FeedbackForm = ({ submitCallback, isEditMode, originalClass }) => {
     const history = useHistory();
 
     useEffect(() => {
-        formik.setFieldValue('overallrankingstars', _.get(originalClass, 'overallrankingstars'));
-        formik.setFieldValue('overallranking', _.get(originalClass, 'overallranking'));
+        formik.setFieldValue('overallRatingStars', _.get(originalClass, 'overallRatingStars'));
+        formik.setFieldValue('overallRating', _.get(originalClass, 'overallRating'));
 
-        formik.setFieldValue('hostrankingstars', _.get(originalClass, 'hostrankingstars'));
-        formik.setFieldValue('hostranking', _.get(originalClass, 'hostranking'));
+        formik.setFieldValue('hostRatingStars', _.get(originalClass, 'hostRatingStars'));
+        formik.setFieldValue('hostRating', _.get(originalClass, 'hostRating'));
 
-        formik.setFieldValue('tasterankingstars', _.get(originalClass, 'tasterankingstars'));
-        formik.setFieldValue('tasteranking', _.get(originalClass, 'tasteranking'));
+        formik.setFieldValue('tasteRatingStars', _.get(originalClass, 'tasteRatingStars'));
+        formik.setFieldValue('tasteRating', _.get(originalClass, 'tasteRating'));
 
-        formik.setFieldValue('locationratingstars', _.get(originalClass, 'locationratingstars'));
-        formik.setFieldValue('locationrating', _.get(originalClass, 'locationrating'));
+        formik.setFieldValue('locationRatingStars', _.get(originalClass, 'locationRatingStars'));
+        formik.setFieldValue('locationRating', _.get(originalClass, 'locationRating'));
 
-        formik.setFieldValue('vtmrrankingstars', _.get(originalClass, 'vtmrrankingstars'));
-        formik.setFieldValue('vtmrranking', _.get(originalClass, 'vtmrranking'));
+        formik.setFieldValue('vtmrRatingStars', _.get(originalClass, 'vtmrRatingStars'));
+        formik.setFieldValue('vtmrRating', _.get(originalClass, 'vtmrRating'));
 
-        formik.setFieldValue('experiencerankingstars', _.get(originalClass, 'experiencerankingstars'));
-        formik.setFieldValue('experienceranking', _.get(originalClass, 'experienceranking'));
+        formik.setFieldValue('experienceRatingStars', _.get(originalClass, 'experienceRatingStars'));
+        formik.setFieldValue('experienceRating', _.get(originalClass, 'experienceRating'));
     }, []);
 
     const formik = useFormik({
         initialValues: {
-            overallrankingstars: '',
-            overallranking: '',
-            hostrankingstars: '',
-            hostranking: '',
-            tasterankingstars: '',
-            tasteranking: '',
-            locationratingstars: '',
-            locationrating: '',
-            vtmrrankingstars: '',
-            vtmrranking: '',
-            experiencerankingstars: '',
-            experienceranking: '',
+            overallRatingStars: '',
+            overallRating: '',
+            hostRatingStars: '',
+            hostRating: '',
+            tasteRatingStars: '',
+            tasteRating: '',
+            locationRatingStars: '',
+            locationRating: '',
+            vtmrRatingStars: '',
+            vtmrRating: '',
+            experienceRatingStars: '',
+            experienceRating: '',
         },
         validationSchema: validationSchema,
         onSubmit: (values, { setSubmitting, resetForm }) => {
             const submit = async () => {
                 try {
                     const {
-                        overallrankingstars,
-                        overallranking,
-                        hostrankingstars,
-                        hostranking,
-                        tasterankingstars,
-                        tasteranking,
-                        locationratingstars,
-                        locationrating,
-                        vtmrrankingstars,
-                        vtmrranking,
-                        experiencerankingstars,
-                        experienceranking,
+                        overallRatingStars,
+                        overallRating,
+                        hostRatingStars,
+                        hostRating,
+                        tasteRatingStars,
+                        tasteRating,
+                        locationRatingStars,
+                        locationRating,
+                        vtmrRatingStars,
+                        vtmrRating,
+                        experienceRatingStars,
+                        experienceRating,
                     } = values;
                     const data = {
-                        overallrankingstars,
-                        overallranking,
-                        hostrankingstars,
-                        hostranking,
-                        tasterankingstars,
-                        tasteranking,
-                        locationratingstars,
-                        locationrating,
-                        vtmrrankingstars,
-                        vtmrranking,
-                        experiencerankingstars,
-                        experienceranking,
+                        overallRatingStars,
+                        overallRating,
+                        hostRatingStars,
+                        hostRating,
+                        tasteRatingStars,
+                        tasteRating,
+                        locationRatingStars,
+                        locationRating,
+                        vtmrRatingStars,
+                        vtmrRating,
+                        experienceRatingStars,
+                        experienceRating,
                     };
 
                     const formData = new FormData();
@@ -95,7 +95,7 @@ const FeedbackForm = ({ submitCallback, isEditMode, originalClass }) => {
                     // calling submit callback from parent component
                     await submitCallback(formData);
                     resetForm();
-                    //history.push('/hostmanagement');
+                    history.push('/hostmanagement');
                 } catch (err) {
                     // error happened in parent component --> do not clear form
                 }

@@ -98,7 +98,7 @@ export default function ClassCard({ c }) {
         <LinkContainer to={`/classes/${c.id}`}>
           <Button variant="primary" block>Go to course</Button>
         </LinkContainer>
-        <LinkContainer to={`/feedback/${c.id}`}>
+        <LinkContainer to={`/create-feedback`}>
           <Button variant="primary" block>Go to feedback</Button>
         </LinkContainer>
       </Card.Body>
