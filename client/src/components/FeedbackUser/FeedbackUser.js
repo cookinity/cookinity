@@ -11,7 +11,6 @@ import Loader from 'components/Shared/Loader/Loader';
 import { useParams } from 'react-router-dom';
 
 const FeedbackUser = () => {
-  const [c, setClass] = useState(undefined);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -23,23 +22,7 @@ const FeedbackUser = () => {
   // @ts-ignore
   let { classId } = useParams();
 
-  useEffect(() => {
-    const fetchClass = async () => {
-      setIsError(false);
-      setIsLoading(true);
-      try {
-        const result = await axios(`/api/classes/${classId}`);
-        setClass(result.data.class);
-      } catch (err) {
-        setIsError(true);
-        setErrorMessage(err?.response?.data.message || err.message);
-      }
-      setIsLoading(false);
-    };
-    fetchClass();
-  }, []);
-
-  const onSubmit = async (formData) => {
+  const onSubmit = async (newFeedback) => {
     setIsLoading(true);
     setIsError(false);
     try {
@@ -54,7 +37,7 @@ const FeedbackUser = () => {
         config.headers['x-auth-token'] = token;
       }
 
-      await axios.post('/api/classes/:id/feedbacks', formData, config);
+      await axios.post(`/api/classes/${classId}/feedbacks`, newFeedback, config);
       setIsLoading(false);
       setFeedbackCreated(true);
       return Promise.resolve(); // tell the form that there was not an error during submitting --> reset form
@@ -101,10 +84,7 @@ const FeedbackUser = () => {
               <Loader></Loader>
             </div>
             <div style={{ display: isLoading ? 'none' : 'block' }}>
-              <FeedbackForm
-                submitCallback={onSubmit}
-                originalClass={undefined}
-              ></FeedbackForm>
+              <FeedbackForm submitCallback={onSubmit}></FeedbackForm>
             </div>
           </div>
         </Col>
@@ -114,4 +94,3 @@ const FeedbackUser = () => {
 };
 
 export default compose(requireAuth)(FeedbackUser);
-

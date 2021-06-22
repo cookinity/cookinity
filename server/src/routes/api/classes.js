@@ -9,7 +9,7 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 import Class, { validateClass, validateTimeSlot } from '../../models/Class';
 import upload from '../../middleware/multer';
-import validateFeedback from '../../models/Feedback';
+import { validateFeedback } from '../../models/Feedback';
 var ObjectId = require('mongoose').Types.ObjectId;
 
 const router = Router();
@@ -198,6 +198,7 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
 });
 
 router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
+  debugger;
   try {
     const tempClass = await Class.findById(req.params.id).populate('host');
     // check that the class exists in the database
@@ -210,16 +211,20 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
       overallRating: req.body.overallRating,
       hostRatingStars: req.body.hostRatingStars,
       hostRating: req.body.hostRating,
-      tasteRatingStars: req.body.tasterankingstars,
-      tasteRating: req.body.tasteranking,
+      tasteRatingStars: req.body.tasteRatingStars,
+      tasteRating: req.body.tasteRating,
       locationRatingStars: req.body.locationRatingStars,
       locationRating: req.body.locationRating,
       vtmrRatingStars: req.body.vtmrRatingStars,
       vtmrRating: req.body.vtmrRating,
       experienceRatingStars: req.body.experienceRatingStars,
       experienceRating: req.body.experienceRating,
+      reviewer: req.user.id,
     };
 
+    // ToDo: We need to add verification such that only people who have really booked the class can make a review
+
+    debugger;
     const { error } = validateFeedback(newFeedback);
     if (error) return res.status(400).json({ message: error.details[0].message });
     tempClass.feedbacks.push(newFeedback);
