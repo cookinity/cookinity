@@ -10,9 +10,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 //ToDo: Add Loading Bar, Add Alert Bar
 //ToDo: Bookable Dates Anzeigen mit Duration addiert (nur future dates)
 //ToDo: Add section mit essens zeug preferenzen (vegan stuff und so)
-function parseDate(dates) {
-  return dates.map((d) => dayjs(d));
-}
 
 function formatAddress(address) {
   return address.street + ', ' + address.zip + ' ' + address.city;
@@ -53,7 +50,6 @@ const ClassDetail = () => {
       setIsLoading(true);
       try {
         const result = await axios(`/api/classes/${classId}`);
-        result.data.class.bookableDates = parseDate(result.data.class.bookableDates);
         setClass(result.data.class);
         const p = [];
         if (result.data.class.coverPhoto) {
@@ -84,7 +80,7 @@ const ClassDetail = () => {
           <Row className="rowFormat">
             <Col className="classDetail" xs={8}>
               <FontAwesomeIcon icon="calendar-alt" size="2x" className="iconPos fa-fw" />{' '}
-              {c.bookableDates[0].format('DD/MM/YYYY')}
+              {dayjs(c.timeSlots[0].date).format('DD/MM/YYYY')}
             </Col>
             <Col className="classDetail" xs={4}>
               <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />{' '}
@@ -94,7 +90,7 @@ const ClassDetail = () => {
           <Row className="rowFormat">
             <Col className="classDetail" xs={8}>
               <FontAwesomeIcon icon="clock" size="2x" className="iconPos fa-fw" />{' '}
-              {c.bookableDates[0].format('HH:mm')}
+              {dayjs(c.timeSlots[0].date).format('HH:mm')}
             </Col>
             <Col className="classDetail" xs={4}>
               <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" /> {c.minGuests} -{' '}
