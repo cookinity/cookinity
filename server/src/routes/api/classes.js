@@ -75,7 +75,6 @@ router.get('/:id', async (req, res) => {
 });
 
 router.delete('/:id', requireJwtAuth, async (req, res) => {
-  debugger;
   try {
     const cl = await Class.findById(req.params.id).populate('host');
     if (!cl) return res.status(404).json({ message: 'No such class.' });
@@ -160,7 +159,6 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
 });
 
 router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
-  debugger;
   if (req.body.bookableDates) {
     req.body.bookableDates = JSON.parse(req.body.bookableDates);
   }

@@ -70,7 +70,6 @@ export const Home = () => {
 
     const handleFilterDate = (e) => {
     setQueryString(queryString.concat(`&date=${e}`));
-    localStorage.setItem("date", e.target.value)
     setStartDate(e);
   }
 

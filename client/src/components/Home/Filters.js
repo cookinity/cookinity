@@ -3,7 +3,6 @@
 //ToDo: Make it possible to clear a filter
 
 import React from 'react';
-import 'bootstrap/dist/js/bootstrap.bundle';
 
 const Filters = ({ options, prompt, fun, name }) => {
   return (
@@ -15,7 +14,7 @@ const Filters = ({ options, prompt, fun, name }) => {
         id="select-criteria"
         data-live-search="true"
       >
-        <option value="" disabled selected>
+        <option disabled selected>
           {prompt}
         </option>
         for (let i of options){' '}
