@@ -17,14 +17,32 @@ var photosUpload = upload.fields([
 
 router.get('/', async (req, res, next) => {
   try {
-    const { hostId } = req.query;
+    const limitValue = parseInt(req.query.limit);
+    const skipValue = parseInt(req.query.skip);
+    
+    if (skipValue < 0) return res.status(400).json({message: 'This is already the most previous page'})
+
+    const { hostId, category, city, date } = req.query;
     let classes = [];
+
     if (hostId) {
       // classes by the specified host
-      classes = await Class.find({ host: new ObjectId(hostId) }).populate('host');
+      classes = await Class.find({host: new ObjectId(hostId)}).populate('host').skip(skipValue).limit(limitValue)
+    }  
+    else if (category) {
+     classes = await Class.find({category: category.toString()}).skip(skipValue).limit(limitValue)
+    }  else if (city) {
+      classes = await Class.find({'meetingAddress.city': city.toString()}).skip(skipValue).limit(limitValue)
+    }  else if (date) {
+      classes = await Class.find({ date : { $all: ['bookableDates']} }).skip(skipValue).limit(limitValue)
     } else {
       // all classes
-      classes = await Class.find().populate('host');
+      //classes = await Class.aggregate([{ $match: {
+      //  category : category,
+      //  'meetingAddress.city' : city,
+      //  date: { $all: ['bookableDates']}
+      //  }}, {$limit : limitValue}, {$skip: skipValue}])
+      classes = await Class.find().populate('host').skip(skipValue).limit(limitValue);
     }
 
     res.json({
@@ -32,6 +50,7 @@ router.get('/', async (req, res, next) => {
         return c.toJSON();
       }),
     });
+
   } catch (err) {
     if (err.message) {
       res.status(500).json({ message: err.message });
@@ -39,7 +58,7 @@ router.get('/', async (req, res, next) => {
       res.status(500).json({ message: 'Something went wrong during the class creation.' });
     }
   }
-});
+ });
 
 router.get('/:id', async (req, res) => {
   try {
@@ -200,5 +219,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     }
   }
 });
+
+
 
 export default router;

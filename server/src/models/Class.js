@@ -10,6 +10,8 @@ const { Schema } = mongoose;
 import { CLASS_CATEGORIES } from '../constants/ClassCategories';
 import { CITY_CATEGORIES } from '../constants/CityCategories';
 
+const mongoosePaginate = require('mongoose-paginate-v2');
+
 const addressSchema = new Schema({
   country: {
     type: String,
@@ -201,6 +203,8 @@ export const validateClass = (c) => {
 
   return classSchema.validate(c);
 };
+
+classSchema.plugin(mongoosePaginate);
 
 const Class = mongoose.model('Class', classSchema);
 

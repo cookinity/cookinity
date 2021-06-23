@@ -5,9 +5,10 @@
 import React from 'react';
 import 'bootstrap/dist/js/bootstrap.bundle';
 
-const Filters = ({ options, prompt, fun }) => {
+const Filters = ({ options, prompt, fun, name }) => {
   return (
     <div>
+      <label>{name}</label>
       <select
         className="form-control selectpicker"
         onChange={fun}

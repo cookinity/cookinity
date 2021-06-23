@@ -11,6 +11,8 @@
   },
   "author": "cookinity team",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "mongoose-aggregate-paginate-v2": "^1.0.42"
+  },
   "devDependencies": {}
 }
