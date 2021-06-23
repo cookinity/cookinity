@@ -29,11 +29,16 @@ import {
   faUsers,
   faMapMarkerAlt,
   faCheckCircle,
+  faInfoCircle, 
+  faUtensils, 
+  faSeedling, 
+  faCarrot, 
+  faCookie
 } from '@fortawesome/free-solid-svg-icons';
 import TimeManagements from 'components/HostManagement/TimeManagement/TimeManagements';
 import BookClass from 'components/ClassBooking/BookClass';
 
-library.add(fab, faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle);
+library.add(fab, faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle, faInfoCircle, faUtensils, faSeedling, faCarrot, faCookie);
 
 const App = ({ auth, loadMe }) => {
   useEffect(() => {
