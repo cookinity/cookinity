@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { LinkContainer } from 'react-router-bootstrap';
 
 //ToDo: Add Loading Bar, Add Alert Bar
 //ToDo: Bookable Dates Anzeigen mit Duration addiert (nur future dates)
@@ -139,9 +140,9 @@ const ClassDetail = () => {
           </Row>
         </Container>
         <div className="text-center">
-          <Button variant="primary" size="lg">
-            Book Now
-          </Button>
+          <LinkContainer to={`/classes/${c.id}/booking`}>
+            <Button variant="primary">Book Now</Button>
+          </LinkContainer>
         </div>
       </Layout>
     );
