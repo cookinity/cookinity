@@ -3,7 +3,6 @@
 //ToDo: Make it possible to clear a filter
 
 import React from 'react';
-import 'bootstrap/dist/js/bootstrap.bundle';
 
 const Filters = ({ options, prompt, fun }) => {
   return (

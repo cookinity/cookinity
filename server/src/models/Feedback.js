@@ -102,6 +102,5 @@ export const feedbackJoiSchema = Joi.object().keys({
 });
 
 export const validateFeedback = (f) => {
-  debugger;
   return feedbackJoiSchema.validate(f);
 };

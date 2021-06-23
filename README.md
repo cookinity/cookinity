@@ -73,10 +73,28 @@ $ npm start
 That's it as far for development setup. For production check the `Deployment on Heroku` section.
 
 ### Generate Admin User
+
 Change the role of the user you want to be a admin to "ADMIN".
 ![image](https://user-images.githubusercontent.com/29718932/119522214-13c1e280-bd7c-11eb-95b3-08766bc68305.png)
 
+### SetUp Stripe
 
+We are using Stripe as an Payment Provider. Please follow the following steps to setup stripe correctly:
+
+- Create a Stripe Account on: https://stripe.com/. Also setup your account settings under https://dashboard.stripe.com/settings/account. **It is especially important that you setup an account name and public business name here**
+- Setup https://stripe.com/docs/stripe-cli on your machine. We need stripe cli to simulate locally during development stripe calling our server.
+- We now need to enter several keys from https://dashboard.stripe.com/apikeys into our project. **Important: Make sure you are using the test data API keys**
+  - We need the secret stripe key on the server. Your secret test key starts with
+    `sk_test_`. Please put it in the `.env` as `STRIPE_SECRET_KEY=`. This is described in the `.env.example`
+  - To verify that a message to the server really comes from stripe we also need the stripe endpoint secret.
+    You can get your personal secret by executing `stripe listen --print-secret`. Your
+    secret starts with `whsec_`. Please put it in the `.env` as `STRIPE_ENDPOINT_SECRET=`. This is described in the `.env.example`.
+  - We need the publishable stripe key on the client. Your publishable test key starts with
+    `pk_test_`. Please copy the file `src/constants/StripeKeyTEMPLATE.js` into
+    `src/constants/StripeKey.js` and enter your own publishable test key into the file.
+  - We are now completely setup. **If you want to know test Cookinity with payment enabled, you have to have the
+    Stripe CLI running while developing so stripe can communicate with our server. You can start the
+    stripe cli in the listening mode with `stripe listen --forward-to https://localhost:5000/api/payment/webhook --skip-verify`**. This command can also be run on the server side with `npm run stripe`
 
 ## Deployment on Heroku
 

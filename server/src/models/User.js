@@ -36,6 +36,11 @@ const userSchema = new Schema(
       minlength: 6,
       maxlength: 60,
     },
+    description: {
+      type: String,
+      lowercase: true,
+      index: true,
+    },
     name: String,
     avatar: String,
     role: { type: String, default: 'USER' },
@@ -60,6 +65,7 @@ userSchema.methods.toJSON = function () {
     provider: this.provider,
     email: this.email,
     username: this.username,
+    description: this.description,
     avatar: avatar,
     name: this.name,
     role: this.role,
@@ -129,6 +135,7 @@ export const validateUser = (user) => {
       .regex(/^[a-zA-Z0-9_]+$/)
       .required(),
     password: Joi.string().min(6).max(20).allow('').allow(null),
+    description: Joi.string().min(2).max(1000),
   });
 
   return schema.validate(user);

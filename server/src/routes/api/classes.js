@@ -61,7 +61,7 @@ router.delete('/:id', [requireJwtAuth], async (req, res, next) => {
       return res.status(404).json({ message: 'Class not found!' });
     }
     // check that the user making the request is the host of the class or an admin
-    if (!(tempClass.host.id === req.user.id) || req.user.role === 'ADMIN') {
+    if (!(tempClass.host.id === req.user.id || req.user.role === 'ADMIN')) {
       return res.status(400).json({ message: 'Only the host of a class can delete a class!' });
     }
     // check that no time slot is booked yet
@@ -86,7 +86,7 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       return res.status(404).json({ message: 'Class not found!' });
     }
     // check that the user making the request is the host of the class or an admin
-    if (!(tempClass.host.id === req.user.id) || req.user.role === 'ADMIN') {
+    if (!(tempClass.host.id === req.user.id || req.user.role === 'ADMIN')) {
       return res.status(400).json({ message: 'Only the host of a class can edit a class!' });
     }
 
@@ -142,7 +142,7 @@ router.delete('/:classId/timeslots/:tsId', [requireJwtAuth], async (req, res, ne
       return res.status(404).json({ message: 'Class not found!' });
     }
     // check that the user making the request is the host of the class or an admin
-    if (!(tempClass.host.id === req.user.id) || req.user.role === 'ADMIN') {
+    if (!(tempClass.host.id === req.user.id || req.user.role === 'ADMIN')) {
       return res.status(400).json({ message: 'Only the host of a class can edit a class!' });
     }
     tempClass.timeSlots.id(req.params.tsId).remove();
@@ -161,7 +161,7 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
       return res.status(404).json({ message: 'Class not found!' });
     }
     // check that the user making the request is the host of the class or an admin
-    if (!(tempClass.host.id === req.user.id) || req.user.role === 'ADMIN') {
+    if (!(tempClass.host.id === req.user.id || req.user.role === 'ADMIN')) {
       return res.status(400).json({ message: 'Only the host of a class can edit a class!' });
     }
 
@@ -198,7 +198,6 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
 });
 
 router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
-  debugger;
   try {
     const tempClass = await Class.findById(req.params.id).populate('host');
     // check that the class exists in the database
@@ -223,8 +222,6 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
     };
 
     // ToDo: We need to add verification such that only people who have really booked the class can make a review
-
-    debugger;
     const { error } = validateFeedback(newFeedback);
     if (error) return res.status(400).json({ message: error.details[0].message });
     tempClass.feedbacks.push(newFeedback);
