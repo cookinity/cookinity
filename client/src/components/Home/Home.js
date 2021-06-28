@@ -58,6 +58,16 @@ export const Home = () => {
     setCat(value);
   };
 
+  const handleFilterCategory2 = async (e) => {
+    let value = e.target.value;
+    let result = [];
+    result = classes.filter((data) => {
+      return data.category.search(value) !== -1;
+    });
+    filteredClasses.concat(result);
+    setFilteredClasses(filteredClasses);
+  };
+
   const handleFilterCity = (e) => {
     let value = e.target.value;
     setQueryString(queryString.concat(`&city=${value}`));
@@ -71,8 +81,8 @@ export const Home = () => {
   };
 
   const openNav = () => {
-    document.getElementById('sidebar').style.width = '250px';
-    document.getElementById('main').style.width = '70%';
+    document.getElementById('sidebar').style.width = '20%';
+    document.getElementById('main').style.width = '65%';
   };
 
   const closeNav = () => {
@@ -171,20 +181,20 @@ export const Home = () => {
             </label>
             <li className="list-group" onClick={() => console.log('clicked!')}>
               <div className="row col-auto">
-              <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
               </div>
             </li>
             <li className="list-group" onClick={() => console.log('clicked!')}>
               <div className="row col-auto">
-              <i className="fa fa-eur"></i>
-              <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
               </div>
             </li>
             <li className="list-group" onClick={() => console.log('clicked!')}>
               <div className="row col-auto">
-              <i className="fa fa-eur"></i>
-              <i className="fa fa-eur"></i>
-              <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
               </div>
             </li>
           </a>
@@ -235,8 +245,6 @@ export const Home = () => {
                 </Alert>
               )}
 
-              <Button onClick={openNav}>Open Sidebar</Button>
-
               <div className="filter">
                 <Filters
                   options={CLASS_CATEGORIES}
@@ -277,15 +285,19 @@ export const Home = () => {
                 </div>
               </div>
 
-              <Button className="mx-auto" onClick={fetchClasses}>
-                Search
-              </Button>
+              <div className="btn-group" role="group">
+                <Button className="mx-auto" onClick={fetchClasses}>
+                  Search
+                </Button>
+                <br></br>
+                <Button onClick={openNav}>Refine your search</Button>
+              </div>
 
               <p></p>
               <Row> {classCards} </Row>
               <label htmlFor=""></label>
 
-              <div>
+              <div className="btn-group" role="group">
                 <Button onClick={previousPage}>Previos Page</Button>
                 <Button onClick={nextPage}> Next Page</Button>
               </div>
