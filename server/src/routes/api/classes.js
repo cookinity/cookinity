@@ -15,6 +15,56 @@ var photosUpload = upload.fields([
   { name: 'photoTwo', maxCount: 1 },
 ]);
 
+router.post('/query', async (req, res, next) => {
+  let { city, category, date, limit, skip } = req.body;
+
+  if (date) {
+    date = dayjs(date);
+  }
+
+  try {
+    let classes = await Class.find();
+    // Apply City Filter
+    if (city) {
+      classes = classes.filter((c) => c.meetingAddress.city === city);
+    }
+    // Apply Category Filter
+    if (category) {
+      classes = classes.filter((c) => c.category === category);
+    }
+    // Apply Date Filter
+    if (date) {
+      classes = classes.filter((c) => {
+        if (c.bookableDates) {
+          const foundFittingDate = c.bookableDates.find((d) => {
+            return dayjs(d).format('DD/MM/YYYY') === date.format('DD/MM/YYYY');
+          });
+          return foundFittingDate ? true : false;
+        } else {
+          return false;
+        }
+      });
+    }
+
+    // Apply Skip and Filter
+    if (skip !== undefined && limit !== undefined) {
+      classes = classes.slice(skip, skip + limit);
+    }
+
+    res.json({
+      classes: classes.map((c) => {
+        return c.toJSON();
+      }),
+    });
+  } catch (err) {
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
+  }
+});
+
 router.get('/', async (req, res, next) => {
   try {
     const limitValue = parseInt(req.query.limit);
@@ -36,9 +86,9 @@ router.get('/', async (req, res, next) => {
         {
           $match: {
             $and: [
-              { 'category': category },
+              { category: category },
               { 'meetingAddress.city': city },
-            //  { 'bookableDates': { $regex: `^${date}*` }},
+              //  { 'bookableDates': { $regex: `^${date}*` }},
             ],
           },
         },

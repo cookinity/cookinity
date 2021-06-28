@@ -9,9 +9,11 @@ import Filters from './Filters';
 import Loader from 'components/Shared/Loader/Loader';
 import { CLASS_CATEGORIES } from 'constants/ClassCategories';
 import { CITY_CATEGORIES } from 'constants/CityCategories';
-import DatePicker from 'react-multi-date-picker';
+import DatePicker, { DateObject } from 'react-multi-date-picker';
 import './Home.scss';
-
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 export const Home = () => {
   const [classes, setClasses] = useState([]);
   const [filteredClasses, setFilteredClasses] = useState([]);
@@ -22,19 +24,31 @@ export const Home = () => {
   const [limit, setLimit] = useState(5);
   const [skip, setSkip] = useState(0);
   const [queryString, setQueryString] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState('');
   const [cat, setCat] = useState('');
   const [city, setCity] = useState('');
 
   useEffect(() => {
-    fetchClasses(limit, skip);
-  }, [skip, limit]);
+    fetchClasses();
+  }, []);
 
-  const fetchClasses = async (limit, skip) => {
+  const fetchClasses = async () => {
     setIsError(false);
     setIsLoading(true);
     try {
-      const result = await axios(`/api/classes?limit=${limit}&skip=${skip}${queryString}`);
+      let date = undefined;
+      if (startDate) {
+        date = dayjs.utc(startDate.toDate()).format();
+      }
+      const queryObject = {
+        skip,
+        limit,
+        city,
+        category: cat,
+        date,
+      };
+
+      const result = await axios.post(`/api/classes/query`, queryObject);
       setClasses(result.data.classes);
       setFilteredClasses(result.data.classes);
     } catch (err) {
@@ -70,13 +84,10 @@ export const Home = () => {
 
   const handleFilterCity = (e) => {
     let value = e.target.value;
-    setQueryString(queryString.concat(`&city=${value}`));
     setCity(value);
   };
 
   const handleFilterDate = (e) => {
-    e.format('YYYY-MM-DD');
-    setQueryString(queryString.concat(`&date=${e}`));
     setStartDate(e);
   };
 
@@ -107,15 +118,14 @@ export const Home = () => {
     );
   });
 
-  if (isLoading) {
-    return (
-      <Layout>
-        <Loader></Loader>
-      </Layout>
-    );
-  } else {
-    return (
-      <div>
+  return (
+    <>
+      <div style={{ display: isLoading ? 'block' : 'none' }}>
+        <Layout>
+          <Loader></Loader>
+        </Layout>
+      </div>
+      <div style={{ display: isLoading ? 'none' : 'block' }}>
         <div id="sidebar" className="sidebar">
           <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>
             &times;
@@ -276,6 +286,7 @@ export const Home = () => {
                       calendarPosition="bottom-center"
                       type="input-icon"
                       id="datePicker"
+                      value={startDate}
                       onChange={(e) => {
                         handleFilterDate(e);
                       }}
@@ -305,6 +316,6 @@ export const Home = () => {
           </div>
         </Layout>
       </div>
-    );
-  }
+    </>
+  );
 };
