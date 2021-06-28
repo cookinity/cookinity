@@ -65,14 +65,19 @@ router.delete('/:id', [requireJwtAuth], async (req, res, next) => {
       return res.status(400).json({ message: 'Only the host of a class can delete a class!' });
     }
     // check that no time slot is booked yet
-    tempClass.timeSlots.map((timeSlot) => {
+    const timeSlots = Array.from([...tempClass.timeSlots]).map((v) => v.toJSON());
+    let containsBookedTimeSlot = false;
+    timeSlots.forEach((timeSlot) => {
       if (timeSlot.isBooked) {
-        return res.status(403).json({ message: 'You can not delete a class that has already been booked!' });
+        containsBookedTimeSlot = true;
       }
     });
-
-    const c = await Class.findByIdAndDelete(tempClass._id);
-    res.status(200).json({ c });
+    if (containsBookedTimeSlot) {
+      res.status(500).json({ message: 'You can not delete a class that has already been booked!' });
+    } else {
+      const c = await Class.findByIdAndDelete(tempClass._id);
+      res.status(200).json({ c });
+    }
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong.' });
   }
