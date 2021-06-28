@@ -96,7 +96,6 @@ const ClassDetail = () => {
     );
   }
   if (c) {
-    console.log(c)
     return (
       <Layout>
         <div className="mt-2">
