@@ -16,12 +16,13 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 export const Home = () => {
   const [classes, setClasses] = useState([]);
+  const [numberOfEntries, setNumberOfEntries] = useState(0);
   const [filteredClasses, setFilteredClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(1);
   const [skip, setSkip] = useState(0);
   const [queryString, setQueryString] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -30,7 +31,7 @@ export const Home = () => {
 
   useEffect(() => {
     fetchClasses();
-  }, []);
+  }, [skip, limit]);
 
   const fetchClasses = async () => {
     setIsError(false);
@@ -50,6 +51,7 @@ export const Home = () => {
 
       const result = await axios.post(`/api/classes/query`, queryObject);
       setClasses(result.data.classes);
+      setNumberOfEntries(result.data.numberOfEntries);
       setFilteredClasses(result.data.classes);
     } catch (err) {
       setIsError(true);
@@ -309,8 +311,12 @@ export const Home = () => {
               <label htmlFor=""></label>
 
               <div className="btn-group" role="group">
-                <Button onClick={previousPage}>Previos Page</Button>
-                <Button onClick={nextPage}> Next Page</Button>
+                <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
+                  Previous Page
+                </Button>
+                <Button onClick={nextPage} disabled={skip >= numberOfEntries - 1 ? true : false}>
+                  Next Page
+                </Button>
               </div>
             </div>
           </div>

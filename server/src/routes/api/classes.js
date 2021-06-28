@@ -46,12 +46,14 @@ router.post('/query', async (req, res, next) => {
       });
     }
 
+    const numberOfEntries = classes.length;
     // Apply Skip and Filter
     if (skip !== undefined && limit !== undefined) {
       classes = classes.slice(skip, skip + limit);
     }
 
     res.json({
+      numberOfEntries,
       classes: classes.map((c) => {
         return c.toJSON();
       }),
