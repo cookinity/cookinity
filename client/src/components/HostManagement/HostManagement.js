@@ -130,7 +130,12 @@ export const HostManagement = () => {
                   <FontAwesomeIcon icon={faPlus} /> Create a new class
                 </Button>
               </LinkContainer>
-
+              {' '}
+              <LinkContainer to={`/hostmanagement/booked-classes`}>
+                <Button variant="info" className="mt-2">
+                    <FontAwesomeIcon icon="info-circle" /> Booked classes
+                </Button>
+              </LinkContainer>    
               <h1 className="text-center">Upcoming Classes</h1>
               <ClassesTable
                 classes={upcomingClasses}
