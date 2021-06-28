@@ -3,26 +3,35 @@
 //ToDo: Make it possible to clear a filter
 
 import React from 'react';
+import './Home.scss';
 
 const Filters = ({ options, prompt, fun, name }) => {
   return (
-    <div>
-      <label>{name}</label>
-      <select
-        className="form-control selectpicker"
-        onChange={fun}
-        id="select-criteria"
-        data-live-search="true"
-      >
-        <option disabled selected>
-          {prompt}
-        </option>
-        for (let i of options){' '}
-        {options.map((i) => (
-          <option>{i}</option>
-        ))}
-      </select>
-    </div>
+    <form>
+      <div className="form-group row">
+        <label htmlFor="select-criteria" className="col-sm-2 col-form-label">
+          {name}
+        </label>
+        <div className="col-sm-10">
+          <select 
+            data-icon="fa-heart"
+            className="form-control selectpicker"
+            onChange={fun}
+            data-live-search="true"
+            data-live-search-style="startsWith"
+            id="select-criteria"
+          >
+            <option disabled selected>
+              {prompt}
+            </option>
+            for (let i of options)
+            {options.map((i) => (
+              <option>{i}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </form>
   );
 };
 
