@@ -3,6 +3,7 @@ const express = require('express');
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import { Router } from 'express';
 import Class from '../../models/Class';
+import User from '../../models/User';
 import Order from '../../models/Order';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -53,8 +54,54 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
     }
   }
 
+  if (event.type === 'account.updated') {
+    const account = event.data.object;
+    // stripe can make payouts to this account
+    if (account.payouts_enabled) {
+      const { userId } = account.metadata;
+      const user = await User.findById(userId).exec();
+      if (user && !user.hasStripeAccount) {
+        const updatedUser = {
+          hasStripeAccount: true,
+          stripeAccountId: account.id,
+        };
+        await User.findByIdAndUpdate(userId, { $set: updatedUser }, { new: true });
+      }
+    }
+  }
+
   res.status(200);
 });
+
+router.post('/onboard-user', [requireJwtAuth], async (req, res) => {
+  try {
+    const account = await stripe.accounts.create({
+      type: 'express',
+      metadata: {
+        username: req.user.username,
+        userId: req.user.id,
+      },
+    });
+    const origin = `${req.headers.origin}`;
+    const accountLinkURL = await generateAccountLink(account.id, origin);
+    res.send({ url: accountLinkURL });
+  } catch (err) {
+    res.status(500).send({
+      error: err.message,
+    });
+  }
+});
+
+function generateAccountLink(accountID, origin) {
+  return stripe.accountLinks
+    .create({
+      type: 'account_onboarding',
+      account: accountID,
+      refresh_url: `${origin}/onboard-user/refresh`,
+      return_url: `${origin}/success.html`,
+    })
+    .then((link) => link.url);
+}
 
 router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
   try {

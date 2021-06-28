@@ -15,6 +15,7 @@ import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { ClassesTable } from './ClassesTable';
 import { LinkContainer } from 'react-router-bootstrap';
+import './HostManagementStyles.scss';
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
@@ -100,6 +101,56 @@ export const HostManagement = () => {
     };
   };
 
+  const createAccount = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setIsError(false);
+    try {
+      // adding the necessary security header
+      const token = auth.token;
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+        },
+      };
+      if (token) {
+        config.headers['x-auth-token'] = token;
+      }
+      const response = await axios.post('/api/payment/onboard-user', null, config);
+      window.location = response.data.url;
+      setIsLoading(false);
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err?.response?.data.message || err.message);
+      setIsLoading(false);
+    }
+  };
+
+  const content = auth.me.hasStripeAccount ? (
+    <>
+      <LinkContainer to={`/hostmanagement/create-class`}>
+        <Button variant="success" className="mt-2">
+          <FontAwesomeIcon icon={faPlus} /> Create a new class
+        </Button>
+      </LinkContainer>
+
+      <h1 className="text-center">Upcoming Classes</h1>
+      <ClassesTable classes={upcomingClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+      <hr></hr>
+      <h1 className="text-center">Past Classes</h1>
+      <ClassesTable classes={pastClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+    </>
+  ) : (
+    <>
+      <p>
+        You need to setup a stripe account to be able to host cooking classes and collect payments!
+      </p>
+      <a className="stripe-connect" onClick={createAccount}>
+        <span>Connect with</span>
+      </a>
+    </>
+  );
+
   if (isLoading) {
     return (
       <Layout>
@@ -125,23 +176,7 @@ export const HostManagement = () => {
                   {errorMessage}
                 </Alert>
               )}
-              <LinkContainer to={`/hostmanagement/create-class`}>
-                <Button variant="success" className="mt-2">
-                  <FontAwesomeIcon icon={faPlus} /> Create a new class
-                </Button>
-              </LinkContainer>
-
-              <h1 className="text-center">Upcoming Classes</h1>
-              <ClassesTable
-                classes={upcomingClasses}
-                onDeleteCallback={onDeleteCallback}
-              ></ClassesTable>
-              <hr></hr>
-              <h1 className="text-center">Past Classes</h1>
-              <ClassesTable
-                classes={pastClasses}
-                onDeleteCallback={onDeleteCallback}
-              ></ClassesTable>
+              {content}
             </div>
           </Col>
         </Row>
