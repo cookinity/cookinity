@@ -80,6 +80,14 @@ export const Home = () => {
     document.getElementById('main').style.width = '100%';
   };
 
+  const rangeValue = () => {
+    document.getElementById('amount')['value'] = document.getElementById('customRange')['value'];
+  };
+
+  const rangeSlider = () => {
+    document.getElementById('customRange')['value'] = document.getElementById('amount')['value'];
+  };
+
   //Darstellung aller Kurse ohne Filter
   const classCards = filteredClasses.map((c) => {
     return (
@@ -104,17 +112,110 @@ export const Home = () => {
           </a>
           <a>
             <h5>Filters</h5>
+          </a>
 
-            <div className="form-check">
-              <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-              <label className="form-check-label" htmlFor="exampleCheck1">
-                Check me out
-              </label>
+          <a>
+            <label htmlFor="averageRating" className="form-label">
+              Average rating
+            </label>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+              </div>
+            </li>
+          </a>
+          <br></br>
+          <a>
+            <label htmlFor="price" className="form-label">
+              Price
+            </label>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+              <i className="fa fa-eur"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+              <i className="fa fa-eur"></i>
+              <i className="fa fa-eur"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+              <i className="fa fa-eur"></i>
+              <i className="fa fa-eur"></i>
+              <i className="fa fa-eur"></i>
+              </div>
+            </li>
+          </a>
+          <br></br>
+          <a>
+            <label htmlFor="customRange" className="form-label">
+              Capacity
+            </label>
+            <div className="row col-auto">
+              <label>1</label>
+              <input
+                type="range"
+                id="customRange"
+                min="1"
+                max="10"
+                step="1"
+                onChange={rangeValue}
+              />
+              <label>10</label>
+              <input
+                placeholder="Number of persons"
+                id="amount"
+                type="text"
+                className="form-control"
+                disabled
+                onChange={rangeSlider}
+              />
             </div>
           </a>
-          <a href="#">Filter2</a>
-          <a href="#">Filter3</a>
-          <a href="#">Filter4</a>
+          <br></br>
+          <a>Filter4</a>
         </div>
 
         <Layout>
