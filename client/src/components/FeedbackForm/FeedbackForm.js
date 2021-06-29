@@ -6,63 +6,65 @@ import { validationSchema } from './feedbackValidation';
 import _ from 'lodash';
 import BasicInfoSection from './FormSections/BasicInfoSection';
 
-const FeedbackForm = ({ submitCallback }) => {
+const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
   const history = useHistory();
+
+  //Stars
+  const [overallRatingStars, setRatingOverallRatingStars] = useState(0);
+  const [hostRatingStars, setRatingHostStars] = useState(0);
+  const [tasteRatingStars, setRatingTasteStars] = useState(0);
+  const [locationRatingStars, setRatingLocationStars] = useState(0);
+  const [vtmrRatingStars, setRatingVtmrStars] = useState(0);
+  const [experienceRatingStars, setRatingExperienceStars] = useState(0);
 
   //ToDo: Discuss if we really want that much feedback. Maybe only stars and overall feedback?
   const formik = useFormik({
     initialValues: {
-      overallRatingStars: '',
       overallRating: '',
-      hostRatingStars: '',
       hostRating: '',
-      tasteRatingStars: '',
       tasteRating: '',
-      locationRatingStars: '',
       locationRating: '',
-      vtmrRatingStars: '',
       vtmrRating: '',
-      experienceRatingStars: '',
       experienceRating: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
       const submit = async () => {
+
         try {
           const {
-            overallRatingStars,
             overallRating,
-            hostRatingStars,
             hostRating,
-            tasteRatingStars,
             tasteRating,
-            locationRatingStars,
             locationRating,
-            vtmrRatingStars,
             vtmrRating,
-            experienceRatingStars,
             experienceRating,
           } = values;
           const newFeedback = {
-            overallRatingStars,
+            overallRatingStars: overallRatingStars,
             overallRating,
-            hostRatingStars,
+            hostRatingStars: hostRatingStars,
             hostRating,
-            tasteRatingStars,
+            tasteRatingStars: tasteRatingStars,
             tasteRating,
-            locationRatingStars,
+            locationRatingStars: locationRatingStars,
             locationRating,
-            vtmrRatingStars,
+            vtmrRatingStars: vtmrRatingStars,
             vtmrRating,
-            experienceRatingStars,
+            experienceRatingStars: experienceRatingStars,
             experienceRating,
           };
-
+          //Error
+          if (overallRatingStars === 0) {
+            setIsError(true);
+            setErrorMessage("You must give a rating in the Overall Section");
+            return;
+          }
+          debugger;
           // calling submit callback from parent component
           await submitCallback(newFeedback);
           resetForm();
-          // ToDo: Think about a better route to navigate to!
-          history.push('/hostmanagement');
+          history.push('/your-bookings');
         } catch (err) {
           // error happened in parent component --> do not clear form
         }
@@ -75,7 +77,14 @@ const FeedbackForm = ({ submitCallback }) => {
     <>
       {<h1>Feedback</h1>}
       <Form className="mx-auto" onSubmit={formik.handleSubmit} noValidate>
-        <BasicInfoSection formik={formik}></BasicInfoSection>
+        <BasicInfoSection formik={formik}
+          setRatingOverallRatingStars={setRatingOverallRatingStars} overallRatingStars={overallRatingStars}
+          setRatingHostStars={setRatingHostStars} hostRatingStars={hostRatingStars}
+          setRatingTasteStars={setRatingTasteStars} tasteRatingStars={tasteRatingStars}
+          setRatingLocationStars={setRatingLocationStars} locationRatingStars={locationRatingStars}
+          setRatingVtmrStars={setRatingVtmrStars} vtmrRatingStars={vtmrRatingStars}
+          setRatingExperienceStars={setRatingExperienceStars} experienceRatingStars={experienceRatingStars}
+        ></BasicInfoSection>
         <hr></hr>
         <Button variant="primary" type="submit">
           {'Submit Feedback'}

@@ -84,7 +84,11 @@ const FeedbackUser = () => {
               <Loader></Loader>
             </div>
             <div style={{ display: isLoading ? 'none' : 'block' }}>
-              <FeedbackForm submitCallback={onSubmit}></FeedbackForm>
+              <FeedbackForm
+                submitCallback={onSubmit}
+                setIsError={setIsError}
+                setErrorMessage={setErrorMessage}
+              ></FeedbackForm>
             </div>
           </div>
         </Col>
