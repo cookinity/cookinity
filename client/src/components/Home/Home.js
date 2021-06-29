@@ -2,31 +2,56 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Layout from '../Layout/Layout';
-import { Alert, Col, Row } from 'react-bootstrap';
+import { Alert, Col, Row, Button } from 'react-bootstrap';
 
 import ClassCard from './ClassCard';
 import Filters from './Filters';
 import Loader from 'components/Shared/Loader/Loader';
 import { CLASS_CATEGORIES } from 'constants/ClassCategories';
 import { CITY_CATEGORIES } from 'constants/CityCategories';
-
+import DatePicker, { DateObject } from 'react-multi-date-picker';
+import './Home.scss';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 export const Home = () => {
   const [classes, setClasses] = useState([]);
+  const [numberOfEntries, setNumberOfEntries] = useState(0);
   const [filteredClasses, setFilteredClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    fetchClasses(undefined); // no filter set --> pull in all classes
-  }, []);
+  const [limit, setLimit] = useState(1);
+  const [skip, setSkip] = useState(0);
+  const [queryString, setQueryString] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [cat, setCat] = useState('');
+  const [city, setCity] = useState('');
 
-  const fetchClasses = async (filters) => {
+  useEffect(() => {
+    fetchClasses();
+  }, [skip, limit]);
+
+  const fetchClasses = async () => {
     setIsError(false);
     setIsLoading(true);
     try {
-      const result = await axios('/api/classes');
+      let date = undefined;
+      if (startDate) {
+        date = dayjs.utc(startDate.toDate()).format();
+      }
+      const queryObject = {
+        skip,
+        limit,
+        city,
+        category: cat,
+        date,
+      };
+
+      const result = await axios.post(`/api/classes/query`, queryObject);
       setClasses(result.data.classes);
+      setNumberOfEntries(result.data.numberOfEntries);
       setFilteredClasses(result.data.classes);
     } catch (err) {
       setIsError(true);
@@ -35,74 +60,268 @@ export const Home = () => {
     setIsLoading(false);
   };
 
-  const handleFilterCategory = (e) => {
+  const nextPage = () => {
+    setSkip(skip + limit);
+  };
+
+  const previousPage = () => {
+    if (skip >= limit) setSkip(skip - limit);
+  };
+
+  const handleFilterCategory = async (e) => {
+    let value = e.target.value;
+    setQueryString(queryString.concat(`&category=${value}`));
+    setCat(value);
+  };
+
+  const handleFilterCategory2 = async (e) => {
     let value = e.target.value;
     let result = [];
     result = classes.filter((data) => {
-      return data.category.search(value) != -1;
+      return data.category.search(value) !== -1;
     });
-    setFilteredClasses(result);
+    filteredClasses.concat(result);
+    setFilteredClasses(filteredClasses);
   };
 
   const handleFilterCity = (e) => {
     let value = e.target.value;
-    let result = [];
-    result = classes.filter((data) => {
-      return data.meetingAddress.city.search(value) != -1;
-    });
-    setFilteredClasses(result);
+    setCity(value);
+  };
+
+  const handleFilterDate = (e) => {
+    setStartDate(e);
+  };
+
+  const openNav = () => {
+    document.getElementById('sidebar').style.width = '20%';
+    document.getElementById('main').style.width = '65%';
+  };
+
+  const closeNav = () => {
+    document.getElementById('sidebar').style.width = '0';
+    document.getElementById('main').style.width = '100%';
+  };
+
+  const rangeValue = () => {
+    document.getElementById('amount')['value'] = document.getElementById('customRange')['value'];
+  };
+
+  const rangeSlider = () => {
+    document.getElementById('customRange')['value'] = document.getElementById('amount')['value'];
   };
 
   //Darstellung aller Kurse ohne Filter
   const classCards = filteredClasses.map((c) => {
     return (
-      <Col key={c.id} sm={12} md={6} lg={4}>
-        <ClassCard c={c} ></ClassCard>
+      <Col sm={12} md={6} lg={4}>
+        <ClassCard c={c} key={c.id}></ClassCard>
       </Col>
     );
   });
 
-  if (isLoading) {
-    return (
-      <Layout>
-        <Loader></Loader>
-      </Layout>
-    );
-  } else {
-    return (
-      <Layout>
-        <div className="mt-2">
-          {isError && (
-            <Alert
-              variant="danger"
-              onClose={() => {
-                setIsError(false);
-                setErrorMessage('');
-              }}
-              dismissible
-            >
-              {' '}
-              {errorMessage}
-            </Alert>
-          )}
-          <Row>
-            <Col>
-              <Filters
-                options={CLASS_CATEGORIES}
-                prompt="Select category"
-                fun={(event) => handleFilterCategory(event)}
+  return (
+    <>
+      <div style={{ display: isLoading ? 'block' : 'none' }}>
+        <Layout>
+          <Loader></Loader>
+        </Layout>
+      </div>
+      <div style={{ display: isLoading ? 'none' : 'block' }}>
+        <div id="sidebar" className="sidebar">
+          <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>
+            &times;
+          </a>
+          <a>
+            <h5>Filters</h5>
+          </a>
+
+          <a>
+            <label htmlFor="averageRating" className="form-label">
+              Average rating
+            </label>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+              </div>
+            </li>
+          </a>
+          <br></br>
+          <a>
+            <label htmlFor="price" className="form-label">
+              Price
+            </label>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-eur"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => console.log('clicked!')}>
+              <div className="row col-auto">
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+              </div>
+            </li>
+          </a>
+          <br></br>
+          <a>
+            <label htmlFor="customRange" className="form-label">
+              Capacity
+            </label>
+            <div className="row col-auto">
+              <label>1</label>
+              <input
+                type="range"
+                id="customRange"
+                min="1"
+                max="10"
+                step="1"
+                onChange={rangeValue}
               />
-              <Filters
-                options={CITY_CATEGORIES}
-                prompt="Select city"
-                fun={(event) => handleFilterCity(event)}
+              <label>10</label>
+              <input
+                placeholder="Number of persons"
+                id="amount"
+                type="text"
+                className="form-control"
+                disabled
+                onChange={rangeSlider}
               />
-            </Col>
-          </Row>
-          <p></p>
-          <Row> {classCards} </Row>
+            </div>
+          </a>
+          <br></br>
+          <a>Filter4</a>
         </div>
-      </Layout>
-    );
-  }
+
+        <Layout>
+          <div id="main" className="container">
+            <div className="mt-2">
+              {isError && (
+                <Alert
+                  variant="danger"
+                  onClose={() => {
+                    setIsError(false);
+                    setErrorMessage('');
+                  }}
+                  dismissible
+                >
+                  {' '}
+                  {errorMessage}
+                </Alert>
+              )}
+
+              <div className="filter">
+                <Filters
+                  options={CLASS_CATEGORIES}
+                  prompt="Select category"
+                  fun={(event) => handleFilterCategory(event)}
+                  name="Category:   "
+                />
+
+                <Filters
+                  options={CITY_CATEGORIES}
+                  prompt="Select city"
+                  fun={(event) => handleFilterCity(event)}
+                  name="City:"
+                />
+
+                <div className="form-group row">
+                  <label htmlFor="datePicker" className="col-sm-2 col-form-label">
+                    Date:
+                  </label>
+                  <div className="col-sm-10">
+                    <DatePicker
+                      style={{
+                        width: '100%',
+                        height: '36px',
+                      }}
+                      containerStyle={{
+                        width: '100%',
+                      }}
+                      calendarPosition="bottom-center"
+                      type="input-icon"
+                      id="datePicker"
+                      value={startDate}
+                      onChange={(e) => {
+                        handleFilterDate(e);
+                      }}
+                      placeholder="Select date"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="btn-group" role="group">
+                <Button className="mx-auto" onClick={fetchClasses}>
+                  Search
+                </Button>
+                <br></br>
+                <Button onClick={openNav}>Refine your search</Button>
+              </div>
+
+              <p></p>
+              <Row> {classCards} </Row>
+              <label htmlFor=""></label>
+
+              <div className="btn-group" role="group">
+                <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
+                  Previous Page
+                </Button>
+                <Button onClick={nextPage} disabled={skip >= numberOfEntries - 1 ? true : false}>
+                  Next Page
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Layout>
+      </div>
+    </>
+  );
 };
