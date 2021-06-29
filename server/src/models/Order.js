@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
-import { timeSlotSchema } from './Class';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+
 const { Schema } = mongoose;
 
 const orderSchema = new Schema(
@@ -22,6 +25,22 @@ const orderSchema = new Schema(
       type: mongoose.Schema.Types.Mixed,
       required: true,
     },
+    numberOfGuests: {
+      type: mongoose.Schema.Types.Number,
+      required: true,
+    },
+    totalPrice: {
+      type: mongoose.Schema.Types.Number,
+      required: true,
+    },
+    currency: {
+      type: mongoose.Schema.Types.Mixed,
+      required: true,
+    },
+    bookingDate: {
+      type: mongoose.Schema.Types.Date,
+      required: true,
+    }
   },
   { timestamps: true },
 );
@@ -33,6 +52,10 @@ orderSchema.methods.toJSON = function () {
     class: this.class.toJSON(),
     bookedTimeSlot: this.timeSlot.toJSON(),
     stripeSession: this.stripeSession,
+    numberOfGuests: this.numberOfGuests,
+    totalPrice: this.totalPrice,
+    currency: this.currency,
+    bookingDate: this.bookingDate
   };
 };
 
