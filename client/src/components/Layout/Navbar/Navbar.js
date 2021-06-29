@@ -24,8 +24,8 @@ export const NavigationBar = () => {
         <LinkContainer to="/hostmanagement">
           <Nav.Link>Host a Class</Nav.Link>
         </LinkContainer>
-        <LinkContainer to="/users">
-          <Nav.Link>Users</Nav.Link>
+        <LinkContainer to="/your-bookings">
+          <Nav.Link>Your Bookings</Nav.Link>
         </LinkContainer>
         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
           <LinkContainer to={`/${auth.me.username}`}>

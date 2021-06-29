@@ -11,12 +11,8 @@ import { compose } from 'redux';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { ClassesTable } from './ClassesTable';
 import { LinkContainer } from 'react-router-bootstrap';
-dayjs.extend(utc);
-dayjs.extend(localizedFormat);
 
 export const HostManagement = () => {
   const [upcomingClasses, setUpcomingClasses] = useState([]);

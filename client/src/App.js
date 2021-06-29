@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
-import Users from './components/Users/Users';
+import YourBookings from './components/YourBookings/YourBookings';
 import Admin from './components/Admin/Admin';
 import NotFound from './components/NotFound/NotFound';
 
@@ -31,10 +31,10 @@ import {
   faUsers,
   faMapMarkerAlt,
   faCheckCircle,
-  faInfoCircle, 
-  faUtensils, 
-  faSeedling, 
-  faCarrot, 
+  faInfoCircle,
+  faUtensils,
+  faSeedling,
+  faCarrot,
   faCookie
 } from '@fortawesome/free-solid-svg-icons';
 import TimeManagements from 'components/HostManagement/TimeManagement/TimeManagements';
@@ -68,7 +68,7 @@ const App = ({ auth, loadMe }) => {
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          <Route path="/users" component={Users} />
+          <Route path="/your-bookings" component={YourBookings} />
           <Route path="/notfound" component={NotFound} />
           <Route path="/admin" component={Admin} />
           <Route path="/hostmanagement" component={HostManagement} exact />
