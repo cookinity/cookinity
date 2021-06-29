@@ -7,7 +7,7 @@ import requireAuth from 'higherOrderComponents/requireAuth';
 import { compose } from 'redux';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import { ClassesTable } from './ClassesTable';
+import { ClassesTable } from './ClassesTableYourBookings';
 
 
 export const HostManagement = () => {
@@ -16,6 +16,7 @@ export const HostManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  // @ts-ignore
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -91,8 +92,7 @@ export const HostManagement = () => {
                   {errorMessage}
                 </Alert>
               )}
-              <h1 className="text-center">Your Bookings</h1>
-              <p className="text-center"  >On this page all of your bookings a listed. Your are able to give feedback for past courses.</p>
+              <p></p>
               <h1 className="text-center">Booked Classes</h1>
               <ClassesTable
                 classes={upcomingClasses}

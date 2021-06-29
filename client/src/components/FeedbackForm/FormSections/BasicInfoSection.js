@@ -1,11 +1,23 @@
-import React from 'react';
+import Rating from 'components/Home/Rating';
+import React, { useState } from 'react';
 import { Col, Form, InputGroup } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import './feedbackUser.scss';
 
 const BasicInfoSection = ({ formik }) => {
 
+  const [rating, setRating] = useState(4);
+
   return (
     <>
+      <div>
+        <div className='row'>
+          <div className='col text-center'>
+            <Rating rating={rating} onRating={rate => setRating(rate)} />
+          </div>
+        </div>
+      </div>
       <Form.Group as={Col} controlId="overallRatingStars">
         <Form.Label>Overall</Form.Label>
         <InputGroup>

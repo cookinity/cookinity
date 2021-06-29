@@ -1,5 +1,5 @@
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import { Accordion, Button, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -17,6 +17,7 @@ export const ClassesTable = ({ classes }) => {
   };
 
   //Min Guests ersetzten durch gebuchte leute
+  //E-Mail host etc.
   const columns = (
     <tr>
       <th>Title</th>
@@ -34,31 +35,18 @@ export const ClassesTable = ({ classes }) => {
         <td>{c.title}</td>
         <td>{c.category}</td>
         <td>{c.pricePerPerson} Euro</td>
-        <td>{c.minGuests} Guests</td>
+        <td>Guests missing</td>
         <td>{c.durationInMinutes} Minutes</td>
         <td>
-          {c.futureDates.length !== 0 ? (
-            <LinkContainer to={`/classes/${c.id}`}>
-              <Button className="mr-1" variant="info">
-                Go to Course
-              </Button>
-            </LinkContainer>
-          ) : (
-            ''
-          )}
-          {c.pastDates.length !== 0 ? (
-            <LinkContainer to={`/classes/${c.id}`}>
-              <Button className="mr-1" variant="primary">
-                <FontAwesomeIcon icon={faEdit} /> Go to Course
-              </Button>
-            </LinkContainer>
-          ) : (
-            ''
-          )}
+          <LinkContainer to={`/classes/${c.id}`}>
+            <Button className="mr-1" variant="info">
+              <FontAwesomeIcon icon="info-circle" /> Go to Course
+            </Button>
+          </LinkContainer>
           {c.pastDates.length !== 0 ? (
             <LinkContainer to={`/classes/${c.id}/create-feedback`}>
-              <Button className="mr-1" variant="info">
-                Give Feedback
+              <Button className="mr-1" variant="sucess">
+                <FontAwesomeIcon icon={faPlus} /> Give Feedback
               </Button>
             </LinkContainer>
           ) : (
