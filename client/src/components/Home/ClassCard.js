@@ -81,7 +81,7 @@ export default function ClassCard({ c }) {
                     {dates}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <span className="font-weight-bold">Prize: </span>
+                    <span className="font-weight-bold">Price: </span>
                     <div>{c.pricePerPerson}€</div>
                   </ListGroup.Item>
                   <ListGroup.Item>
