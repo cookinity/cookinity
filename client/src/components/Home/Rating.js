@@ -1,6 +1,5 @@
 import React, {useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Rating = ({ count, rating, colour, onRating}) => {
     const [clickRating, setClickRating] = useState(0);
@@ -19,15 +18,14 @@ const Rating = ({ count, rating, colour, onRating}) => {
         .fill(0)
         .map((_, i) => i + 1)
         .map( (index) => (
-            <FontAwesomeIcon
+            <i
             key={index}
-            className="cursor-pointer"
-            icon="star"
+            className="fa fa-star cursor-pointer"
             onClick={() => onRating(index)}
             style={{color: getColour(index)}}
             onMouseEnter={() => setClickRating(index)}
-            onMouseLeave={() => setClickRating(0)}
-            />
+            onMouseLeave={() => setClickRating(0)}>
+            </i>
         ));
     }, [count, rating, clickRating])
 
