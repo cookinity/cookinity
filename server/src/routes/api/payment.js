@@ -30,13 +30,17 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   // Handle the checkout.session.completed event --> customer payment for the cooking class
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const { userId, classId, timeSlotId } = session.metadata;
+    const { userId, classId, timeSlotId, guestNumber } = session.metadata;
 
     const order = {
       customer: userId,
       class: classId,
       timeSlot: timeSlotId,
       stripeSession: session,
+      numberOfGuests: guestNumber,
+      totalPrice: session.amount_total,
+      currency: session.currency,
+      bookingDate: dayjs().utc().toJSON()
     };
 
     try {
@@ -83,6 +87,7 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
         userId: req.user.id,
         classId: classId,
         timeSlotId: timeSlotId,
+        guestNumber: numberOfGuests,
       },
       payment_method_types: ['card'],
       line_items: [
