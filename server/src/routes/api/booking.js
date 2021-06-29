@@ -20,15 +20,13 @@ router.get('/', async (req, res, next) => {
 
       //all classes
       bookings = await Order.find().populate('customer').populate('class')
-
     
 
-    for (const booking of bookings) {
-        debugger
-        const timeSlot = booking.timeSlots.id(booking.timeSlot)
-        debugger
-    }
-
+    // for (const booking of bookings) {
+    //     //debugger
+    //     const timeSlot = booking.timeSlots.id(booking.timeSlot)
+    //     //debugger
+    // }
       res.json({
         bookings: bookings.map((b) => {
           return b.toJSON();

@@ -31,7 +31,7 @@ const addressSchema = new Schema({
   },
 });
 
-const timeSlotSchema = new Schema({
+export const timeSlotSchema = new Schema({
   date: {
     type: Date,
     required: true,

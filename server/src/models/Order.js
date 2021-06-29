@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import dayjs from 'dayjs';
+import { timeSlotSchema } from './Class';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
@@ -17,8 +18,8 @@ const orderSchema = new Schema(
       ref: 'Class',
       required: true,
     },
-    timeSlot: {
-      type: mongoose.Schema.Types.ObjectId,
+    bookedTimeSlot: {
+      type: timeSlotSchema,
       required: true,
     },
     stripeSession: {
@@ -50,7 +51,7 @@ orderSchema.methods.toJSON = function () {
     id: this._id,
     customer: this.customer.toJSON(),
     class: this.class.toJSON(),
-    timeSlot: this.timeSlot.toJSON(),
+    bookedTimeSlot: this.bookedTimeSlot.toJSON(),
     stripeSession: this.stripeSession,
     numberOfGuests: this.numberOfGuests,
     totalPrice: this.totalPrice,
