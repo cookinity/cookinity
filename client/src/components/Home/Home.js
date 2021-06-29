@@ -24,10 +24,13 @@ export const Home = () => {
 
   const [limit, setLimit] = useState(1);
   const [skip, setSkip] = useState(0);
-  const [queryString, setQueryString] = useState('');
+
   const [startDate, setStartDate] = useState('');
   const [cat, setCat] = useState('');
   const [city, setCity] = useState('');
+  const [guests, setGuests] = useState('');
+  const [price, setPrice] = useState('');
+  const [rating, setRating] = useState('');
 
   useEffect(() => {
     fetchClasses();
@@ -47,6 +50,9 @@ export const Home = () => {
         city,
         category: cat,
         date,
+        guests,
+        price,
+        rating,
       };
 
       const result = await axios.post(`/api/classes/query`, queryObject);
@@ -70,18 +76,7 @@ export const Home = () => {
 
   const handleFilterCategory = async (e) => {
     let value = e.target.value;
-    setQueryString(queryString.concat(`&category=${value}`));
     setCat(value);
-  };
-
-  const handleFilterCategory2 = async (e) => {
-    let value = e.target.value;
-    let result = [];
-    result = classes.filter((data) => {
-      return data.category.search(value) !== -1;
-    });
-    filteredClasses.concat(result);
-    setFilteredClasses(filteredClasses);
   };
 
   const handleFilterCity = (e) => {
@@ -93,6 +88,19 @@ export const Home = () => {
     setStartDate(e);
   };
 
+  const handleFilterCapacity = () => {
+    document.getElementById('amount')['value'] = document.getElementById('customRange')['value'];
+    setGuests(document.getElementById('customRange')['value']);
+  };
+
+  const handleFilterPrice = (e) => {
+    setPrice(e);
+  };
+
+  const handleFilterRating = (e) => {
+    setRating(e);
+  }
+
   const openNav = () => {
     document.getElementById('sidebar').style.width = '20%';
     document.getElementById('main').style.width = '65%';
@@ -103,15 +111,7 @@ export const Home = () => {
     document.getElementById('main').style.width = '100%';
   };
 
-  const rangeValue = () => {
-    document.getElementById('amount')['value'] = document.getElementById('customRange')['value'];
-  };
-
-  const rangeSlider = () => {
-    document.getElementById('customRange')['value'] = document.getElementById('amount')['value'];
-  };
-
-  //Darstellung aller Kurse ohne Filter
+  // All classes
   const classCards = filteredClasses.map((c) => {
     return (
       <Col sm={12} md={6} lg={4}>
@@ -140,7 +140,8 @@ export const Home = () => {
             <label htmlFor="averageRating" className="form-label">
               Average rating
             </label>
-            <li className="list-group" onClick={() => console.log('clicked!')}>
+
+            <li className="list-group" onClick={() => handleFilterRating(5)}>
               <div className="row col-auto">
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
@@ -149,7 +150,7 @@ export const Home = () => {
                 <i className="fa fa-star text-warning"></i>
               </div>
             </li>
-            <li className="list-group" onClick={() => console.log('clicked!')}>
+            <li className="list-group" onClick={() => handleFilterRating(4)}>
               <div className="row col-auto">
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
@@ -158,7 +159,7 @@ export const Home = () => {
                 <i className="fa fa-star-o text-warning"></i>
               </div>
             </li>
-            <li className="list-group" onClick={() => console.log('clicked!')}>
+            <li className="list-group" onClick={() => handleFilterRating(3)}>
               <div className="row col-auto">
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
@@ -167,7 +168,7 @@ export const Home = () => {
                 <i className="fa fa-star-o text-warning"></i>
               </div>
             </li>
-            <li className="list-group" onClick={() => console.log('clicked!')}>
+            <li className="list-group" onClick={() => handleFilterRating(2)}>
               <div className="row col-auto">
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
@@ -176,7 +177,7 @@ export const Home = () => {
                 <i className="fa fa-star-o text-warning"></i>
               </div>
             </li>
-            <li className="list-group" onClick={() => console.log('clicked!')}>
+            <li className="list-group" onClick={() => handleFilterRating(1)}>
               <div className="row col-auto">
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star-o text-warning"></i>
@@ -186,31 +187,44 @@ export const Home = () => {
               </div>
             </li>
           </a>
+
           <br></br>
           <a>
             <label htmlFor="price" className="form-label">
               Price
             </label>
-            <li className="list-group" onClick={() => console.log('clicked!')}>
+            <li className="list-group" onClick={() => handleFilterPrice(25)}>
               <div className="row col-auto">
                 <i className="fa fa-eur"></i>
+                <p className="small px-2">under 25€</p>
               </div>
             </li>
-            <li className="list-group" onClick={() => console.log('clicked!')}>
+            <li className="list-group" onClick={() => handleFilterPrice(50)}>
               <div className="row col-auto">
                 <i className="fa fa-eur"></i>
                 <i className="fa fa-eur"></i>
+                <p className="small px-2">under 50€</p>
               </div>
             </li>
-            <li className="list-group" onClick={() => console.log('clicked!')}>
+            <li className="list-group" onClick={() => handleFilterPrice(100)}>
               <div className="row col-auto">
                 <i className="fa fa-eur"></i>
                 <i className="fa fa-eur"></i>
                 <i className="fa fa-eur"></i>
+                <p className="small px-2">under 100€</p>
+              </div>
+            </li>
+            <li className="list-group" onClick={() => handleFilterPrice(250)}>
+              <div className="row col-auto">
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <p className="small px-2">under 250€</p>
               </div>
             </li>
           </a>
-          <br></br>
+
           <a>
             <label htmlFor="customRange" className="form-label">
               Capacity
@@ -223,21 +237,24 @@ export const Home = () => {
                 min="1"
                 max="10"
                 step="1"
-                onChange={rangeValue}
+                onChange={handleFilterCapacity}
               />
               <label>10</label>
               <input
                 placeholder="Number of persons"
                 id="amount"
                 type="text"
-                className="form-control"
+                className="form-control custom-width"
                 disabled
-                onChange={rangeSlider}
               />
             </div>
           </a>
           <br></br>
-          <a>Filter4</a>
+          <a>
+            <Button className="mx-auto" onClick={fetchClasses}>
+              Apply
+            </Button>
+          </a>
         </div>
 
         <Layout>
