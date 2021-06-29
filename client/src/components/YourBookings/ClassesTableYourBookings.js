@@ -17,6 +17,7 @@ export const ClassesTable = ({ classes }) => {
   };
 
   //Min Guests ersetzten durch gebuchte leute
+  //E-Mail host etc.
   const columns = (
     <tr>
       <th>Title</th>

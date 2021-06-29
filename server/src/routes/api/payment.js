@@ -96,7 +96,7 @@ router.post('/generate-dashboard-link', [requireJwtAuth], async (req, res) => {
 
 router.post('/onboard-user', [requireJwtAuth], async (req, res) => {
   const email = req.user.email;
-
+  debugger;
   try {
     const account = await stripe.accounts.create({
       type: 'express',
@@ -189,7 +189,7 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
       cancel_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?canceled=true`,
     });
     res.json({ session });
-  } catch (err) {}
+  } catch (err) { }
 });
 
 export default router;

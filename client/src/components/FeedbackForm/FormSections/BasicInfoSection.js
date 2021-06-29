@@ -7,8 +7,7 @@ import './feedbackUser.scss';
 
 const BasicInfoSection = ({ formik }) => {
 
-  const [rating, setRating] = useState(0);
-  const [rating2, setRating2] = useState(0);
+  const [rating, setRating] = useState(4);
 
   return (
     <>
@@ -16,9 +15,6 @@ const BasicInfoSection = ({ formik }) => {
         <div className='row'>
           <div className='col text-center'>
             <Rating rating={rating} onRating={rate => setRating(rate)} />
-            <p>Rating - {rating}</p>
-            <Rating rating={rating2} onRating={rate => setRating2(rate)} />
-            <p>Rating - {rating2}</p>
           </div>
         </div>
       </div>
