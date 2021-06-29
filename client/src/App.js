@@ -38,6 +38,7 @@ import {
   faCookie
 } from '@fortawesome/free-solid-svg-icons';
 import TimeManagements from 'components/HostManagement/TimeManagement/TimeManagements';
+import BookedClasses from 'components/HostManagement/BookedClasses/BookedClasses';
 import BookClass from 'components/ClassBooking/BookClass';
 
 library.add(fab, faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle, faInfoCircle, faUtensils, faSeedling, faCarrot, faCookie);
@@ -73,6 +74,7 @@ const App = ({ auth, loadMe }) => {
           <Route path="/admin" component={Admin} />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
+          <Route path="/hostmanagement/booked-classes" component={BookedClasses} exact />
           <Route path="/classes/:classId" component={ClassDetail} exact />
           <Route path="/classes/:classId/booking" component={BookClass} exact />
           <Route path="/classes/:classId/create-feedback" component={FeedbackUser} exact />
