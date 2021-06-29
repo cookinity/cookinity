@@ -16,7 +16,7 @@ var photosUpload = upload.fields([
 ]);
 
 router.post('/query', async (req, res, next) => {
-  let { city, category, date, limit, skip } = req.body;
+  let { city, category, date, guests, price, rating, limit, skip } = req.body;
 
   if (date) {
     date = dayjs(date);
@@ -45,9 +45,23 @@ router.post('/query', async (req, res, next) => {
         }
       });
     }
+    // Apply Capacity Filter
+    if (guests) {
+      classes = classes.filter((c) => {
+        return c.maxGuests >= guests && c.minGuests <= guests;
+      });
+    }
+    // Apply Price Filter
+    if (price) {
+      classes = classes.filter((c) => c.pricePerPerson < price)
+    }
+    // Apply Rating Filter 
+    //if(rating) {
+    //  classes = classes.filter((c) => c. === rating)
+    //}
 
     const numberOfEntries = classes.length;
-    // Apply Skip and Filter
+    // Apply Skip and Limit
     if (skip !== undefined && limit !== undefined) {
       classes = classes.slice(skip, skip + limit);
     }
@@ -83,20 +97,6 @@ router.get('/', async (req, res, next) => {
         .populate('host')
         .skip(skipValue)
         .limit(limitValue);
-    } else if (category != null && city != null) {
-      classes = await Class.aggregate([
-        {
-          $match: {
-            $and: [
-              { category: category },
-              { 'meetingAddress.city': city },
-              //  { 'bookableDates': { $regex: `^${date}*` }},
-            ],
-          },
-        },
-      ])
-        .skip(skipValue)
-        .limit(10);
     } else {
       classes = await Class.find().populate('host').skip(skipValue).limit(limitValue);
     }
@@ -109,7 +109,7 @@ router.get('/', async (req, res, next) => {
     if (err.message) {
       res.status(500).json({ message: err.message });
     } else {
-      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+      res.status(500).json({ message: 'Something went wrong during class search.' });
     }
   }
 });
