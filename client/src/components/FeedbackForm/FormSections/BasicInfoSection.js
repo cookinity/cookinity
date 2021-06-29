@@ -1,13 +1,12 @@
 import Rating from 'components/Home/Rating';
 import React, { useState } from 'react';
 import { Col, Form, InputGroup } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import './feedbackUser.scss';
 
 const BasicInfoSection = ({ formik }) => {
 
-  const [rating, setRating] = useState(4);
+  const [rating, setRating] = useState(0);
 
   return (
     <>
