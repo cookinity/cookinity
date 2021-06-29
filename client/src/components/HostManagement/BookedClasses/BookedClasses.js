@@ -26,8 +26,18 @@ const BookedClasses = () => {
         setIsError(false);
         setIsLoading(true);
         try {
+          // adding the necessary security header
+            const token = auth.token;
+            const config = {
+                headers: {
+                'Content-type': 'application/json',
+                },
+            };
+            if (token) {
+                config.headers['x-auth-token'] = token;
+            }  
           // load all bookings for which the currently logged in user is host
-          const result = await axios.get('/api/bookings', { params: { hostId: auth.me.id } });
+          const result = await axios.get('/api/bookings', config);
           const unformattedBookings = result.data.bookings;
           const classesBookedFuture = [];
           const classesBookedPast = [];
@@ -57,8 +67,6 @@ const BookedClasses = () => {
           </Layout>
         );
     } else {
-        console.log('futurebookings',futureBookings)
-        console.log('pastBookings',pastBookings)
     return (
         <Layout>
             <Row>

@@ -73,7 +73,7 @@ const ClassDetail = () => {
         const d = []
         const today = dayjs(new Date());
         for (const timeslot of result.data.class.timeSlots) {
-          if (dayjs(timeslot.date).isAfter(today)) {
+          if (dayjs(timeslot.date).isAfter(today) && !timeslot.isBooked) {
             d.push(dayjs(timeslot.date));
           }
         }

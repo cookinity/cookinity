@@ -13,6 +13,11 @@ const orderSchema = new Schema(
       ref: 'User',
       required: true,
     },
+    host: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     class: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Class',
@@ -51,6 +56,7 @@ orderSchema.methods.toJSON = function () {
     id: this._id,
     customer: this.customer.toJSON(),
     class: this.class.toJSON(),
+    host: this.host.toJSON(),
     bookedTimeSlot: this.bookedTimeSlot.toJSON(),
     stripeSession: this.stripeSession,
     numberOfGuests: this.numberOfGuests,

@@ -32,12 +32,13 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
     debugger;
     const session = event.data.object;
     const { userId, classId, timeSlotId, guestNumber} = session.metadata;
-    const c = await Class.findById(classId).populate('host');
+    const c = await Class.findById(classId);
     const ts = c.timeSlots.id(timeSlotId);
 
     const order = {
       customer: userId,
       class: classId,
+      host: c.host,
       bookedTimeSlot: ts,
       stripeSession: session,
       numberOfGuests: guestNumber,

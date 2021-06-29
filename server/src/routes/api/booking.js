@@ -13,20 +13,17 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 const router = Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', [requireJwtAuth], async (req, res, next) => {
     try {
+
+    const idOfLoggedInUser = req.user.id
+
       //const { hostId } = req.query;
       let bookings = [];
 
       //all classes
-      bookings = await Order.find().populate('customer').populate('class')
+      bookings = await Order.find({ host: idOfLoggedInUser }).populate('customer').populate('class')
     
-
-    // for (const booking of bookings) {
-    //     //debugger
-    //     const timeSlot = booking.timeSlots.id(booking.timeSlot)
-    //     //debugger
-    // }
       res.json({
         bookings: bookings.map((b) => {
           return b.toJSON();

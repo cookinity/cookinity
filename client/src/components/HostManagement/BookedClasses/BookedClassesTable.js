@@ -22,7 +22,7 @@ export const BookedClassesTable = ({ bookings}) => {
         return (
         <tr key={b.id}>
             <td>{b.class.title}</td>
-        <td>{(b.stripeSession.amount_total)/100} {b.currency}</td>
+            <td>{(b.totalPrice)/100} {b.currency}</td>
             <td>{b.numberOfGuests}</td>
             <td>{b.customer.username}</td>
             <td>{b.customer.email}</td>
