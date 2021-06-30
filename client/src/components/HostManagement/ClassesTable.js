@@ -1,7 +1,7 @@
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import { Accordion, Button, Card, Col, Container, Modal, Row, Table } from 'react-bootstrap';
+import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 export const ClassesTable = ({ classes, onDeleteCallback }) => {
@@ -24,7 +24,6 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
       <th>Min Guests</th>
       <th>Max Guests</th>
       <th>Duration</th>
-      <th>Dates</th>
       <th>Actions</th>
     </tr>
   );
@@ -84,16 +83,20 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
           </Accordion>
         </td>
         <td>
-          <div className="text-center">
-            <LinkContainer to={`/hostmanagement/edit-class/${c.id}`}>
-              <Button variant="primary">
-                <FontAwesomeIcon icon={faEdit} />
-              </Button>
-            </LinkContainer>
-            <Button variant="danger" onClick={handleShow(c)}>
-              <FontAwesomeIcon icon={faTrash} />
+          <LinkContainer to={`/hostmanagement/edit-class/${c.id}`}>
+            <Button variant="primary">
+              <FontAwesomeIcon icon={faEdit} /> Edit
             </Button>
-          </div>
+          </LinkContainer>
+          <Button variant="danger" className="ml-2" onClick={handleShow(c)}>
+            <FontAwesomeIcon icon={faTrash} /> Delete
+          </Button>
+          <LinkContainer to={`/hostmanagement/edit-class/${c.id}/times`}>
+            <Button variant="secondary">
+              <FontAwesomeIcon icon={faClock} />
+              Manage Bookable Times
+            </Button>
+          </LinkContainer>
         </td>
       </tr>
     );
@@ -101,7 +104,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
 
   return (
     <>
-      <Table striped bordered responsive>
+      <Table striped bordered hover>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>

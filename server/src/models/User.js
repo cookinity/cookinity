@@ -14,6 +14,13 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    hasStripeAccount: {
+      type: Boolean,
+      default: false,
+    },
+    stripeAccountId: {
+      type: String,
+    },
     username: {
       type: String,
       lowercase: true,
@@ -35,6 +42,11 @@ const userSchema = new Schema(
       trim: true,
       minlength: 6,
       maxlength: 60,
+    },
+    description: {
+      type: String,
+      lowercase: true,
+      index: true,
     },
     name: String,
     avatar: String,
@@ -60,6 +72,9 @@ userSchema.methods.toJSON = function () {
     provider: this.provider,
     email: this.email,
     username: this.username,
+    hasStripeAccount: this.hasStripeAccount,
+    stripeAccountId: this.stripeAccountId,
+    description: this.description,
     avatar: avatar,
     name: this.name,
     role: this.role,
@@ -123,12 +138,15 @@ export const validateUser = (user) => {
   const schema = Joi.object().keys({
     avatar: Joi.any(),
     name: Joi.string().min(2).max(30).required(),
+    hasStripeAccount: Joi.boolean(),
+    stripeAccountId: Joi.string(),
     username: Joi.string()
       .min(2)
       .max(20)
       .regex(/^[a-zA-Z0-9_]+$/)
       .required(),
     password: Joi.string().min(6).max(20).allow('').allow(null),
+    description: Joi.string().min(2).max(1000),
   });
 
   return schema.validate(user);

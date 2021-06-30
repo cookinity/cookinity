@@ -11,11 +11,30 @@ import routes from './routes';
 
 const app = express();
 
-// Bodyparser Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  if (req.originalUrl.includes('/webhook')) {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 
-app.use(passport.initialize());
+app.use((req, res, next) => {
+  if (req.originalUrl.includes('/webhook')) {
+    next();
+  } else {
+    express.urlencoded({ extended: true })(req, res, next);
+  }
+});
+
+app.use((req, res, next) => {
+  if (req.originalUrl.includes('/webhook')) {
+    next();
+  } else {
+    passport.initialize()(req, res, next);
+  }
+});
+
 require('./services/jwtStrategy');
 require('./services/localStrategy');
 

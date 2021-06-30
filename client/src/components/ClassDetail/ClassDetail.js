@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../Layout/Layout';
-import { Carousel, Container, Row, Col, Image, Button } from 'react-bootstrap';
+import { Alert, Carousel, Container, Row, Col, Image, Button } from 'react-bootstrap';
 import './classDetail.scss';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import Loader from 'components/Shared/Loader/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { LinkContainer } from 'react-router-bootstrap';
 
-//ToDo: Add Loading Bar, Add Alert Bar
+
 //ToDo: Bookable Dates Anzeigen mit Duration addiert (nur future dates)
 //ToDo: Add section mit essens zeug preferenzen (vegan stuff und so)
-function parseDate(dates) {
-  return dates.map((d) => dayjs(d));
-}
 
 function formatAddress(address) {
   return address.street + ', ' + address.zip + ' ' + address.city;
+}
+
+function dateWithDuration(date, duration) {
+  return date.add(duration, 'minute')
 }
 
 const ColoredLine = ({ color }) => (
@@ -34,9 +37,10 @@ const ClassDetail = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [photos, setPhotos] = useState([]);
+  const [futureDates, setFutureDates] = useState([]);
 
   const carouselImages = photos.map((src) => (
-    <Carousel.Item interval={3000}>
+    <Carousel.Item interval={3000} key={src}>
       <div className="photoFrame">
         <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration" />
       </div>
@@ -52,8 +56,8 @@ const ClassDetail = () => {
       setIsLoading(true);
       try {
         const result = await axios(`/api/classes/${classId}`);
-        result.data.class.bookableDates = parseDate(result.data.class.bookableDates);
         setClass(result.data.class);
+        //set available photos
         const p = [];
         if (result.data.class.coverPhoto) {
           p.push(result.data.class.coverPhoto);
@@ -65,6 +69,15 @@ const ClassDetail = () => {
           p.push(result.data.class.photoTwo);
         }
         setPhotos(p);
+        //set future dates
+        const d = []
+        const today = dayjs(new Date());
+        for (const timeslot of result.data.class.timeSlots) {
+          if (dayjs(timeslot.date).isAfter(today) && !timeslot.isBooked) {
+            d.push(dayjs(timeslot.date));
+          }
+        }
+        setFutureDates(d)
       } catch (err) {
         setIsError(true);
         setErrorMessage(err?.response?.data.message || err.message);
@@ -74,51 +87,71 @@ const ClassDetail = () => {
     fetchClass();
   }, []);
 
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <Loader></Loader>
+      </Layout>
+    );
+  }
   if (c) {
     return (
       <Layout>
+        <div className="mt-2">
+          {isError && (
+            <Alert
+              variant="danger"
+              onClose={() => {
+                setIsError(false);
+                setErrorMessage('');
+              }}
+              dismissible
+            >
+              {' '}
+              {errorMessage}
+            </Alert>
+          )}
         <Carousel>{carouselImages}</Carousel>
         <h1 className="classTitle">{c.title}</h1>
         <Container>
-          <Row className="rowFormat">
-            <Col className="classDetail" xs={8}>
-              <FontAwesomeIcon icon="calendar-alt" size="2x" className="iconPos fa-fw" />{' '}
-              {c.bookableDates[0].format('DD/MM/YYYY')}
-            </Col>
-            <Col className="classDetail" xs={4}>
-              <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />{' '}
+          <Row>
+            <Col className="classDetail">
+              <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />
               {c.pricePerPerson} € per person
             </Col>
-          </Row>
-          <Row className="rowFormat">
-            <Col className="classDetail" xs={8}>
-              <FontAwesomeIcon icon="clock" size="2x" className="iconPos fa-fw" />{' '}
-              {c.bookableDates[0].format('HH:mm')}
-            </Col>
-            <Col className="classDetail" xs={4}>
-              <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" /> {c.minGuests} -{' '}
+            <Col className="classDetail">
+              <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" />{c.minGuests} -{' '}
               {c.maxGuests} persons
             </Col>
-          </Row>
-          <Row className="rowFormat">
-            <Col className="classDetail" xs={8}>
-              <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />{' '}
+            <Col className="classDetail">
+              <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />
               {formatAddress(c.meetingAddress)}
-            </Col>
-            <Col className="classDetail" xs={4}>
-              <FontAwesomeIcon icon="check-circle" size="2x" className="iconPos fa-fw" />
-              {c.vegetarianFriendly ? 'vegetarian, ' : ''}
-              {c.veganFriendly ? 'vegan, ' : ''}
-              {c.nutAllergyFriendly ? 'nut free' : ''}
             </Col>
           </Row>
         </Container>
         <ColoredLine color="gray" />
-        <h3>Description</h3>
+        <h3>Upcoming Dates <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" /></h3>
+        <ul>
+          {futureDates.map((date) => (
+            <li key={date}>{date.format('dddd, DD MMM, h:mm A')} - {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}</li>
+          ))}
+        </ul>
+        <ColoredLine color="gray" />
+        <h3>Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" /></h3>
         <Row className="rowFormat">{c.description}</Row>
         <ColoredLine color="gray" />
-        <h3>What to bring</h3>
+        <h3>What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" /></h3>
         <Row className="rowFormat">{c.toBring}</Row>
+        <ColoredLine color="gray" />
+        <h3>Dietary preferences</h3>
+        <Container>
+          <Row>
+            <Col><FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />{c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'} </Col>
+            <Col> <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />{c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'} </Col>
+            <Col> <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />{c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'} </Col>
+          </Row>
+        </Container>
         <ColoredLine color="gray" />
         <Container>
           <Row>
@@ -130,22 +163,16 @@ const ClassDetail = () => {
             <Col xs={12} md={9}>
               <h3>Get to know your host: {c.host.name}</h3>
               <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
-                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-                dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-                dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-                ipsum dolor sit amet.
+                {c.host.description}
               </p>
             </Col>
           </Row>
         </Container>
         <div className="text-center">
-          <Button variant="primary" size="lg">
-            Book Now
-          </Button>
+          <LinkContainer to={`/classes/${c.id}/booking`}>
+            <Button variant="primary">Book Now</Button>
+          </LinkContainer>
+        </div>
         </div>
       </Layout>
     );

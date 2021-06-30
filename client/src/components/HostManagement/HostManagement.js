@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import Layout from '../Layout/Layout';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 
@@ -15,6 +16,7 @@ import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { ClassesTable } from './ClassesTable';
 import { LinkContainer } from 'react-router-bootstrap';
+import './HostManagementStyles.scss';
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
@@ -24,10 +26,19 @@ export const HostManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [stripeAccountCreated, setStripeAccountCreated] = useState(false);
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
     fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    // Check to see if this is a redirect back from stripe account onboarding
+    const query = new URLSearchParams(window.location.search);
+    if (query.get('success')) {
+      setStripeAccountCreated(true);
+    }
   }, []);
 
   const fetchClasses = async () => {
@@ -45,8 +56,8 @@ export const HostManagement = () => {
         cCopy.pastDates = [];
         cCopy.futureDates = [];
 
-        for (const dateString of cCopy.bookableDates) {
-          const date = dayjs(dateString);
+        for (const ts of cCopy.timeSlots) {
+          const date = dayjs(ts.date);
           if (date.isBefore(today)) {
             cCopy.pastDates.push(date.format('llll'));
           } else {
@@ -100,13 +111,107 @@ export const HostManagement = () => {
     };
   };
 
+  const toStripeDashboard = async () => {
+    setIsLoading(true);
+    setIsError(false);
+    try {
+      // adding the necessary security header
+      const token = auth.token;
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+        },
+      };
+      if (token) {
+        config.headers['x-auth-token'] = token;
+      }
+      const response = await axios.post('/api/payment/generate-dashboard-link', null, config);
+      window.location = response.data.url;
+      setIsLoading(false);
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err?.response?.data.message || err.message);
+      setIsLoading(false);
+    }
+  };
+
+  const createAccount = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setIsError(false);
+    try {
+      // adding the necessary security header
+      const token = auth.token;
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+        },
+      };
+      if (token) {
+        config.headers['x-auth-token'] = token;
+      }
+      const response = await axios.post('/api/payment/onboard-user', null, config);
+      window.location = response.data.url;
+      setIsLoading(false);
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err?.response?.data.message || err.message);
+      setIsLoading(false);
+    }
+  };
+
+  const content =
+    auth && auth.me && auth.me.hasStripeAccount ? (
+      <>
+        <LinkContainer to={`/hostmanagement/create-class`}>
+          <Button variant="success" className="mt-2">
+            <FontAwesomeIcon icon={faPlus} /> Create a new class
+          </Button>
+        </LinkContainer>
+        <Button variant="success" className="ml-2 mt-2 stripe-connect" onClick={toStripeDashboard}>
+          <FontAwesomeIcon icon={faMoneyBill} /> Payments
+        </Button>
+        <LinkContainer to={`/hostmanagement/booked-classes`}>
+          <Button variant="info" className="ml-2 mt-2">
+            <FontAwesomeIcon icon="info-circle" /> Booked classes
+          </Button>
+        </LinkContainer>
+        <h1 className="text-center">Upcoming Classes</h1>
+        <ClassesTable classes={upcomingClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+        <hr></hr>
+        <h1 className="text-center">Past Classes</h1>
+        <ClassesTable classes={pastClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+      </>
+    ) : (
+      <>
+        <p>
+          You need to setup a stripe account to be able to host cooking classes and collect
+          payments!
+        </p>
+        <a className="stripe-connect" onClick={createAccount}>
+          <span>Connect with</span>
+        </a>
+      </>
+    );
+
   if (isLoading) {
     return (
       <Layout>
         <Loader></Loader>
       </Layout>
     );
-  } else {
+  } else if (stripeAccountCreated) {
+    return (
+      <Layout>
+        <Row>
+          <Col>
+            {' '}
+            <Alert variant="success">Order confirmed!</Alert>
+          </Col>
+        </Row>
+      </Layout>
+    );
+  } else
     return (
       <Layout>
         <Row>
@@ -125,29 +230,12 @@ export const HostManagement = () => {
                   {errorMessage}
                 </Alert>
               )}
-              <LinkContainer to={`/hostmanagement/create-class`}>
-                <Button variant="success" className="mt-2">
-                  <FontAwesomeIcon icon={faPlus} /> Create a new class
-                </Button>
-              </LinkContainer>
-
-              <h1 className="text-center">Upcoming Classes</h1>
-              <ClassesTable
-                classes={upcomingClasses}
-                onDeleteCallback={onDeleteCallback}
-              ></ClassesTable>
-              <hr></hr>
-              <h1 className="text-center">Past Classes</h1>
-              <ClassesTable
-                classes={pastClasses}
-                onDeleteCallback={onDeleteCallback}
-              ></ClassesTable>
+              {content}
             </div>
           </Col>
         </Row>
       </Layout>
     );
-  }
 };
 
 export default compose(requireAuth)(HostManagement);

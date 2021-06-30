@@ -13,6 +13,7 @@
     "build-babel": "babel -d ./build ./src -s",
     "start-dev": "node --exec babel-node src/index.js",
     "server": "nodemon --inspect --exec babel-node src/index.js",
+    "stripe": "stripe listen --forward-to https://localhost:5000/api/payment/webhook --skip-verify",
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
@@ -43,7 +44,8 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "server": "^1.0.33"
+    "server": "^1.0.33",
+    "stripe": "^8.156.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
