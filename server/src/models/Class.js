@@ -8,6 +8,7 @@ dayjs.extend(utc);
 const { Schema } = mongoose;
 import { CLASS_CATEGORIES } from '../constants/ClassCategories';
 import { CITY_CATEGORIES } from '../constants/CityCategories';
+import { feedbackJoiSchema, feedbackSchema } from './Feedback';
 
 const mongoosePaginate = require('mongoose-paginate-v2');
 
@@ -124,6 +125,7 @@ const classSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    feedbacks: [feedbackSchema],
     vegetarianFriendly: {
       type: Boolean,
       default: false,
@@ -182,6 +184,9 @@ classSchema.methods.toJSON = function () {
     timeSlots: this.timeSlots.map((timeSlot) => {
       return timeSlot.toJSON();
     }),
+    feedbacks: this.feedbacks.map((feedback) => {
+      return feedback.toJSON();
+    }),
   };
 };
 
@@ -222,6 +227,7 @@ export const validateClass = (c) => {
     veganFriendly: Joi.boolean(),
     vegetarianFriendly: Joi.boolean(),
     nutAllergyFriendly: Joi.boolean(),
+    feedbacks: Joi.array().items(feedbackJoiSchema),
   });
 
   return classJoiSchema.validate(c);

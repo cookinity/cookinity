@@ -4,8 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { validationSchema } from './classValidation';
 import { DateObject } from 'react-multi-date-picker';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import _ from 'lodash';
 import AddressSection from './FormSections/AddressSection';
 import EatingHabitsSection from './FormSections/EatingHabitsSection';
@@ -13,7 +11,6 @@ import PhotosSection from './FormSections/PhotosSection';
 import DatesSection from './FormSections/DatesSection';
 import GuestsSection from './FormSections/GuestsSection';
 import BasicInfoSection from './FormSections/BasicInfoSection';
-dayjs.extend(utc);
 
 const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
   const history = useHistory();

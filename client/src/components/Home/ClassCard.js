@@ -2,12 +2,7 @@ import React from 'react';
 import { Button, Card, ListGroup } from 'react-bootstrap';
 import { run as runHolder } from 'holderjs/holder';
 import { useEffect } from 'react';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { LinkContainer } from 'react-router-bootstrap';
-dayjs.extend(utc);
-dayjs.extend(localizedFormat);
 
 // TODO: Please look in the console Johannes. There are a LOT of exceptions and nesting errors and fix them! Signed Stefan
 // TODO: Plese try to make every card the same size.
@@ -28,30 +23,6 @@ export default function ClassCard({ c }) {
     runHolder('image-class-name');
   });
 
-  const readableDates = c.bookableDates.map((date) => {
-    return dayjs(date).local().format('LLLL');
-  });
-
-  const readableTimes = c.bookableDates.map((date) => {
-    return dayjs(date).local().format('hh:mm');
-  });
-
-  const dates = (
-    <dl>
-      {readableDates.map((date) => (
-        <dd>{date}</dd>
-      ))}
-    </dl>
-  );
-
-  const times = (
-    <dl>
-      {readableTimes.map((date) => (
-        <dd>{date} (Am Tag XY)</dd>
-      ))}
-    </dl>
-  );
-
   const shortdescription = c.description ? truncateString(c.description, 200) : '';
 
   return (
@@ -66,9 +37,6 @@ export default function ClassCard({ c }) {
             <p></p>
           </div>
           <div>
-            <span></span>
-          </div>
-          <div>
             <Card border="primary">
               <Card.Text>
                 <ListGroup variant="flush">
@@ -78,7 +46,7 @@ export default function ClassCard({ c }) {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Available Dates: </span>
-                    {dates}
+                    Dates missing
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Price: </span>
@@ -97,6 +65,9 @@ export default function ClassCard({ c }) {
         </Card.Text>
         <LinkContainer to={`/classes/${c.id}`}>
           <Button variant="primary" block>Go to course</Button>
+        </LinkContainer>
+        <LinkContainer to={`/classes/${c.id}/create-feedback`}>
+          <Button variant="primary" block>Go to feedback</Button>
         </LinkContainer>
       </Card.Body>
     </Card>
