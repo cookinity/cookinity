@@ -30,13 +30,16 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
   // Handle the checkout.session.completed event --> customer payment for the cooking class
   if (event.type === 'checkout.session.completed') {
+    debugger;
     const session = event.data.object;
     const { userId, classId, timeSlotId } = session.metadata;
+    const c = await Class.findById(classId).populate('host');
+    const ts = c.timeSlots.id(timeSlotId);
 
     const order = {
       customer: userId,
       class: classId,
-      timeSlot: timeSlotId,
+      bookedTimeSlot: ts,
       stripeSession: session,
     };
 
@@ -44,11 +47,9 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       // 1. Create New Order
       let newOrder = await Order.create(order);
       // 2. Set Time Slot IsBooked
-      const c = await Class.findById(classId).populate('host');
-      // set time slot to booked
       c.timeSlots.id(timeSlotId).isBooked = true;
       await c.save();
-      res.status(200).json({ class: newOrder.toJSON() });
+      res.status(200);
     } catch (err) {
       res.status(500).json({ message: 'Something went wrong during the class creation.' });
     }
