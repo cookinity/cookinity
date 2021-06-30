@@ -1,6 +1,5 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { Form, Button } from 'react-bootstrap';
 
 import { withRouter, Redirect } from 'react-router-dom';
 
@@ -28,67 +27,85 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
   if (auth.isAuthenticated) return <Redirect to="/" />;
 
   return (
-    <div className="w-25 p-3 mb-1 bg-secondary text-light">
+    <div className="card mb-3 mx-auto shadow " style={{ width: 500 }}>
       <Form onSubmit={formik.handleSubmit} noValidate>
-        <p>
-          Back to <a href="/">Home page</a>
-        </p>
+        <div id="main" className="container">
+          <div className="mt-2">
+            <p>
+              Back to <a href="/">Home page</a>
+            </p>
 
-        <h3>Login</h3>
-        <div>
-          <Form.Group controlId="formEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email address"
-              name="email"
-              required
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-            />
-          </Form.Group>
+            <h4 className="text-center">Login</h4>
 
-          {formik.touched.email && formik.errors.email ? (
-            <p className="error">{formik.errors.email}</p>
-          ) : null}
+            <div>
+              <div className="form-group">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <i className="fa fa-envelope"></i>
+                    </span>
+                  </div>
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Enter email address"
+                    name="email"
+                    required
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.email}
+                  />
+                </div>
+              </div>
 
-          <Form.Group controlId="formPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Enter password"
-              name="password"
-              required
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password}
-            />
-          </Form.Group>
+              {formik.touched.email && formik.errors.email ? (
+                <p className="error">{formik.errors.email}</p>
+              ) : null}
+              <div className="form-group">
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      <i className="fa fa-key"></i>
+                    </span>
+                  </div>
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Enter password"
+                    name="password"
+                    required
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.password}
+                  />
+                </div>
+              </div>
 
-          {formik.touched.password && formik.errors.password ? (
-            <p className="error">{formik.errors.password}</p>
-          ) : null}
+              {formik.touched.password && formik.errors.password ? (
+                <p className="error">{formik.errors.password}</p>
+              ) : null}
+            </div>
+
+            {auth.error && <p className="error">{auth.error}</p>}
+
+            <Button
+              className="btn submit text-center"
+              variant="primary"
+              type="submit"
+              disabled={auth.isLoading || !formik.isValid}
+            >
+              Log in now
+            </Button>
+            
+            <p>
+              Don't have an account? <a href="/register">Register</a>
+            </p>
+
+            <p className="forgot-password">
+              Forgot <a href="#">password</a>?
+            </p>
+          </div>
         </div>
-
-        {auth.error && <p className="error">{auth.error}</p>}
-
-        <Button
-          className="btn submit"
-          variant="primary"
-          type="submit"
-          disabled={auth.isLoading || !formik.isValid}
-        >
-          Log in now
-        </Button>
-
-        <p>
-          Don't have an account? <a href="/register">Register</a>
-        </p>
-
-        <p className="forgot-password">
-          Forgot <a href="#">password</a>?
-        </p>
       </Form>
     </div>
   );

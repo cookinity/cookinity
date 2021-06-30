@@ -32,15 +32,20 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   if (event.type === 'checkout.session.completed') {
     debugger;
     const session = event.data.object;
-    const { userId, classId, timeSlotId } = session.metadata;
-    const c = await Class.findById(classId).populate('host');
+    const { userId, classId, timeSlotId, guestNumber} = session.metadata;
+    const c = await Class.findById(classId);
     const ts = c.timeSlots.id(timeSlotId);
 
     const order = {
       customer: userId,
       class: classId,
+      host: c.host,
       bookedTimeSlot: ts,
       stripeSession: session,
+      numberOfGuests: guestNumber,
+      totalPrice: session.amount_total,
+      currency: session.currency,
+      bookingDate: dayjs().utc().toJSON()
     };
 
     try {
@@ -97,7 +102,7 @@ router.post('/generate-dashboard-link', [requireJwtAuth], async (req, res) => {
 
 router.post('/onboard-user', [requireJwtAuth], async (req, res) => {
   const email = req.user.email;
-  debugger;
+
   try {
     const account = await stripe.accounts.create({
       type: 'express',
@@ -164,6 +169,7 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
         userId: req.user.id,
         classId: classId,
         timeSlotId: timeSlotId,
+        guestNumber: numberOfGuests,
       },
       payment_method_types: ['card'],
       line_items: [
@@ -190,7 +196,7 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
       cancel_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?canceled=true`,
     });
     res.json({ session });
-  } catch (err) { }
+  } catch (err) {}
 });
 
 export default router;

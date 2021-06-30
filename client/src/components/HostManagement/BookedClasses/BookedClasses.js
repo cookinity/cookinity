@@ -1,122 +1,100 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Layout from 'components/Layout/Layout'
+import Layout from 'components/Layout/Layout';
 import { compose } from 'redux';
 import requireAuth from 'higherOrderComponents/requireAuth';
 import Loader from 'components/Shared/Loader/Loader';
 import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { Alert, Col, Row } from 'react-bootstrap';
-import utc from 'dayjs/plugin/utc';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { BookedClassesTable } from './BookedClassesTable';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useParams } from 'react-router-dom';
-
 
 const BookedClasses = () => {
-    const [booked, setBooked] = useState([]);
-    const [notBooked, setNotBooked] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const auth = useSelector((state) => state.auth);
-    
-    useEffect(() => {
-        fetchClasses();
-      }, []);
+  const [futureBookings, setFutureBookings] = useState([]);
+  const [pastBookings, setPastBookings] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const auth = useSelector((state) => state.auth);
 
-    const fetchClasses = async () => {
-        setIsError(false);
-        setIsLoading(true);
-        try {
-          // load all classes for which the currently logged in user is host
-          const result = await axios.get('/api/classes', { params: { hostId: auth.me.id } });
-          const unformattedClasses = result.data.classes;
-          const classesBooked = [];
-          const classesNotBooked = [];
-          unformattedClasses.forEach((c) => {
-            const cCopy = { ...c };
-            cCopy.booked = [];
-            cCopy.notBooked = [];
+  useEffect(() => {
+    fetchBookings();
+  }, []);
 
-            //const bookedClasses = cCopy.filter(class => class.timeSlots.)
-            for (const ts of cCopy.timeSlots) {
-                const isBooked = ts.isBooked
-                const date = dayjs(ts.date);
-                
-                if (isBooked) {
-                    cCopy.booked.push(date.format('llll'));
-                } else {
-                    cCopy.notBooked.push(date.format('llll'));
-                }
-            }
-
-            if (cCopy.booked.length !== 0) {
-              classesBooked.push(cCopy);
-            } else {
-              classesNotBooked.push(cCopy);
-            }
-          });
-    
-          setBooked(classesBooked);
-          setNotBooked(classesNotBooked);
-        } catch (err) {
-          setIsError(true);
-          setErrorMessage(err?.response?.data.message || err.message);
-        }
-        setIsLoading(false);
+  const fetchBookings = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      // adding the necessary security header
+      const token = auth.token;
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+        },
       };
+      if (token) {
+        config.headers['x-auth-token'] = token;
+      }
+      // load all bookings for which the currently logged in user is host
+      const result = await axios.get('/api/bookings', config);
+      const unformattedBookings = result.data.bookings;
+      const classesBookedFuture = [];
+      const classesBookedPast = [];
+      const today = dayjs(new Date());
+      unformattedBookings.forEach((b) => {
+        const date = dayjs(b.bookedTimeSlot.date);
+        if (date.isBefore(today)) {
+          classesBookedPast.push(b);
+        } else {
+          classesBookedFuture.push(b);
+        }
+      });
 
+      setFutureBookings(classesBookedFuture);
+      setPastBookings(classesBookedPast);
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err?.response?.data.message || err.message);
+    }
+    setIsLoading(false);
+  };
 
-    const onDeleteCallback = (c) => {
-    return async () => {
-        await fetchClasses();
-    };
-    };
-
-    if (isLoading) {
-        return (
-          <Layout>
-            <Loader></Loader>
-          </Layout>
-        );
-    } else {
+  if (isLoading) {
     return (
-        <Layout>
-            <Row>
-                <Col>
-                    <div>
-                    {isError && (
-                        <Alert
-                        variant="danger"
-                        onClose={() => {
-                            setIsError(false);
-                            setErrorMessage('');
-                        }}
-                        dismissible
-                        >
-                        {' '}
-                        {errorMessage}
-                        </Alert>
-                    )}
-                    <h1 className="text-center">Booked Classes</h1>
-                    <BookedClassesTable
-                        classes={booked}
-                        onDeleteCallback={onDeleteCallback}
-                    ></BookedClassesTable>
-                    <hr></hr>
-                    <h1 className="text-center">Not yet booked Classes</h1>
-                    <BookedClassesTable
-                        classes={notBooked}
-                        onDeleteCallback={onDeleteCallback}
-                    ></BookedClassesTable>
-                    </div>
-                </Col>
-            </Row>
-        </Layout>
-        );
-    }   
-}
+      <Layout>
+        <Loader></Loader>
+      </Layout>
+    );
+  } else {
+    return (
+      <Layout>
+        <Row>
+          <Col>
+            <div>
+              {isError && (
+                <Alert
+                  variant="danger"
+                  onClose={() => {
+                    setIsError(false);
+                    setErrorMessage('');
+                  }}
+                  dismissible
+                >
+                  {' '}
+                  {errorMessage}
+                </Alert>
+              )}
+              <h1 className="text-center">Future Bookings</h1>
+              <BookedClassesTable bookings={futureBookings}></BookedClassesTable>
+              <hr></hr>
+              <h1 className="text-center">Past Bookings</h1>
+              <BookedClassesTable bookings={pastBookings}></BookedClassesTable>
+            </div>
+          </Col>
+        </Row>
+      </Layout>
+    );
+  }
+};
 
 export default compose(requireAuth)(BookedClasses);

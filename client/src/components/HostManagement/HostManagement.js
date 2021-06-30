@@ -171,7 +171,11 @@ export const HostManagement = () => {
         <Button variant="success" className="ml-2 mt-2 stripe-connect" onClick={toStripeDashboard}>
           <FontAwesomeIcon icon={faMoneyBill} /> Payments
         </Button>
-
+        <LinkContainer to={`/hostmanagement/booked-classes`}>
+          <Button variant="info" className="ml-2 mt-2">
+            <FontAwesomeIcon icon="info-circle" /> Booked classes
+          </Button>
+        </LinkContainer>
         <h1 className="text-center">Upcoming Classes</h1>
         <ClassesTable classes={upcomingClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
         <hr></hr>
