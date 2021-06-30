@@ -19,25 +19,102 @@ var photosUpload = upload.fields([
   { name: 'photoTwo', maxCount: 1 },
 ]);
 
-router.get('/', async (req, res, next) => {
+router.post('/query', async (req, res, next) => {
+  let { city, category, date, guests, price, rating, limit, skip } = req.body;
+
+  if (date) {
+    date = dayjs(date);
+  }
+
   try {
-    const { hostId } = req.query;
-    let classes = [];
-    if (hostId) {
-      // classes by the specified host
-      classes = await Class.find({ host: new ObjectId(hostId) }).populate('host');
-    } else {
-      // all classes
-      classes = await Class.find().populate('host');
+    let classes = await Class.find();
+    // Apply City Filter
+    if (city) {
+      classes = classes.filter((c) => c.meetingAddress.city === city);
+    }
+    // Apply Category Filter
+    if (category) {
+      classes = classes.filter((c) => c.category === category);
+    }
+    // Apply Date Filter
+    if (date) {
+      classes = classes.filter((c) => {
+        if (c.bookableDates) {
+          const foundFittingDate = c.bookableDates.find((d) => {
+            return dayjs(d).format('DD/MM/YYYY') === date.format('DD/MM/YYYY');
+          });
+          return foundFittingDate ? true : false;
+        } else {
+          return false;
+        }
+      });
+    }
+    // Apply Capacity Filter
+    if (guests) {
+      classes = classes.filter((c) => {
+        return c.maxGuests >= guests && c.minGuests <= guests;
+      });
+    }
+    // Apply Price Filter
+    if (price) {
+      classes = classes.filter((c) => c.pricePerPerson < price)
+    }
+    // Apply Rating Filter 
+    //if(rating) {
+    //  classes = classes.filter((c) => c. === rating)
+    //}
+
+    const numberOfEntries = classes.length;
+    // Apply Skip and Limit
+    if (skip !== undefined && limit !== undefined) {
+      classes = classes.slice(skip, skip + limit);
     }
 
     res.json({
+      numberOfEntries,
       classes: classes.map((c) => {
         return c.toJSON();
       }),
     });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
+  }
+});
+
+router.get('/', async (req, res, next) => {
+  try {
+    const limitValue = parseInt(req.query.limit);
+    const skipValue = parseInt(req.query.skip);
+
+    if (skipValue < 0) return res.status(400).json({ message: 'This is already the most previous page' });
+
+    const { hostId, category, city, date } = req.query;
+    let classes = [];
+
+    if (hostId) {
+      // classes by the specified host
+      classes = await Class.find({ host: new ObjectId(hostId) })
+        .populate('host')
+        .skip(skipValue)
+        .limit(limitValue);
+    } else {
+      classes = await Class.find().populate('host').skip(skipValue).limit(limitValue);
+    }
+    res.json({
+      classes: classes.map((c) => {
+        return JSON.parse(JSON.stringify(c));
+      }),
+    });
+  } catch (err) {
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during class search.' });
+    }
   }
 });
 
@@ -47,7 +124,11 @@ router.get('/:id', async (req, res) => {
     if (!c) return res.status(404).json({ message: 'No class found.' });
     res.json({ class: c.toJSON() });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -78,7 +159,11 @@ router.delete('/:id', [requireJwtAuth], async (req, res, next) => {
       res.status(200).json({ c });
     }
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -134,7 +219,11 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
 
     res.status(200).json({ c });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -247,7 +336,11 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     newClass = await newClass.populate('host').execPopulate();
     res.status(200).json({ class: newClass.toJSON() });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 

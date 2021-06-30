@@ -6,7 +6,10 @@ import { join } from 'path';
 import fs from 'fs';
 dayjs.extend(utc);
 const { Schema } = mongoose;
-import { CLASS_CATEGORIES } from './ClassCategories';
+import { CLASS_CATEGORIES } from '../constants/ClassCategories';
+import { CITY_CATEGORIES } from '../constants/CityCategories';
+
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const addressSchema = new Schema({
   country: {
@@ -15,6 +18,7 @@ const addressSchema = new Schema({
   },
   city: {
     type: String,
+    enum: CITY_CATEGORIES,
     required: true,
   },
   zip: {
@@ -222,6 +226,8 @@ export const validateClass = (c) => {
 
   return classJoiSchema.validate(c);
 };
+
+classSchema.plugin(mongoosePaginate);
 
 const Class = mongoose.model('Class', classSchema);
 
