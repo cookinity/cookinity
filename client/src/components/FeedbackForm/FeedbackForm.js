@@ -34,25 +34,15 @@ const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
         try {
           const {
             overallRating,
-            hostRating,
-            tasteRating,
-            locationRating,
-            vtmrRating,
-            experienceRating,
           } = values;
           const newFeedback = {
             overallRatingStars: overallRatingStars,
-            overallRating,
             hostRatingStars: hostRatingStars,
-            hostRating,
             tasteRatingStars: tasteRatingStars,
-            tasteRating,
             locationRatingStars: locationRatingStars,
-            locationRating,
             vtmrRatingStars: vtmrRatingStars,
-            vtmrRating,
             experienceRatingStars: experienceRatingStars,
-            experienceRating,
+            overallRating,
           };
           //Error
           if (overallRatingStars === 0) {
@@ -75,7 +65,7 @@ const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
 
   return (
     <>
-      {<h1>Feedback</h1>}
+      {<h1 className="text-center">Feedback</h1>}
       <Form className="mx-auto" onSubmit={formik.handleSubmit} noValidate>
         <BasicInfoSection formik={formik}
           setRatingOverallRatingStars={setRatingOverallRatingStars} overallRatingStars={overallRatingStars}

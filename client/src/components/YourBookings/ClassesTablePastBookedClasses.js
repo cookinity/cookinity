@@ -5,7 +5,7 @@ import { Accordion, Button, Card, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import dayjs from 'dayjs';
 
-export const ClassesTableYourBookings = ({ yourbookings }) => {
+export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
 
   const columns = (
     <tr>
@@ -47,6 +47,11 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
           <LinkContainer to={`/classes/${b.class.id}`}>
             <Button className="mr-1" variant="info">
               <FontAwesomeIcon icon="info-circle" /> Go to Course
+            </Button>
+          </LinkContainer>
+          <LinkContainer to={`/classes/${b.class.id}/create-feedback`}>
+            <Button className="mr-1" variant="sucess">
+              <FontAwesomeIcon icon={faPlus} /> Give Feedback
             </Button>
           </LinkContainer>
         </td>

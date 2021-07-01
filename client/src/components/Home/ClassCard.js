@@ -4,11 +4,9 @@ import { run as runHolder } from 'holderjs/holder';
 import { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 
-// TODO: Please look in the console Johannes. There are a LOT of exceptions and nesting errors and fix them! Signed Stefan
-// TODO: Plese try to make every card the same size.
 // TODO: Please restrict available dates and do not show all of them. Maybe only the two closest to the current date?
 // Simply sort by date, eliminate the ones in the past and pick the first two.
-//
+
 
 const truncateString = function (str, num) {
   if (str.length > num) {

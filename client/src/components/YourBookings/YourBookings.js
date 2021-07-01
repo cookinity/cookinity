@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Layout from '../Layout/Layout';
-import { Alert, Button, Col, Row } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
 import requireAuth from 'higherOrderComponents/requireAuth';
 import { compose } from 'redux';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import { ClassesTable } from './ClassesTableYourBookings';
+import { ClassesTableYourBookings } from './ClassesTableYourBookings';
+import { ClassesTablePastBookedClasses } from './ClassesTablePastBookedClasses';
 
 
 export const HostManagement = () => {
@@ -27,39 +28,36 @@ export const HostManagement = () => {
     setIsError(false);
     setIsLoading(true);
     try {
-      // load all classes  which the currently logged in user booked
-      //muss noch angepasst werden
-      const result = await axios.get('/api/classes', { params: { hostId: auth.me.id } });
-      const unformattedClasses = result.data.classes;
+      // adding the necessary security header
+      const token = auth.token;
+      const config = {
+        headers: {
+          'Content-type': 'application/json',
+        },
+      };
+      if (token) {
+        config.headers['x-auth-token'] = token;
+      }
+      // load all bookings for which the currently logged in user is the customer
+      //TODO
+      const result = await axios.put('/api/bookings', config);
 
-      //Divide bookings into past and future bookings
+      const unformattedBookings = result.data.bookings;
+      const classesBookedFuture = [];
+      const classesBookedPast = [];
       const today = dayjs(new Date());
-      const pastClasses = [];
-      const futureClasses = [];
-
-      unformattedClasses.forEach((c) => {
-        const cCopy = { ...c };
-        cCopy.pastDates = [];
-        cCopy.futureDates = [];
-
-        for (const ts of cCopy.timeSlots) {
-          const date = dayjs(ts.date);
-          if (date.isBefore(today)) {
-            cCopy.pastDates.push(date.format('llll'));
-          } else {
-            cCopy.futureDates.push(date.format('llll'));
-          }
-        }
-        if (cCopy.futureDates.length !== 0) {
-          futureClasses.push(cCopy);
+      unformattedBookings.forEach((b) => {
+        const date = dayjs(b.bookedTimeSlot.date);
+        if (date.isBefore(today)) {
+          classesBookedPast.push(b);
         } else {
-          pastClasses.push(cCopy);
+          classesBookedFuture.push(b);
         }
       });
 
-      //Set of past and future bookings
-      setUpcomingClasses(futureClasses);
+      setUpcomingClasses(upcomingClasses);
       setPastClasses(pastClasses);
+
     } catch (err) {
       setIsError(true);
       setErrorMessage(err?.response?.data.message || err.message);
@@ -94,14 +92,14 @@ export const HostManagement = () => {
               )}
               <p></p>
               <h1 className="text-center">Booked Classes</h1>
-              <ClassesTable
-                classes={upcomingClasses}
-              ></ClassesTable>
+              <ClassesTableYourBookings
+                yourbookings={upcomingClasses}
+              ></ClassesTableYourBookings>
               <hr></hr>
               <h1 className="text-center">Past Classes</h1>
-              <ClassesTable
-                classes={pastClasses}
-              ></ClassesTable>
+              <ClassesTablePastBookedClasses
+                yourbookings={pastClasses}
+              ></ClassesTablePastBookedClasses>
             </div>
           </Col>
         </Row>
