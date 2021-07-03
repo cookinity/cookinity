@@ -57,9 +57,9 @@ router.post('/query', async (req, res, next) => {
     }
     // Apply Price Filter
     if (price) {
-      classes = classes.filter((c) => c.pricePerPerson < price)
+      classes = classes.filter((c) => c.pricePerPerson < price);
     }
-    // Apply Rating Filter 
+    // Apply Rating Filter
     //if(rating) {
     //  classes = classes.filter((c) => c. === rating)
     //}
@@ -203,6 +203,8 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       category: req.body.category,
       description: req.body.description,
       toBring: req.body.toBring,
+      lon: req.body.lon,
+      lat: req.body.lat,
       meetingAddress: req.body.meetingAddress,
       pricePerPerson: req.body.pricePerPerson,
       durationInMinutes: req.body.durationInMinutes,
@@ -315,6 +317,8 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     category: req.body.category,
     description: req.body.description,
     toBring: req.body.toBring,
+    lon: req.body.lon,
+    lat: req.body.lat,
     meetingAddress: req.body.meetingAddress,
     pricePerPerson: req.body.pricePerPerson,
     durationInMinutes: req.body.durationInMinutes,

@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import Loader from 'components/Shared/Loader/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
-
+import ClassDetailMap from './ClassDetailMap';
 
 //ToDo: Bookable Dates Anzeigen mit Duration addiert (nur future dates)
 //ToDo: Add section mit essens zeug preferenzen (vegan stuff und so)
@@ -18,7 +18,7 @@ function formatAddress(address) {
 }
 
 function dateWithDuration(date, duration) {
-  return date.add(duration, 'minute')
+  return date.add(duration, 'minute');
 }
 
 const ColoredLine = ({ color }) => (
@@ -70,14 +70,14 @@ const ClassDetail = () => {
         }
         setPhotos(p);
         //set future dates
-        const d = []
+        const d = [];
         const today = dayjs(new Date());
         for (const timeslot of result.data.class.timeSlots) {
           if (dayjs(timeslot.date).isAfter(today) && !timeslot.isBooked) {
             d.push(dayjs(timeslot.date));
           }
         }
-        setFutureDates(d)
+        setFutureDates(d);
       } catch (err) {
         setIsError(true);
         setErrorMessage(err?.response?.data.message || err.message);
@@ -86,7 +86,6 @@ const ClassDetail = () => {
     };
     fetchClass();
   }, []);
-
 
   if (isLoading) {
     return (
@@ -112,67 +111,86 @@ const ClassDetail = () => {
               {errorMessage}
             </Alert>
           )}
-        <Carousel>{carouselImages}</Carousel>
-        <h1 className="classTitle">{c.title}</h1>
-        <Container>
-          <Row>
-            <Col className="classDetail">
-              <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />
-              {c.pricePerPerson} € per person
-            </Col>
-            <Col className="classDetail">
-              <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" />{c.minGuests} -{' '}
-              {c.maxGuests} persons
-            </Col>
-            <Col className="classDetail">
-              <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />
-              {formatAddress(c.meetingAddress)}
-            </Col>
-          </Row>
-        </Container>
-        <ColoredLine color="gray" />
-        <h3>Upcoming Dates <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" /></h3>
-        <ul>
-          {futureDates.map((date) => (
-            <li key={date}>{date.format('dddd, DD MMM, h:mm A')} - {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}</li>
-          ))}
-        </ul>
-        <ColoredLine color="gray" />
-        <h3>Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" /></h3>
-        <Row className="rowFormat">{c.description}</Row>
-        <ColoredLine color="gray" />
-        <h3>What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" /></h3>
-        <Row className="rowFormat">{c.toBring}</Row>
-        <ColoredLine color="gray" />
-        <h3>Dietary preferences</h3>
-        <Container>
-          <Row>
-            <Col><FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />{c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'} </Col>
-            <Col> <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />{c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'} </Col>
-            <Col> <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />{c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'} </Col>
-          </Row>
-        </Container>
-        <ColoredLine color="gray" />
-        <Container>
-          <Row>
-            <Col xs={12} md={3}>
-              <div className="text-center">
-                <Image src={c.host.avatar} className="hostImage" roundedCircle />
-              </div>
-            </Col>
-            <Col xs={12} md={9}>
-              <h3>Get to know your host: {c.host.name}</h3>
-              <p>
-                {c.host.description}
-              </p>
-            </Col>
-          </Row>
-        </Container>
-        <div className="text-center">
-          <LinkContainer to={`/classes/${c.id}/booking`}>
-            <Button variant="primary">Book Now</Button>
-          </LinkContainer>
-        </div>
+          <Carousel>{carouselImages}</Carousel>
+          <h1 className="classTitle">{c.title}</h1>
+          <Container>
+            <Row>
+              <Col className="classDetail">
+                <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />
+                {c.pricePerPerson} € per person
+              </Col>
+              <Col className="classDetail">
+                <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" />
+                {c.minGuests} - {c.maxGuests} persons
+              </Col>
+            </Row>
+          </Container>
+          <ColoredLine color="gray" />
+          <div className="mr-4 ml-4">
+            <ClassDetailMap c={c}></ClassDetailMap>
+          </div>
+          <ColoredLine color="gray" />
+          <h3>
+            Upcoming Dates{' '}
+            <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" />
+          </h3>
+          <ul>
+            {futureDates.map((date) => (
+              <li key={date}>
+                {date.format('dddd, DD MMM, h:mm A')} -{' '}
+                {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}
+              </li>
+            ))}
+          </ul>
+          <ColoredLine color="gray" />
+          <h3>
+            Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" />
+          </h3>
+          <Row className="rowFormat">{c.description}</Row>
+          <ColoredLine color="gray" />
+          <h3>
+            What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" />
+          </h3>
+          <Row className="rowFormat">{c.toBring}</Row>
+          <ColoredLine color="gray" />
+          <h3>Dietary preferences</h3>
+          <Container>
+            <Row>
+              <Col>
+                <FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />
+                {c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'}{' '}
+              </Col>
+              <Col>
+                {' '}
+                <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />
+                {c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'}{' '}
+              </Col>
+              <Col>
+                {' '}
+                <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />
+                {c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'}{' '}
+              </Col>
+            </Row>
+          </Container>
+          <ColoredLine color="gray" />
+          <Container>
+            <Row>
+              <Col xs={12} md={3}>
+                <div className="text-center">
+                  <Image src={c.host.avatar} className="hostImage" roundedCircle />
+                </div>
+              </Col>
+              <Col xs={12} md={9}>
+                <h3>Get to know your host: {c.host.name}</h3>
+                <p>{c.host.description}</p>
+              </Col>
+            </Row>
+          </Container>
+          <div className="text-center">
+            <LinkContainer to={`/classes/${c.id}/booking`}>
+              <Button variant="primary">Book Now</Button>
+            </LinkContainer>
+          </div>
         </div>
       </Layout>
     );
