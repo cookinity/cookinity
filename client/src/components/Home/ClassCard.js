@@ -16,13 +16,29 @@ const truncateString = function (str, num) {
   }
 };
 
+const getRating = function (res) {
+  if (res == -1) {
+    return "No Feedback given"
+  } else {
+    return res;
+  }
+};
+
 export default function ClassCard({ c }) {
   useEffect(() => {
     runHolder('image-class-name');
   });
 
   const shortdescription = c.description ? truncateString(c.description, 200) : '';
-
+  const allratings = c.feedbacks;
+  let sum = 0;
+  for (var i = 0; i < allratings.length; i++) {
+    sum = sum + allratings[i].overallRatingStars
+  }
+  let classrating = -1;
+  if (allratings.length > 0) {
+    classrating = sum / allratings.length;
+  }
   return (
     <Card border="primary" className="mb-3 shadow classCard">
       <Card.Img className="image-class-name" variant="top" src={c.coverPhoto} />
@@ -40,7 +56,7 @@ export default function ClassCard({ c }) {
                 <ListGroup variant="flush">
                   <ListGroup.Item>
                     <span className="font-weight-bold">Rating: </span>
-                    {c.rating}
+                    {getRating(classrating)}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Available Dates: </span>

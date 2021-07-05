@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import { Accordion, Button, Card, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -21,27 +20,22 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
   );
 
   const rows = yourbookings.map((b) => {
+    const priceineuro = b.totalPrice / 100;
     return (
       <tr key={b.id}>
         <td>{b.class.title}</td>
         <td>{dayjs(b.bookedTimeSlot.date).format('llll')}</td>
         <td>{b.class.durationInMinutes}</td>
         <td>{b.numberOfGuests}</td>
-        <td>{b.totalPrice} Euro</td>
+        <td>{priceineuro} Euro</td>
         <td>{b.host.email}</td>
+
         <td>
-          <Card>
-            <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                {b.host.name}
-              </Accordion.Toggle>
-            </Card.Header>
-            <Accordion.Collapse eventKey="0">
-              <Card.Body>
-                {b.host.description}
-              </Card.Body>
-            </Accordion.Collapse>
-          </Card>
+          <LinkContainer to={`/${b.host.username}`}>
+            <Button className="mr-1" variant="info">
+              <FontAwesomeIcon icon="info-circle" /> {b.host.name}
+            </Button>
+          </LinkContainer>
         </td>
         <td>
           <LinkContainer to={`/classes/${b.class.id}`}>
