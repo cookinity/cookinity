@@ -40,7 +40,7 @@ export const HostManagement = () => {
       }
       // load all bookings for which the currently logged in user is the customer
       //TODO
-      const result = await axios.put('/api/bookings', config);
+      const result = await axios.get('/api/bookings/ofuser', config);
 
       const unformattedBookings = result.data.bookings;
       const classesBookedFuture = [];

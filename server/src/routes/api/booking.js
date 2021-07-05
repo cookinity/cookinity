@@ -34,7 +34,7 @@ router.get('/', [requireJwtAuth], async (req, res, next) => {
   }
 });
 
-router.put('/', [requireJwtAuth], async (req, res, next) => {
+router.get('/ofuser', [requireJwtAuth], async (req, res, next) => {
   try {
 
     const idOfLoggedInUser = req.user.id

@@ -50,7 +50,6 @@ const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
             setErrorMessage("You must give a rating in the Overall Section");
             return;
           }
-          debugger;
           // calling submit callback from parent component
           await submitCallback(newFeedback);
           resetForm();
