@@ -134,6 +134,30 @@ const classSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    avgRating: {
+      type: Number,
+      required: false
+    },
+    hostRating: {
+      type: Number,
+      required: false
+    },
+    tasteRating: {
+      type: Number,
+      required: false
+    },
+    locationRating: {
+      type: Number,
+      required: false
+    },
+    vtmrRating: {
+      type: Number,
+      required: false
+    },
+    expRating: {
+      type: Number,
+      required: false
+    }
   },
   { timestamps: true },
 );
@@ -181,6 +205,12 @@ classSchema.methods.toJSON = function () {
     veganFriendly: this.veganFriendly,
     vegetarianFriendly: this.vegetarianFriendly,
     nutAllergyFriendly: this.nutAllergyFriendly,
+    avgRating: this.avgRating,
+    hostRating: this.hostRating,
+    tasteRating: this.tasteRating,
+    locationRating: this.locationRating,
+    vtmrRating: this.vtmrRating,
+    expRating: this.expRating,
     timeSlots: this.timeSlots.map((timeSlot) => {
       return timeSlot.toJSON();
     }),

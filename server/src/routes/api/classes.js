@@ -279,6 +279,13 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
     let updatedClass = {
       feedbacks: tempClass.feedbacks,
     };
+    //update Class Feedback Ratings
+    updatedClass.avgRating= tempClass.feedbacks.map((f) => f.overallRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.hostRating= tempClass.feedbacks.map((f) => f.hostRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.tasteRating= tempClass.feedbacks.map((f) => f.tasteRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.locationRating= tempClass.feedbacks.map((f) => f.locationRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.vtmrRating= tempClass.feedbacks.map((f) => f.vtmrRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.expRating= tempClass.feedbacks.map((f) => f.experienceRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
     updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
  
     res.status(200).json({ updatedClass });
