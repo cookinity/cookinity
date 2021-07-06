@@ -269,6 +269,7 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
       experienceRatingStars: req.body.experienceRatingStars,
       experienceRating: req.body.experienceRating,
       reviewer: req.user.id,
+      feedbackDate: dayjs().utc().toJSON()
     };
  
     // ToDo: We need to add verification such that only people who have really booked the class can make a review

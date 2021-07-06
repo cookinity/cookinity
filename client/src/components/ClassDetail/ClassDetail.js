@@ -36,6 +36,7 @@ const ClassDetail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [photos, setPhotos] = useState([]);
   const [futureDates, setFutureDates] = useState([]);
+  const [numFeedback, setNumFeedback] = useState(0);
 
   const carouselImages = photos.map((src) => (
     <Carousel.Item interval={3000} key={src}>
@@ -54,6 +55,19 @@ const ClassDetail = () => {
       setIsLoading(true);
       try {
         const result = await axios(`/api/classes/${classId}`);
+        result.data.class.feedbacks.sort((a, b) => {
+          const aDate = dayjs(a.feedbackDate)
+          const bDate = dayjs(b.feedbackDate)
+          if(aDate.isBefore(bDate)) {
+            return 1;
+          } else if (aDate.isAfter(bDate)) {
+            return -1;
+          } else {
+            return 0;
+          }
+        })
+        setNumFeedback(result.data.class.feedbacks.length)
+        result.data.class.feedbacks = result.data.class.feedbacks.slice(0,2)
         setClass(result.data.class);
         //set available photos
         const p = [];
@@ -156,11 +170,10 @@ const ClassDetail = () => {
 
           {/* Class Feedback */}
           <h3>Feedback <FontAwesomeIcon icon="star" size="1x" className="iconPos fa-fw" /></h3>
-          <h6>Average: {c.avgRating.toFixed(2)} ({c.feedbacks.length} Ratings)</h6>
-          <Container>
+          <h6>Average: {c.avgRating.toFixed(2)} ({numFeedback} Ratings)</h6>
+          <Container className="ratingContainer">
             <Row>
               {/* OverallRating */}
-              <Spacer width='12px' />
               <Col xs={6} md={4}>
                 <Row className="align-items-center">
                   Overall Rating
@@ -174,7 +187,6 @@ const ClassDetail = () => {
               <Col xs={3} md={3}>
               </Col>
               {/* HostRating */}
-              <Spacer width='12px' />
               <Col xs={6} md={4}>
                 <Row className="align-items-center">
                   Host Rating
@@ -187,9 +199,8 @@ const ClassDetail = () => {
               </Col>
             </Row>
             <Row>
-            {/* TasteRating */}
-            <Spacer width='12px' />
-            <Col xs={6} md={4}>
+              {/* TasteRating */}
+              <Col xs={6} md={4}>
                 <Row className="align-items-center">
                   Taste Rating
                   <Spacer grow='1' />
@@ -202,7 +213,6 @@ const ClassDetail = () => {
               <Col xs={3} md={3}>
               </Col>
               {/* LocationRating */}
-              <Spacer width='12px' />
               <Col xs={6} md={4}>
                 <Row className="align-items-center">
                   Location Rating
@@ -216,10 +226,9 @@ const ClassDetail = () => {
             </Row>
             <Row>
               {/* ValueToMoneyRating */}
-              <Spacer width='12px' />
               <Col xs={6} md={4}>
                 <Row className="align-items-center">
-                  Value-To-Money Rating
+                  Price-Quality Rating
                   <Spacer grow='1' />
                   <div className="ratingBar">
                     <ProgressBar now={(c.vtmrRating) / 5 * 100} />
@@ -227,10 +236,9 @@ const ClassDetail = () => {
                   <div className="ratingFontSize">{c.vtmrRating.toFixed(2)}</div>
                 </Row>
               </Col>
-              <Col xs={1} md={3}>
+              <Col xs={3} md={3}>
               </Col>
               {/* ExperienceRating */}
-              <Spacer width='12px' />
               <Col xs={6} md={4}>
                 <Row className="align-items-center">
                   Experience Rating
@@ -241,6 +249,35 @@ const ClassDetail = () => {
                   <div className="ratingFontSize">{c.expRating.toFixed(2)}</div>
                 </Row>
               </Col>
+            </Row>
+          </Container>
+          {/* Feedback Comments */}
+          <Container>
+            <Row xs={1} md={2}>
+              {c.feedbacks.map((f) => (
+                <Col key={f.id}>
+                  <Container>
+                    <Row>
+                      <Col xs={12} sm={12} md={2}>
+                        <Image src={f.reviewer.avatar} className="reviewerImage" roundedCircle />
+                      </Col>
+                      <Col xs={12} sm={12} md={10}>
+                        {f.reviewer.name}
+                        <p>{dayjs(f.feedbackDate).format('llll')}</p>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <div className="feedbackDescription">
+                          <p>
+                            {f.overallRating}
+                          </p>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Col>
+              ))}
             </Row>
           </Container>
           <ColoredLine color="gray" />

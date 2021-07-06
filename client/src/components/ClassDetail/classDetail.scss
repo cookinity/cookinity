@@ -33,7 +33,7 @@
     background-color: rgb(63, 60, 60);
     border: 1px solid black;
     vertical-align: middle;
-    Display: flex; 
+    display: flex; 
     justify-content: center; 
     align-items: center
 }
@@ -64,4 +64,19 @@
 
 .ratingFontSize {
     font-size: 12px;
+}
+
+.ratingContainer {
+    padding: 35px
+}
+
+.reviewerImage {
+    width: 90px;
+    height: 90px;
+    padding: 5px;
+    margin: auto
+}
+
+.feedbackDescription {
+    padding: 5px;
 }

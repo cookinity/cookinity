@@ -47,8 +47,7 @@ const orderSchema = new Schema(
       type: mongoose.Schema.Types.Date,
       required: true,
     }
-  },
-  { timestamps: true },
+  }
 );
 
 orderSchema.methods.toJSON = function () {
