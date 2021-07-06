@@ -9,11 +9,12 @@ import Filters from './Filters';
 import Loader from 'components/Shared/Loader/Loader';
 import { CLASS_CATEGORIES } from 'constants/ClassCategories';
 import { CITY_CATEGORIES } from 'constants/CityCategories';
-import DatePicker, { DateObject } from 'react-multi-date-picker';
+import DatePicker from 'react-multi-date-picker';
 import './Home.scss';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
+
 export const Home = () => {
   const [classes, setClasses] = useState([]);
   const [numberOfEntries, setNumberOfEntries] = useState(0);
@@ -29,10 +30,14 @@ export const Home = () => {
   const [cat, setCat] = useState('');
   const [city, setCity] = useState('');
   const [guests, setGuests] = useState('');
-  const [price, setPrice] = useState('');
   const [priceLow, setPriceLow] = useState('');
   const [priceUp, setPriceUp] = useState('');
+  const [priceLowField, setPriceLowField] = useState('');
+  const [priceUpField, setPriceUpField] = useState('');
   const [rating, setRating] = useState('');
+  const [vegan, setVegan] = useState(false);
+  const [vegetarian, setVegetarian] = useState(false);
+  const [nutAllergy, setNutAllergy] = useState(false);
 
   const starRating4 = document.getElementById('starRating4');
   const starRating3 = document.getElementById('starRating3');
@@ -46,7 +51,19 @@ export const Home = () => {
 
   useEffect(() => {
     fetchClasses();
-  }, [skip, limit]);
+  }, [
+    skip,
+    limit,
+    cat,
+    city,
+    startDate,
+    priceLow && priceUp,
+    guests,
+    rating,
+    vegan,
+    vegetarian,
+    nutAllergy,
+  ]);
 
   const fetchClasses = async () => {
     setIsError(false);
@@ -65,7 +82,12 @@ export const Home = () => {
         guests,
         priceLow,
         priceUp,
+        priceLowField,
+        priceUpField,
         rating,
+        vegan,
+        vegetarian,
+        nutAllergy,
       };
 
       const result = await axios.post(`/api/classes/query`, queryObject);
@@ -87,7 +109,7 @@ export const Home = () => {
     if (skip >= limit) setSkip(skip - limit);
   };
 
-  const handleFilterCategory = async (e) => {
+  const handleFilterCategory = (e) => {
     let value = e.target.value;
     setCat(value);
   };
@@ -128,12 +150,27 @@ export const Home = () => {
     }
   };
 
-  const handleFilterPriceMin = (priceMin) => {
-    setPriceLow(priceMin);
+  const handleFilterPriceMinField = (priceMin) => {
+    setPriceLowField(priceMin);
   };
 
-  const handleFilterPriceMax = (priceMax) => {
-    setPriceUp(priceMax);
+  const handleFilterPriceMaxField = (priceMax) => {
+    setPriceUpField(priceMax);
+  };
+
+  const handleVegan = (e) => {
+    if (e.target.checked) setVegan(true);
+    else setVegan(false);
+  };
+
+  const handleVegetarian = (e) => {
+    if (e.target.checked) setVegetarian(true);
+    else setVegetarian(false);
+  };
+
+  const handleNutAllergy = (e) => {
+    if (e.target.checked) setNutAllergy(true);
+    else setNutAllergy(false);
   };
 
   const handleFilterRating = (starRating, e) => {
@@ -297,26 +334,31 @@ export const Home = () => {
                 <p className="small px-2">over 100€</p>
               </div>
             </li>
+            <div className="row col-auto">
             <div className="d-flex ">
               <input
-                placeholder="€ Min"
+                placeholder="Min"
                 type="number"
                 className="form-control custom-width-min-max"
                 min="1"
                 max="1000"
-                onChange={handleFilterPriceMin}
+                onChange={handleFilterPriceMinField}
               />
               <p className="px-2">-</p>
               <input
-                placeholder="€ Max"
+                placeholder="Max"
                 type="number"
                 className="form-control custom-width-min-max"
                 min="1"
                 max="1000"
-                onChange={handleFilterPriceMax}
+                onChange={handleFilterPriceMaxField}
               />
             </div>
+            <p>&nbsp;</p>
+            <Button onClick={fetchClasses}>Go</Button>
+            </div>
           </a>
+
           <a>
             <label htmlFor="customRange" className="form-label">
               Number of participants
@@ -339,11 +381,44 @@ export const Home = () => {
               <Button onClick={clearCapacityFilter}>Clear</Button>
             </div>
           </a>
-          <br></br>
+
           <a>
-            <Button className="mx-auto" onClick={fetchClasses}>
-              Apply
-            </Button>
+            <label htmlFor="vegan" className="form-label">
+              Dietary preference
+            </label>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                onChange={(event) => handleVegan(event)}
+                type="checkbox"
+                id="vegan"
+              />
+              <label className="form-check-label small" htmlFor="vegan">
+                Vegan
+              </label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                onChange={(event) => handleVegetarian(event)}
+                type="checkbox"
+                id="vegetarian"
+              />
+              <label className="form-check-label small" htmlFor="vegetarian">
+                Vegetarian
+              </label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                onChange={(event) => handleNutAllergy(event)}
+                type="checkbox"
+                id="nutAllergy"
+              />
+              <label className="form-check-label small" htmlFor="nutAllergy">
+                Nut free
+              </label>
+            </div>
           </a>
         </div>
 
@@ -404,16 +479,9 @@ export const Home = () => {
                     </div>
                   </div>
                 </div>
-                <div className="btn-group" role="group">
-                <Button className="mx-auto" onClick={fetchClasses}>
-                  Search
-                </Button>
-                <br></br>
-                <Button onClick={openNav}>Refine</Button>
-              </div>
-              </div>
 
-                          
+                <Button onClick={openNav}>Add more filters</Button>
+              </div>
 
               <Row> {classCards} </Row>
               <label htmlFor=""></label>
