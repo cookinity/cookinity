@@ -114,13 +114,12 @@ const getDates = function (c) {
       let date = c.timeSlots[0].date;
       alldates.push(date);
     }
-    debugger;
     return alldates;
   }
 }
 
 const filterDates = function (filterdate, c) {
-  if (filterdate == null) {
+  if (filterdate != null) {
     return getDates(c);
   } else {
     return filterdate;
