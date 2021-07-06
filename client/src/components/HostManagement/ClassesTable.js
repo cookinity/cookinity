@@ -97,6 +97,12 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
               Manage Bookable Times
             </Button>
           </LinkContainer>
+          <LinkContainer to={`/classes/${c.id}/create-feedback-host`}>
+            <Button variant="info">
+              <FontAwesomeIcon icon={faClock} />
+              Feedback of the Customer
+            </Button>
+          </LinkContainer>
         </td>
       </tr>
     );

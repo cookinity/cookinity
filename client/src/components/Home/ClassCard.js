@@ -3,6 +3,7 @@ import { Button, Card, ListGroup } from 'react-bootstrap';
 import { run as runHolder } from 'holderjs/holder';
 import { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
+import dayjs from 'dayjs';
 
 // TODO: Please restrict available dates and do not show all of them. Maybe only the two closest to the current date?
 // Simply sort by date, eliminate the ones in the past and pick the first two.
@@ -110,9 +111,11 @@ const getRating = function (res) {
 const getDates = function (c) {
   if (c != null) {
     const alldates = [];
+    alldates.push(<div></div>);
     for (var i = 0; i < c.timeSlots.length; i++) {
-      let date = c.timeSlots[0].date;
+      let date = dayjs(c.timeSlots[0].date).format('llll');
       alldates.push(date);
+      alldates.push(<div></div>);
     }
     return alldates;
   }

@@ -3,8 +3,42 @@ import upload from '../../middleware/multer';
 
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import User, { hashPassword, validateUser } from '../../models/User';
+import { validateFeedback } from '../../models/FeedbackHost';
 
 const router = Router();
+
+// ToDo: router.post für host feedback
+router.post('/:id/feedbacks-hosts', [requireJwtAuth], async (req, res, next) => {
+  try {
+    const tempClass = await Class.findById(req.params.id).populate('host');
+    // check that the class exists in the database
+    if (!tempClass) {
+      return res.status(404).json({ message: 'Class not found!' });
+    }
+    const newFeedbackHost = {
+      ratingCustomerStars: req.body.ratingCustomerStars,
+      ratingCustomer: req.body.ratingCustomer,
+      reviewer: req.user.id,
+      customer: req.host.id,
+    }
+
+    const { error } = validateFeedback(newFeedbackHost);
+    if (error) return res.status(400).json({ message: error.details[0].message });
+    tempClass.feedbacksHosts.push(newFeedbackHost);
+    let updatedClass = {
+      feedbacksHosts: tempClass.feedbacksHosts,
+    };
+    updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
+    res.status(200).json({ updatedClass });
+
+  } catch (err) {
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the feedback creation of the customer.' });
+    }
+  }
+});
 
 router.put('/:id', [requireJwtAuth, upload.single('avatar')], async (req, res, next) => {
   try {
