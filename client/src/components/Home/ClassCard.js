@@ -121,7 +121,6 @@ const getDates = function (c) {
 
 const filterDates = function (filterdate, c) {
   if (filterdate == null) {
-    //return "tEST";
     return getDates(c);
   } else {
     return filterdate;
@@ -161,7 +160,6 @@ export default function ClassCard({ c, date }) {
                   <ListGroup.Item>
                     <span className="font-weight-bold">Rating: </span>
                     {getRating(classrating)}
-
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Available Dates: </span>
