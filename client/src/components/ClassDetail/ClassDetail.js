@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../Layout/Layout';
-import { Alert, Carousel, Container, Row, Col, Image, Button } from 'react-bootstrap';
+import { Alert, Carousel, Container, Row, Col, Image, Button, ProgressBar } from 'react-bootstrap';
 import './classDetail.scss';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -8,10 +8,8 @@ import dayjs from 'dayjs';
 import Loader from 'components/Shared/Loader/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
-
-
-//ToDo: Bookable Dates Anzeigen mit Duration addiert (nur future dates)
-//ToDo: Add section mit essens zeug preferenzen (vegan stuff und so)
+const Spacer = require('react-spacer')
+const { render } = require('react-dom')
 
 function formatAddress(address) {
   return address.street + ', ' + address.zip + ' ' + address.city;
@@ -112,67 +110,162 @@ const ClassDetail = () => {
               {errorMessage}
             </Alert>
           )}
-        <Carousel>{carouselImages}</Carousel>
-        <h1 className="classTitle">{c.title}</h1>
-        <Container>
-          <Row>
-            <Col className="classDetail">
-              <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />
-              {c.pricePerPerson} € per person
+          <Carousel>{carouselImages}</Carousel>
+          <h1 className="classTitle">{c.title}</h1>
+          <Container>
+            <Row>
+              <Col className="classDetail">
+                <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />
+                {c.pricePerPerson} € per person
             </Col>
-            <Col className="classDetail">
-              <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" />{c.minGuests} -{' '}
-              {c.maxGuests} persons
+              <Col className="classDetail">
+                <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" />{c.minGuests} -{' '}
+                {c.maxGuests} persons
             </Col>
-            <Col className="classDetail">
-              <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />
-              {formatAddress(c.meetingAddress)}
-            </Col>
-          </Row>
-        </Container>
-        <ColoredLine color="gray" />
-        <h3>Upcoming Dates <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" /></h3>
-        <ul>
-          {futureDates.map((date) => (
-            <li key={date}>{date.format('dddd, DD MMM, h:mm A')} - {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}</li>
-          ))}
-        </ul>
-        <ColoredLine color="gray" />
-        <h3>Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" /></h3>
-        <Row className="rowFormat">{c.description}</Row>
-        <ColoredLine color="gray" />
-        <h3>What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" /></h3>
-        <Row className="rowFormat">{c.toBring}</Row>
-        <ColoredLine color="gray" />
-        <h3>Dietary preferences</h3>
-        <Container>
-          <Row>
-            <Col><FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />{c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'} </Col>
-            <Col> <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />{c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'} </Col>
-            <Col> <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />{c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'} </Col>
-          </Row>
-        </Container>
-        <ColoredLine color="gray" />
-        <Container>
-          <Row>
-            <Col xs={12} md={3}>
-              <div className="text-center">
-                <Image src={c.host.avatar} className="hostImage" roundedCircle />
-              </div>
-            </Col>
-            <Col xs={12} md={9}>
-              <h3>Get to know your host: {c.host.name}</h3>
-              <p>
-                {c.host.description}
-              </p>
-            </Col>
-          </Row>
-        </Container>
-        <div className="text-center">
-          <LinkContainer to={`/classes/${c.id}/booking`}>
-            <Button variant="primary">Book Now</Button>
-          </LinkContainer>
-        </div>
+              <Col className="classDetail">
+                <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />
+                {formatAddress(c.meetingAddress)}
+              </Col>
+            </Row>
+          </Container>
+          <ColoredLine color="gray" />
+          <h3>Upcoming Dates <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" /></h3>
+          <ul>
+            {futureDates.map((date) => (
+              <li key={date}>{date.format('dddd, DD MMM, h:mm A')} - {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}</li>
+            ))}
+          </ul>
+          <ColoredLine color="gray" />
+          <h3>Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" /></h3>
+          <Row className="rowFormat">{c.description}</Row>
+          <ColoredLine color="gray" />
+          <h3>What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" /></h3>
+          <Row className="rowFormat">{c.toBring}</Row>
+          <ColoredLine color="gray" />
+
+          {/* Dietary preferences */}
+          <h3>Dietary preferences</h3>
+          <Container>
+            <Row>
+              <Col><FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />{c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'} </Col>
+              <Col> <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />{c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'} </Col>
+              <Col> <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />{c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'} </Col>
+            </Row>
+          </Container>
+          <ColoredLine color="gray" />
+
+          {/* Class Feedback */}
+          <h3>Feedback <FontAwesomeIcon icon="star" size="1x" className="iconPos fa-fw" /></h3>
+          <h6>Average: {c.avgRating.toFixed(2)} ({c.feedbacks.length} Ratings)</h6>
+          <Container>
+            <Row>
+              {/* OverallRating */}
+              <Spacer width='12px' />
+              <Col xs={6} md={4}>
+                <Row className="align-items-center">
+                  Overall Rating
+                  <Spacer grow='1' />
+                  <div className="ratingBar">
+                    <ProgressBar now={(c.avgRating) / 5 * 100} />
+                  </div>
+                  <div className="ratingFontSize">{c.avgRating.toFixed(2)}</div>
+                </Row>
+              </Col>
+              <Col xs={3} md={3}>
+              </Col>
+              {/* HostRating */}
+              <Spacer width='12px' />
+              <Col xs={6} md={4}>
+                <Row className="align-items-center">
+                  Host Rating
+                <Spacer grow='1' />
+                  <div className="ratingBar">
+                    <ProgressBar now={(c.hostRating) / 5 * 100} />
+                  </div>
+                  <div className="ratingFontSize">{c.hostRating.toFixed(2)}</div>
+                </Row>
+              </Col>
+            </Row>
+            <Row>
+            {/* TasteRating */}
+            <Spacer width='12px' />
+            <Col xs={6} md={4}>
+                <Row className="align-items-center">
+                  Taste Rating
+                  <Spacer grow='1' />
+                  <div className="ratingBar">
+                    <ProgressBar now={(c.tasteRating) / 5 * 100} />
+                  </div>
+                  <div className="ratingFontSize">{c.tasteRating.toFixed(2)}</div>
+                </Row>
+              </Col>
+              <Col xs={3} md={3}>
+              </Col>
+              {/* LocationRating */}
+              <Spacer width='12px' />
+              <Col xs={6} md={4}>
+                <Row className="align-items-center">
+                  Location Rating
+                <Spacer grow='1' />
+                  <div className="ratingBar">
+                    <ProgressBar now={(c.locationRating) / 5 * 100} />
+                  </div>
+                  <div className="ratingFontSize">{c.locationRating.toFixed(2)}</div>
+                </Row>
+              </Col>
+            </Row>
+            <Row>
+              {/* ValueToMoneyRating */}
+              <Spacer width='12px' />
+              <Col xs={6} md={4}>
+                <Row className="align-items-center">
+                  Value-To-Money Rating
+                  <Spacer grow='1' />
+                  <div className="ratingBar">
+                    <ProgressBar now={(c.vtmrRating) / 5 * 100} />
+                  </div>
+                  <div className="ratingFontSize">{c.vtmrRating.toFixed(2)}</div>
+                </Row>
+              </Col>
+              <Col xs={1} md={3}>
+              </Col>
+              {/* ExperienceRating */}
+              <Spacer width='12px' />
+              <Col xs={6} md={4}>
+                <Row className="align-items-center">
+                  Experience Rating
+                <Spacer grow='1' />
+                  <div className="ratingBar">
+                    <ProgressBar now={(c.expRating) / 5 * 100} />
+                  </div>
+                  <div className="ratingFontSize">{c.expRating.toFixed(2)}</div>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
+          <ColoredLine color="gray" />
+
+          {/* Host Information */}
+          <Container>
+            <Row>
+              <Col xs={12} md={3}>
+                <div className="text-center">
+                  <Image src={c.host.avatar} className="hostImage" roundedCircle />
+                </div>
+              </Col>
+              <Col xs={12} md={9}>
+                <h3>Get to know your host: {c.host.name}</h3>
+                <p>
+                  {c.host.description}
+                </p>
+              </Col>
+            </Row>
+          </Container>
+          <div className="text-center">
+            <LinkContainer to={`/classes/${c.id}/booking`}>
+              <Button variant="primary">Book Now</Button>
+            </LinkContainer>
+          </div>
         </div>
       </Layout>
     );
