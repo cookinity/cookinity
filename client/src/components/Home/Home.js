@@ -30,7 +30,19 @@ export const Home = () => {
   const [city, setCity] = useState('');
   const [guests, setGuests] = useState('');
   const [price, setPrice] = useState('');
+  const [priceLow, setPriceLow] = useState('');
+  const [priceUp, setPriceUp] = useState('');
   const [rating, setRating] = useState('');
+
+  const starRating4 = document.getElementById('starRating4');
+  const starRating3 = document.getElementById('starRating3');
+  const starRating2 = document.getElementById('starRating2');
+  const starRating1 = document.getElementById('starRating1');
+
+  const priceUnder25 = document.getElementById('priceUnder25');
+  const priceUnder50 = document.getElementById('priceUnder50');
+  const priceUnder100 = document.getElementById('priceUnder100');
+  const priceOver100 = document.getElementById('priceOver100');
 
   useEffect(() => {
     fetchClasses();
@@ -51,7 +63,8 @@ export const Home = () => {
         category: cat,
         date,
         guests,
-        price,
+        priceLow,
+        priceUp,
         rating,
       };
 
@@ -93,13 +106,49 @@ export const Home = () => {
     setGuests(document.getElementById('customRange')['value']);
   };
 
-  const handleFilterPrice = (e) => {
-    setPrice(e);
+  const clearCapacityFilter = () => {
+    setGuests(undefined);
+    document.getElementById('amount')['value'] = undefined;
+    document.getElementById('customRange')['value'] = document.getElementById('amount')['value'];
   };
 
-  const handleFilterRating = (e) => {
-    setRating(e);
-  }
+  const handleFilterPrice = (priceId, low, up) => {
+    if (priceId.style.color != 'dodgerblue') {
+      priceId.style.color = 'dodgerblue';
+      var prices = [priceUnder25, priceUnder50, priceUnder100, priceOver100];
+      for (var i = 0; i < prices.length; i++) {
+        if (prices[i] != priceId) prices[i].style.color = 'black';
+      }
+      setPriceLow(low);
+      setPriceUp(up);
+    } else if (priceId.style.color == 'dodgerblue') {
+      priceId.style.color = 'black';
+      setPriceLow(undefined);
+      setPriceUp(undefined);
+    }
+  };
+
+  const handleFilterPriceMin = (priceMin) => {
+    setPriceLow(priceMin);
+  };
+
+  const handleFilterPriceMax = (priceMax) => {
+    setPriceUp(priceMax);
+  };
+
+  const handleFilterRating = (starRating, e) => {
+    if (starRating.style.color != 'dodgerblue') {
+      starRating.style.color = 'dodgerblue';
+      var ratings = [starRating1, starRating2, starRating3, starRating4];
+      for (var i = 0; i < ratings.length; i++) {
+        if (ratings[i] != starRating) ratings[i].style.color = 'black';
+      }
+      setRating(e);
+    } else if (starRating.style.color == 'dodgerblue') {
+      starRating.style.color = 'black';
+      setRating(undefined);
+    }
+  };
 
   const openNav = () => {
     document.getElementById('sidebar').style.width = '20%';
@@ -138,96 +187,139 @@ export const Home = () => {
 
           <a>
             <label htmlFor="averageRating" className="form-label">
-              Average rating
+              Overall rating
             </label>
 
-            <li className="list-group" onClick={() => handleFilterRating(5)}>
+            <li
+              id="starRating4"
+              className="list-group pointer"
+              onClick={() => handleFilterRating(starRating4, 4)}
+            >
               <div className="row col-auto">
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <p className="small px-2">& More</p>
               </div>
             </li>
-            <li className="list-group" onClick={() => handleFilterRating(4)}>
+            <li
+              id="starRating3"
+              className="list-group pointer"
+              onClick={() => handleFilterRating(starRating3, 3)}
+            >
               <div className="row col-auto">
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <p className="small px-2">& More</p>
               </div>
             </li>
-            <li className="list-group" onClick={() => handleFilterRating(3)}>
+            <li
+              id="starRating2"
+              className="list-group pointer"
+              onClick={() => handleFilterRating(starRating2, 2)}
+            >
               <div className="row col-auto">
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star-o text-warning"></i>
                 <i className="fa fa-star-o text-warning"></i>
+                <i className="fa fa-star-o text-warning"></i>
+                <p className="small px-2">& More</p>
               </div>
             </li>
-            <li className="list-group" onClick={() => handleFilterRating(2)}>
-              <div className="row col-auto">
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-              </div>
-            </li>
-            <li className="list-group" onClick={() => handleFilterRating(1)}>
+            <li
+              id="starRating1"
+              className="list-group pointer"
+              onClick={() => handleFilterRating(starRating1, 1)}
+            >
               <div className="row col-auto">
                 <i className="fa fa-star text-warning"></i>
                 <i className="fa fa-star-o text-warning"></i>
                 <i className="fa fa-star-o text-warning"></i>
                 <i className="fa fa-star-o text-warning"></i>
                 <i className="fa fa-star-o text-warning"></i>
+                <p className="small px-2">& More</p>
               </div>
             </li>
           </a>
-
-          <br></br>
           <a>
             <label htmlFor="price" className="form-label">
               Price
             </label>
-            <li className="list-group" onClick={() => handleFilterPrice(25)}>
+            <li
+              id="priceUnder25"
+              className="list-group pointer"
+              onClick={() => handleFilterPrice(priceUnder25, 1, 25)}
+            >
               <div className="row col-auto">
                 <i className="fa fa-eur"></i>
-                <p className="small px-2">under 25€</p>
+                <p className="small px-2">1 - 25€</p>
               </div>
             </li>
-            <li className="list-group" onClick={() => handleFilterPrice(50)}>
-              <div className="row col-auto">
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <p className="small px-2">under 50€</p>
-              </div>
-            </li>
-            <li className="list-group" onClick={() => handleFilterPrice(100)}>
-              <div className="row col-auto">
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <p className="small px-2">under 100€</p>
-              </div>
-            </li>
-            <li className="list-group" onClick={() => handleFilterPrice(250)}>
+            <li
+              id="priceUnder50"
+              className="list-group pointer"
+              onClick={() => handleFilterPrice(priceUnder50, 26, 50)}
+            >
               <div className="row col-auto">
                 <i className="fa fa-eur"></i>
                 <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <p className="small px-2">under 250€</p>
+                <p className="small px-2">26 - 50€</p>
               </div>
             </li>
+            <li
+              id="priceUnder100"
+              className="list-group pointer"
+              onClick={() => handleFilterPrice(priceUnder100, 51, 100)}
+            >
+              <div className="row col-auto">
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <p className="small px-2">51 - 100€</p>
+              </div>
+            </li>
+            <li
+              id="priceOver100"
+              className="list-group pointer"
+              onClick={() => handleFilterPrice(priceOver100, 100, 1000)}
+            >
+              <div className="row col-auto">
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <i className="fa fa-eur"></i>
+                <p className="small px-2">over 100€</p>
+              </div>
+            </li>
+            <div className="d-flex ">
+              <input
+                placeholder="€ Min"
+                type="number"
+                className="form-control custom-width-min-max"
+                min="1"
+                max="1000"
+                onChange={handleFilterPriceMin}
+              />
+              <p className="px-2">-</p>
+              <input
+                placeholder="€ Max"
+                type="number"
+                className="form-control custom-width-min-max"
+                min="1"
+                max="1000"
+                onChange={handleFilterPriceMax}
+              />
+            </div>
           </a>
-
           <a>
             <label htmlFor="customRange" className="form-label">
-              Capacity
+              Number of participants
             </label>
             <div className="row col-auto">
               <label>1</label>
@@ -240,13 +332,11 @@ export const Home = () => {
                 onChange={handleFilterCapacity}
               />
               <label>10</label>
-              <input
-                placeholder="Number of persons"
-                id="amount"
-                type="text"
-                className="form-control custom-width"
-                disabled
-              />
+              <p>&nbsp;</p>
+              <div className="d-flex ">
+                <input id="amount" type="number" className="form-control custom-width" disabled />
+              </div>
+              <Button onClick={clearCapacityFilter}>Clear</Button>
             </div>
           </a>
           <br></br>
@@ -274,56 +364,57 @@ export const Home = () => {
                 </Alert>
               )}
 
-              <div className="filter">
-                <Filters
-                  options={CLASS_CATEGORIES}
-                  prompt="Select category"
-                  fun={(event) => handleFilterCategory(event)}
-                  name="Category:   "
-                />
-
-                <Filters
-                  options={CITY_CATEGORIES}
-                  prompt="Select city"
-                  fun={(event) => handleFilterCity(event)}
-                  name="City:"
-                />
-
-                <div className="form-group row">
-                  <label htmlFor="datePicker" className="col-sm-2 col-form-label">
-                    Date:
-                  </label>
-                  <div className="col-sm-10">
-                    <DatePicker
-                      style={{
-                        width: '100%',
-                        height: '36px',
-                      }}
-                      containerStyle={{
-                        width: '100%',
-                      }}
-                      calendarPosition="bottom-center"
-                      type="input-icon"
-                      id="datePicker"
-                      value={startDate}
-                      onChange={(e) => {
-                        handleFilterDate(e);
-                      }}
-                      placeholder="Select date"
-                    />
+              <div className="d-flex justify-content-center">
+                <div className="filter">
+                  <Filters
+                    options={CLASS_CATEGORIES}
+                    prompt="Select category"
+                    fun={(event) => handleFilterCategory(event)}
+                  />
+                </div>
+                <p>&nbsp;</p>
+                <div className="filter">
+                  <Filters
+                    options={CITY_CATEGORIES}
+                    prompt="Select city"
+                    fun={(event) => handleFilterCity(event)}
+                  />
+                </div>
+                <p>&nbsp;</p>
+                <div className="filter">
+                  <div className="form-group row">
+                    <div className="col-sm-10">
+                      <DatePicker
+                        style={{
+                          width: '100%',
+                          height: '36px',
+                        }}
+                        containerStyle={{
+                          width: '100%',
+                        }}
+                        calendarPosition="bottom-center"
+                        type="input-icon"
+                        id="datePicker"
+                        value={startDate}
+                        onChange={(e) => {
+                          handleFilterDate(e);
+                        }}
+                        placeholder="Select date"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="btn-group" role="group">
+                <div className="btn-group" role="group">
                 <Button className="mx-auto" onClick={fetchClasses}>
                   Search
                 </Button>
                 <br></br>
-                <Button onClick={openNav}>Refine your search</Button>
+                <Button onClick={openNav}>Refine</Button>
+              </div>
               </div>
 
-              <p></p>
+                          
+
               <Row> {classCards} </Row>
               <label htmlFor=""></label>
 

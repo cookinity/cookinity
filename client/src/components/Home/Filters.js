@@ -1,19 +1,12 @@
-//ToDo: Add label to the left side of the filters
-//ToDo: Add search icon button to search with filters --> Collect filter and only if the user presses search apply filter
-//ToDo: Make it possible to clear a filter
-
 import React from 'react';
 import './Home.scss';
 
-const Filters = ({ options, prompt, fun, name }) => {
+const Filters = ({ options, prompt, fun }) => {
   return (
     <form>
       <div className="form-group row">
-        <label htmlFor="select-criteria" className="col-sm-2 col-form-label">
-          {name}
-        </label>
         <div className="col-sm-10">
-          <select 
+          <select
             data-icon="fa-heart"
             className="form-control selectpicker"
             onChange={fun}

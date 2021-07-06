@@ -20,7 +20,7 @@ var photosUpload = upload.fields([
 ]);
 
 router.post('/query', async (req, res, next) => {
-  let { city, category, date, guests, price, rating, limit, skip } = req.body;
+  let { city, category, date, guests, priceLow, priceUp, rating, limit, skip } = req.body;
 
   if (date) {
     date = dayjs(date);
@@ -56,13 +56,15 @@ router.post('/query', async (req, res, next) => {
       });
     }
     // Apply Price Filter
-    if (price) {
-      classes = classes.filter((c) => c.pricePerPerson < price)
+    if (priceUp && priceLow) {
+      classes = classes.filter((c) => {
+        return c.pricePerPerson < (priceUp + 1) && c.pricePerPerson >= priceLow;
+      });
     }
-    // Apply Rating Filter 
-    //if(rating) {
-    //  classes = classes.filter((c) => c. === rating)
-    //}
+    // Apply Rating Filter
+    if (rating) {
+      classes = classes.filter((c) => c.feedbacks.overallRatingStars >= rating);
+    }
 
     const numberOfEntries = classes.length;
     // Apply Skip and Limit
