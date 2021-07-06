@@ -19,8 +19,91 @@ const truncateString = function (str, num) {
 const getRating = function (res) {
   if (res == -1) {
     return "No Feedback given"
-  } else {
-    return res;
+  } else if (res < 1) { //Error Handling
+    return "Something with the feedback went wrong."
+  } else if (res < 1.25) { //1 Stern
+    return (
+      <div>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+      </div>);
+  } else if (res < 1.75) { //1.5 Sterne
+    return (
+      <div>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star-half-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+      </div>);
+  } else if (res < 2.25) { //2 Sterne
+    return (
+      <div>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+      </div>);
+  } else if (res < 2.75) { //2.5 Sterne
+    return (
+      <div>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star-half-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+      </div>);
+  } else if (res < 3.25) { //3 Sterne
+    return (
+      <div>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+      </div>);
+  } else if (res < 3.75) { //3.5 Sterne
+    return (
+      <div>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star-half-o text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+      </div>);
+  } else if (res < 4.25) { //4 Sterne
+    return (
+      <div>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star-o text-warning"></i>
+      </div>);
+  } else if (res < 4.75) { //4.5 Sterne
+    return (
+      <div>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star-half-o text-warning"></i>
+      </div>);
+  } else if (res <= 5) { //5 Sterne
+    return (
+      <div>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+        <i className="fa fa-star text-warning"></i>
+      </div>);
+  } else { //Error Handling
+    return "Something with the feedback went wrong."
   }
 };
 
@@ -57,6 +140,7 @@ export default function ClassCard({ c }) {
                   <ListGroup.Item>
                     <span className="font-weight-bold">Rating: </span>
                     {getRating(classrating)}
+
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Available Dates: </span>
