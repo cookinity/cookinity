@@ -15,6 +15,7 @@ const BookedClasses = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  // @ts-ignore
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
