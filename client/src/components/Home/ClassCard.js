@@ -120,7 +120,7 @@ const getDates = function (c) {
 }
 
 const filterDates = function (filterdate, c) {
-  if (filterdate == null) {
+  if (filterdate != null) {
     return getDates(c);
   } else {
     return filterdate;
