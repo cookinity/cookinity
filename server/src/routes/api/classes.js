@@ -121,7 +121,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const c = await Class.findById(req.params.id).populate('host');
+    const c = await Class.findById(req.params.id).populate('host').populate({path: 'feedbacks.reviewer'});
     if (!c) return res.status(404).json({ message: 'No class found.' });
     res.json({ class: c.toJSON() });
   } catch (err) {
@@ -249,7 +249,6 @@ router.delete('/:classId/timeslots/:tsId', [requireJwtAuth], async (req, res, ne
 
 router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
   try {
-    debugger
     const tempClass = await Class.findById(req.params.id).populate('host');
     // check that the class exists in the database
     if (!tempClass) {
