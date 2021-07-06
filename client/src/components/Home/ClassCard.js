@@ -107,11 +107,32 @@ const getRating = function (res) {
   }
 };
 
-export default function ClassCard({ c }) {
+const getDates = function (c) {
+  if (c != null) {
+    const alldates = [];
+    for (var i = 0; i < c.timeSlots.length; i++) {
+      let date = c.timeSlots[0].date;
+      alldates.push(date);
+    }
+    debugger;
+    return alldates;
+  }
+}
+
+const filterDates = function (filterdate, c) {
+  if (filterdate == null) {
+    //return "tEST";
+    return getDates(c);
+  } else {
+    return filterdate;
+  }
+}
+
+export default function ClassCard({ c, date }) {
   useEffect(() => {
     runHolder('image-class-name');
   });
-
+  const startDate = date;
   const shortdescription = c.description ? truncateString(c.description, 200) : '';
   const allratings = c.feedbacks;
   let sum = 0;
@@ -144,11 +165,11 @@ export default function ClassCard({ c }) {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Available Dates: </span>
-                    Dates missing
+                    {filterDates(startDate, c)}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Price: </span>
-                    <div>{c.pricePerPerson}€</div>
+                    {c.pricePerPerson}€
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <span className="font-weight-bold">Participants: </span>
@@ -163,9 +184,6 @@ export default function ClassCard({ c }) {
         </Card.Text>
         <LinkContainer to={`/classes/${c.id}`}>
           <Button variant="primary" block>Go to course</Button>
-        </LinkContainer>
-        <LinkContainer to={`/classes/${c.id}/create-feedback`}>
-          <Button variant="primary" block>Go to feedback</Button>
         </LinkContainer>
       </Card.Body>
     </Card>
