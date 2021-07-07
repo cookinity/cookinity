@@ -15,6 +15,9 @@ export const validationSchema = Yup.object().shape({
   veganFriendly: Yup.boolean(),
   vegetarianFriendly: Yup.boolean(),
   nutAllergyFriendly: Yup.boolean(),
+  pescatarianFriendly: Yup.boolean(),
+  eggFree: Yup.boolean(),
+  soyFree: Yup.boolean(),
   minGuests: Yup.number()
     .required('Min. Guests is required')
     .positive('Min. Guests must be positive')

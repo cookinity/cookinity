@@ -212,6 +212,9 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       veganFriendly: req.body.veganFriendly,
       vegetarianFriendly: req.body.vegetarianFriendly,
       nutAllergyFriendly: req.body.nutAllergyFriendly,
+      pescatarianFriendly: req.body.pescatarianFriendly,
+      eggFree: req.body.vegetarianFriendly,
+      soyFree: req.body.nutAllergyFriendly,
     };
 
     Object.keys(updatedClass).forEach((key) => (updatedClass[key] === undefined ? delete updatedClass[key] : {}));
@@ -269,6 +272,7 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
       experienceRatingStars: req.body.experienceRatingStars,
       experienceRating: req.body.experienceRating,
       reviewer: req.user.id,
+      feedbackDate: dayjs().utc().toJSON()
     };
  
     // ToDo: We need to add verification such that only people who have really booked the class can make a review
@@ -279,6 +283,13 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
     let updatedClass = {
       feedbacks: tempClass.feedbacks,
     };
+    //update Class Feedback Ratings
+    updatedClass.avgRating= tempClass.feedbacks.map((f) => f.overallRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.hostRating= tempClass.feedbacks.map((f) => f.hostRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.tasteRating= tempClass.feedbacks.map((f) => f.tasteRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.locationRating= tempClass.feedbacks.map((f) => f.locationRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.vtmrRating= tempClass.feedbacks.map((f) => f.vtmrRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.expRating= tempClass.feedbacks.map((f) => f.experienceRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
     updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
  
     res.status(200).json({ updatedClass });
@@ -372,6 +383,9 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     veganFriendly: req.body.veganFriendly,
     vegetarianFriendly: req.body.vegetarianFriendly,
     nutAllergyFriendly: req.body.nutAllergyFriendly,
+    pescatarianFriendly: req.body.pescatarianFriendly,
+    eggFree: req.body.eggFree,
+    soyFree: req.body.soyFree,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
   };
 
