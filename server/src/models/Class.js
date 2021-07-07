@@ -134,6 +134,18 @@ const classSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    pescatarianFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    eggFree: {
+      type: Boolean,
+      default: false,
+    },
+    soyFree: {
+      type: Boolean,
+      required: false
+    },
     avgRating: {
       type: Number,
       required: false
@@ -205,6 +217,9 @@ classSchema.methods.toJSON = function () {
     veganFriendly: this.veganFriendly,
     vegetarianFriendly: this.vegetarianFriendly,
     nutAllergyFriendly: this.nutAllergyFriendly,
+    pescatarianFriendly: this.pescatarianFriendly,
+    eggFree: this.eggFree,
+    soyFree: this.soyFree,
     avgRating: this.avgRating,
     hostRating: this.hostRating,
     tasteRating: this.tasteRating,
@@ -256,6 +271,9 @@ export const validateClass = (c) => {
     timeSlots: Joi.array().items(timeSlotJoiSchema),
     veganFriendly: Joi.boolean(),
     vegetarianFriendly: Joi.boolean(),
+    pescatarianFriendly: Joi.boolean(),
+    eggFree: Joi.boolean(),
+    soyFree: Joi.boolean(),
     nutAllergyFriendly: Joi.boolean(),
     feedbacks: Joi.array().items(feedbackJoiSchema),
   });

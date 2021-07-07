@@ -212,6 +212,9 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       veganFriendly: req.body.veganFriendly,
       vegetarianFriendly: req.body.vegetarianFriendly,
       nutAllergyFriendly: req.body.nutAllergyFriendly,
+      pescatarianFriendly: req.body.pescatarianFriendly,
+      eggFree: req.body.vegetarianFriendly,
+      soyFree: req.body.nutAllergyFriendly,
     };
 
     Object.keys(updatedClass).forEach((key) => (updatedClass[key] === undefined ? delete updatedClass[key] : {}));
@@ -380,6 +383,9 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     veganFriendly: req.body.veganFriendly,
     vegetarianFriendly: req.body.vegetarianFriendly,
     nutAllergyFriendly: req.body.nutAllergyFriendly,
+    pescatarianFriendly: req.body.pescatarianFriendly,
+    eggFree: req.body.eggFree,
+    soyFree: req.body.soyFree,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
   };
 

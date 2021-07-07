@@ -67,7 +67,7 @@ const ClassDetail = () => {
           }
         })
         setNumFeedback(result.data.class.feedbacks.length)
-        result.data.class.feedbacks = result.data.class.feedbacks.slice(0,2)
+        result.data.class.feedbacks = result.data.class.feedbacks.slice(0,10)
         setClass(result.data.class);
         //set available photos
         const p = [];
@@ -160,17 +160,22 @@ const ClassDetail = () => {
           {/* Dietary preferences */}
           <h3>Dietary preferences</h3>
           <Container>
-            <Row>
+            <Row className="dietaryRows">
               <Col><FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />{c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'} </Col>
               <Col> <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />{c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'} </Col>
               <Col> <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />{c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'} </Col>
+            </Row>
+            <Row className="dietaryRows">
+              <Col><FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" />{c.pescatarianFriendly ? 'pescatarian ✔' : 'pescatarian ❌'} </Col>
+              <Col> <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" />{c.eggFree ? 'egg-free ✔ ' : 'egg-free ❌'} </Col>
+              <Col> <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" />{c.soyFree ? 'soy-free  ✔' : 'soy-free ❌'} </Col>
             </Row>
           </Container>
           <ColoredLine color="gray" />
 
           {/* Class Feedback */}
           <h3>Feedback <FontAwesomeIcon icon="star" size="1x" className="iconPos fa-fw" /></h3>
-          <h6>Average: {c.avgRating.toFixed(2)} ({numFeedback} Ratings)</h6>
+          <h6>Average: {c.avgRating?.toFixed(2)} ({numFeedback} Ratings)</h6>
           <Container className="ratingContainer">
             <Row>
               {/* OverallRating */}
@@ -181,7 +186,7 @@ const ClassDetail = () => {
                   <div className="ratingBar">
                     <ProgressBar now={(c.avgRating) / 5 * 100} />
                   </div>
-                  <div className="ratingFontSize">{c.avgRating.toFixed(2)}</div>
+                  <div className="ratingFontSize">{c.avgRating?.toFixed(2)}</div>
                 </Row>
               </Col>
               <Col xs={3} md={3}>
@@ -194,7 +199,7 @@ const ClassDetail = () => {
                   <div className="ratingBar">
                     <ProgressBar now={(c.hostRating) / 5 * 100} />
                   </div>
-                  <div className="ratingFontSize">{c.hostRating.toFixed(2)}</div>
+                  <div className="ratingFontSize">{c.hostRating?.toFixed(2)}</div>
                 </Row>
               </Col>
             </Row>
@@ -207,7 +212,7 @@ const ClassDetail = () => {
                   <div className="ratingBar">
                     <ProgressBar now={(c.tasteRating) / 5 * 100} />
                   </div>
-                  <div className="ratingFontSize">{c.tasteRating.toFixed(2)}</div>
+                  <div className="ratingFontSize">{c.tasteRating?.toFixed(2)}</div>
                 </Row>
               </Col>
               <Col xs={3} md={3}>
@@ -220,7 +225,7 @@ const ClassDetail = () => {
                   <div className="ratingBar">
                     <ProgressBar now={(c.locationRating) / 5 * 100} />
                   </div>
-                  <div className="ratingFontSize">{c.locationRating.toFixed(2)}</div>
+                  <div className="ratingFontSize">{c.locationRating?.toFixed(2)}</div>
                 </Row>
               </Col>
             </Row>
@@ -233,7 +238,7 @@ const ClassDetail = () => {
                   <div className="ratingBar">
                     <ProgressBar now={(c.vtmrRating) / 5 * 100} />
                   </div>
-                  <div className="ratingFontSize">{c.vtmrRating.toFixed(2)}</div>
+                  <div className="ratingFontSize">{c.vtmrRating?.toFixed(2)}</div>
                 </Row>
               </Col>
               <Col xs={3} md={3}>
@@ -246,7 +251,7 @@ const ClassDetail = () => {
                   <div className="ratingBar">
                     <ProgressBar now={(c.expRating) / 5 * 100} />
                   </div>
-                  <div className="ratingFontSize">{c.expRating.toFixed(2)}</div>
+                  <div className="ratingFontSize">{c.expRating?.toFixed(2)}</div>
                 </Row>
               </Col>
             </Row>
@@ -258,12 +263,12 @@ const ClassDetail = () => {
                 <Col key={f.id}>
                   <Container>
                     <Row>
-                      <Col xs={12} sm={12} md={2}>
+                      <Col xs={12} md={2}>
                         <Image src={f.reviewer.avatar} className="reviewerImage" roundedCircle />
                       </Col>
-                      <Col xs={12} sm={12} md={10}>
+                      <Col xs={12} md={10}>
                         {f.reviewer.name}
-                        <p>{dayjs(f.feedbackDate).format('llll')}</p>
+                        <p>{dayjs(f.feedbackDate).format('MMMM YYYY')}</p>
                       </Col>
                     </Row>
                     <Row>
