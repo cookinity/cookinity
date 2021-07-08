@@ -4,10 +4,6 @@ import { run as runHolder } from 'holderjs/holder';
 import { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 
-// TODO: Please restrict available dates and do not show all of them. Maybe only the two closest to the current date?
-// Simply sort by date, eliminate the ones in the past and pick the first two.
-
-
 const truncateString = function (str, num) {
   if (str.length > num) {
     return str.slice(0, num) + '...';
@@ -143,7 +139,7 @@ export default function ClassCard({ c, date }) {
     classrating = sum / allratings.length;
   }
   return (
-    <Card border="primary" className="mb-3 shadow classCard">
+    <Card border="primary" className="shadow classCard">
       <Card.Img className="image-class-name" variant="top" src={c.coverPhoto} />
       <Card.Body>
         <Card.Title>{c.title}</Card.Title>
@@ -181,7 +177,9 @@ export default function ClassCard({ c, date }) {
           </div>
         </Card.Text>
         <LinkContainer to={`/classes/${c.id}`}>
-          <Button variant="primary" block>Go to course</Button>
+          <Button variant="primary" block>
+            Go to course
+          </Button>
         </LinkContainer>
       </Card.Body>
     </Card>

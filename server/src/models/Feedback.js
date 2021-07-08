@@ -39,8 +39,12 @@ export const feedbackSchema = new Schema(
       type: String,
       default: '',
     },
+    
+    feedbackDate: {
+      type: mongoose.Schema.Types.Date,
+      required: true,
+    }
   },
-  { timestamps: true },
 );
 
 feedbackSchema.methods.toJSON = function () {
@@ -54,6 +58,7 @@ feedbackSchema.methods.toJSON = function () {
     vtmrRatingStars: this.vtmrRatingStars,
     experienceRatingStars: this.experienceRatingStars,
     reviewer: this.reviewer.toJSON(),
+    feedbackDate: this.feedbackDate
   };
 };
 
@@ -66,6 +71,7 @@ export const feedbackJoiSchema = Joi.object().keys({
   vtmrRatingStars: Joi.number().min(1).max(5).positive().required(),
   experienceRatingStars: Joi.number().min(1).max(5).positive().required(),
   reviewer: Joi.objectId().required(),
+  feedbackDate: Joi.date().required(),
 });
 
 export const validateFeedback = (f) => {
