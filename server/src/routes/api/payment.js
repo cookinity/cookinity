@@ -31,7 +31,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   // Handle the checkout.session.completed event --> customer payment for the cooking class
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const { userId, classId, timeSlotId, guestNumber} = session.metadata;
+    const { userId, classId, timeSlotId, guestNumber } = session.metadata;
     const c = await Class.findById(classId);
     const ts = c.timeSlots.id(timeSlotId);
 
@@ -138,6 +138,7 @@ function generateAccountLink(accountID, origin) {
 }
 
 router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
+  debugger;
   try {
     const { classId, timeSlotId, numberOfGuests } = req.query;
     if (!numberOfGuests || !timeSlotId || !numberOfGuests) {
@@ -195,7 +196,7 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
       cancel_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?canceled=true`,
     });
     res.json({ session });
-  } catch (err) {}
+  } catch (err) { }
 });
 
 export default router;

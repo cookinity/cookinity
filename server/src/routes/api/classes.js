@@ -10,6 +10,7 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 import Class, { validateClass, validateTimeSlot } from '../../models/Class';
 import upload from '../../middleware/multer';
+import { validateFeedback } from '../../models/Feedback';
 var ObjectId = require('mongoose').Types.ObjectId;
 
 const router = Router();
@@ -350,6 +351,48 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
     }
   }
 });
+
+//router.post suchen
+router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
+  debugger;
+  try {
+    const tempClass = await Class.findById(req.params.id).populate('host');
+    // check that the class exists in the database
+    if (!tempClass) {
+      return res.status(404).json({ message: 'Class not found!' });
+    }
+    const newFeedback = {
+      overallRatingStars: req.body.overallRatingStars,
+      overallRating: req.body.overallRating,
+      hostRatingStars: req.body.hostRatingStars,
+      tasteRatingStars: req.body.tasterankingstars,
+      tasteRatingStars: req.body.tasteRatingStars,
+      locationRatingStars: req.body.locationRatingStars,
+      vtmrRatingStars: req.body.vtmrRatingStars,
+      experienceRatingStars: req.body.experienceRatingStars,
+      reviewer: req.user.id,
+    };
+
+    // ToDo: We need to add verification such that only people who have really booked the class can make a review
+
+    debugger;
+    const { error } = validateFeedback(newFeedback);
+    if (error) return res.status(400).json({ message: error.details[0].message });
+    tempClass.feedbacks.push(newFeedback);
+    let updatedClass = {
+      feedbacks: tempClass.feedbacks,
+    };
+    updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
+    res.status(200).json({ updatedClass });
+  } catch (err) {
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the feedback creation.' });
+    }
+  }
+});
+
 router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
   let coverPhoto = undefined;
   let photoOne = undefined;
