@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {validateFeedback} from '../../models/Feedback';
+import { validateFeedback } from '../../models/Feedback';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -10,7 +10,6 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 import Class, { validateClass, validateTimeSlot } from '../../models/Class';
 import upload from '../../middleware/multer';
-import { validateFeedback } from '../../models/Feedback';
 var ObjectId = require('mongoose').Types.ObjectId;
 
 const router = Router();
@@ -59,9 +58,9 @@ router.post('/query', async (req, res, next) => {
     }
     // Apply Price Filter
     if (price) {
-      classes = classes.filter((c) => c.pricePerPerson < price)
+      classes = classes.filter((c) => c.pricePerPerson < price);
     }
-    // Apply Rating Filter 
+    // Apply Rating Filter
     //if(rating) {
     //  classes = classes.filter((c) => c. === rating)
     //}
@@ -122,7 +121,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const c = await Class.findById(req.params.id).populate('host').populate({path: 'feedbacks.reviewer'});
+    const c = await Class.findById(req.params.id).populate('host').populate({ path: 'feedbacks.reviewer' });
     if (!c) return res.status(404).json({ message: 'No class found.' });
     res.json({ class: c.toJSON() });
   } catch (err) {
@@ -258,7 +257,7 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
     if (!tempClass) {
       return res.status(404).json({ message: 'Class not found!' });
     }
- 
+
     const newFeedback = {
       overallRatingStars: req.body.overallRatingStars,
       overallRating: req.body.overallRating,
@@ -273,11 +272,11 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
       experienceRatingStars: req.body.experienceRatingStars,
       experienceRating: req.body.experienceRating,
       reviewer: req.user.id,
-      feedbackDate: dayjs().utc().toJSON()
+      feedbackDate: dayjs().utc().toJSON(),
     };
- 
+
     // ToDo: We need to add verification such that only people who have really booked the class can make a review
- 
+
     const { error } = validateFeedback(newFeedback);
     if (error) return res.status(400).json({ message: error.details[0].message });
     tempClass.feedbacks.push(newFeedback);
@@ -285,14 +284,20 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
       feedbacks: tempClass.feedbacks,
     };
     //update Class Feedback Ratings
-    updatedClass.avgRating= tempClass.feedbacks.map((f) => f.overallRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
-    updatedClass.hostRating= tempClass.feedbacks.map((f) => f.hostRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
-    updatedClass.tasteRating= tempClass.feedbacks.map((f) => f.tasteRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
-    updatedClass.locationRating= tempClass.feedbacks.map((f) => f.locationRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
-    updatedClass.vtmrRating= tempClass.feedbacks.map((f) => f.vtmrRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
-    updatedClass.expRating= tempClass.feedbacks.map((f) => f.experienceRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.avgRating =
+      tempClass.feedbacks.map((f) => f.overallRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.hostRating =
+      tempClass.feedbacks.map((f) => f.hostRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.tasteRating =
+      tempClass.feedbacks.map((f) => f.tasteRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.locationRating =
+      tempClass.feedbacks.map((f) => f.locationRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.vtmrRating =
+      tempClass.feedbacks.map((f) => f.vtmrRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.expRating =
+      tempClass.feedbacks.map((f) => f.experienceRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
     updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
- 
+
     res.status(200).json({ updatedClass });
   } catch (err) {
     if (err.message) {
