@@ -117,7 +117,7 @@ export const Home = () => {
 
   const classCards = filteredClasses.map((c) => {
     return (
-      <Col className="mb-1" sm={12} lg={6}>
+      <Col className="mb-1" sm={12} lg={4}>
         <ClassCard c={c} date={startDate} key={c.id}></ClassCard>
       </Col>
     );
@@ -164,7 +164,7 @@ export const Home = () => {
             <Col xs={12} lg={12} xl={1}>
               <FilterSideBar></FilterSideBar>
             </Col>
-            <Col xs={12} lg={12} xl={6}>
+            <Col xs={12} lg={12} xl={7}>
               <Container fluid>
                 <Row>{classCards}</Row>
                 <Row>
@@ -184,7 +184,7 @@ export const Home = () => {
                 </Row>
               </Container>
             </Col>
-            <Col xs={12} lg={12} xl={5}>
+            <Col xs={12} lg={12} xl={4}>
               {filteredClasses.length > 0 ? (
                 <ClassesMap classes={filteredClasses}></ClassesMap>
               ) : null}
