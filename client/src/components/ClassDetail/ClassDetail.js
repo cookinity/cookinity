@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import Loader from 'components/Shared/Loader/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
+import ClassDetailMap from './ClassDetailMap';
 const Spacer = require('react-spacer')
 const { render } = require('react-dom')
 
@@ -143,6 +144,10 @@ const ClassDetail = () => {
             </Row>
           </Container>
           <ColoredLine color="gray" />
+          <div className="mr-4 ml-4">
+            <ClassDetailMap c={c}></ClassDetailMap>
+          </div>
+          <ColoredLine color="gray" />
           <h3>Upcoming Dates <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" /></h3>
           <ul>
             {futureDates.map((date) => (
@@ -172,7 +177,6 @@ const ClassDetail = () => {
             </Row>
           </Container>
           <ColoredLine color="gray" />
-
           {/* Class Feedback */}
           <h3>Feedback <FontAwesomeIcon icon="star" size="1x" className="iconPos fa-fw" /></h3>
           <h6>Average: {c.avgRating?.toFixed(2)} ({numFeedback} Ratings)</h6>
