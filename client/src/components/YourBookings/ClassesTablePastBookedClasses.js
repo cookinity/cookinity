@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import { Accordion, Button, Card, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import dayjs from 'dayjs';
 
-export const ClassesTableYourBookings = ({ yourbookings }) => {
+export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
 
   const columns = (
     <tr>
@@ -29,7 +30,6 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
         <td>{b.numberOfGuests}</td>
         <td>{priceineuro} Euro</td>
         <td>{b.host.email}</td>
-
         <td>
           <LinkContainer to={`/${b.host.username}`}>
             <Button className="mr-1" variant="info">
@@ -41,6 +41,11 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
           <LinkContainer to={`/classes/${b.class.id}`}>
             <Button className="mr-1" variant="info">
               <FontAwesomeIcon icon="info-circle" /> Go to Course
+            </Button>
+          </LinkContainer>
+          <LinkContainer to={`/classes/${b.class.id}/create-feedback`}>
+            <Button className="mr-1" variant="sucess">
+              <FontAwesomeIcon icon={faPlus} /> Give Feedback
             </Button>
           </LinkContainer>
         </td>

@@ -117,7 +117,7 @@ export const Home = () => {
   const classCards = filteredClasses.map((c) => {
     return (
       <Col className="mb-1" sm={12} md={6} lg={4}>
-        <ClassCard c={c} key={c.id}></ClassCard>
+        <ClassCard c={c} date={startDate} key={c.id}></ClassCard>
       </Col>
     );
   });
