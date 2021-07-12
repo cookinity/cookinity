@@ -44,7 +44,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       numberOfGuests: guestNumber,
       totalPrice: session.amount_total,
       currency: session.currency,
-      bookingDate: dayjs().utc().toJSON()
+      bookingDate: dayjs().utc().toJSON(),
     };
 
     try {
@@ -138,7 +138,6 @@ function generateAccountLink(accountID, origin) {
 }
 
 router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
-  debugger;
   try {
     const { classId, timeSlotId, numberOfGuests } = req.query;
     if (!numberOfGuests || !timeSlotId || !numberOfGuests) {
@@ -196,7 +195,7 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
       cancel_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?canceled=true`,
     });
     res.json({ session });
-  } catch (err) { }
+  } catch (err) {}
 });
 
 export default router;

@@ -361,7 +361,6 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
 
 //router.post suchen
 router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
-  debugger;
   try {
     const tempClass = await Class.findById(req.params.id).populate('host');
     // check that the class exists in the database
@@ -382,7 +381,6 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
 
     // ToDo: We need to add verification such that only people who have really booked the class can make a review
 
-    debugger;
     const { error } = validateFeedback(newFeedback);
     if (error) return res.status(400).json({ message: error.details[0].message });
     tempClass.feedbacks.push(newFeedback);
