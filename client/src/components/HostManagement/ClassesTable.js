@@ -90,7 +90,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
           </LinkContainer>
           <Button variant="danger" className="ml-2" onClick={handleShow(c)}>
             <FontAwesomeIcon icon={faTrash} /> Delete
-          </Button>
+          </Button>{' '}
           <LinkContainer to={`/hostmanagement/edit-class/${c.id}/times`}>
             <Button variant="secondary">
               <FontAwesomeIcon icon={faClock} />

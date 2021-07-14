@@ -58,7 +58,7 @@ const ClassDetail = () => {
         result.data.class.feedbacks.sort((a, b) => {
           const aDate = dayjs(a.feedbackDate)
           const bDate = dayjs(b.feedbackDate)
-          if(aDate.isBefore(bDate)) {
+          if (aDate.isBefore(bDate)) {
             return 1;
           } else if (aDate.isAfter(bDate)) {
             return -1;
@@ -67,7 +67,7 @@ const ClassDetail = () => {
           }
         })
         setNumFeedback(result.data.class.feedbacks.length)
-        result.data.class.feedbacks = result.data.class.feedbacks.slice(0,10)
+        result.data.class.feedbacks = result.data.class.feedbacks.slice(0, 10)
         setClass(result.data.class);
         //set available photos
         const p = [];
@@ -124,9 +124,10 @@ const ClassDetail = () => {
               {errorMessage}
             </Alert>
           )}
-          <Carousel>{carouselImages}</Carousel>
-          <h1 className="classTitle">{c.title}</h1>
+
           <Container>
+            <Carousel>{carouselImages}</Carousel>
+            <h1 className="classTitle">{c.title}</h1>
             <Row>
               <Col className="classDetail">
                 <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />
@@ -141,173 +142,171 @@ const ClassDetail = () => {
                 {formatAddress(c.meetingAddress)}
               </Col>
             </Row>
-          </Container>
-          <ColoredLine color="gray" />
-          <h3>Upcoming Dates <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" /></h3>
-          <ul>
-            {futureDates.map((date) => (
-              <li key={date}>{date.format('dddd, DD MMM, h:mm A')} - {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}</li>
-            ))}
-          </ul>
-          <ColoredLine color="gray" />
-          <h3>Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" /></h3>
-          <Row className="rowFormat">{c.description}</Row>
-          <ColoredLine color="gray" />
-          <h3>What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" /></h3>
-          <Row className="rowFormat">{c.toBring}</Row>
-          <ColoredLine color="gray" />
-
-          {/* Dietary preferences */}
-          <h3>Dietary preferences</h3>
-          <Container>
-            <Row className="dietaryRows">
-              <Col><FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />{c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'} </Col>
-              <Col> <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />{c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'} </Col>
-              <Col> <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />{c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'} </Col>
-            </Row>
-            <Row className="dietaryRows">
-              <Col><FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" />{c.pescatarianFriendly ? 'pescatarian ✔' : 'pescatarian ❌'} </Col>
-              <Col> <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" />{c.eggFree ? 'egg-free ✔ ' : 'egg-free ❌'} </Col>
-              <Col> <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" />{c.soyFree ? 'soy-free  ✔' : 'soy-free ❌'} </Col>
-            </Row>
-          </Container>
-          <ColoredLine color="gray" />
-
-          {/* Class Feedback */}
-          <h3>Feedback <FontAwesomeIcon icon="star" size="1x" className="iconPos fa-fw" /></h3>
-          <h6>Average: {c.avgRating?.toFixed(2)} ({numFeedback} Ratings)</h6>
-          <Container className="ratingContainer">
-            <Row>
-              {/* OverallRating */}
-              <Col xs={6} md={4}>
-                <Row className="align-items-center">
-                  Overall Rating
-                  <Spacer grow='1' />
-                  <div className="ratingBar">
-                    <ProgressBar now={(c.avgRating) / 5 * 100} />
-                  </div>
-                  <div className="ratingFontSize">{c.avgRating?.toFixed(2)}</div>
-                </Row>
-              </Col>
-              <Col xs={3} md={3}>
-              </Col>
-              {/* HostRating */}
-              <Col xs={6} md={4}>
-                <Row className="align-items-center">
-                  Host Rating
-                <Spacer grow='1' />
-                  <div className="ratingBar">
-                    <ProgressBar now={(c.hostRating) / 5 * 100} />
-                  </div>
-                  <div className="ratingFontSize">{c.hostRating?.toFixed(2)}</div>
-                </Row>
-              </Col>
-            </Row>
-            <Row>
-              {/* TasteRating */}
-              <Col xs={6} md={4}>
-                <Row className="align-items-center">
-                  Taste Rating
-                  <Spacer grow='1' />
-                  <div className="ratingBar">
-                    <ProgressBar now={(c.tasteRating) / 5 * 100} />
-                  </div>
-                  <div className="ratingFontSize">{c.tasteRating?.toFixed(2)}</div>
-                </Row>
-              </Col>
-              <Col xs={3} md={3}>
-              </Col>
-              {/* LocationRating */}
-              <Col xs={6} md={4}>
-                <Row className="align-items-center">
-                  Location Rating
-                <Spacer grow='1' />
-                  <div className="ratingBar">
-                    <ProgressBar now={(c.locationRating) / 5 * 100} />
-                  </div>
-                  <div className="ratingFontSize">{c.locationRating?.toFixed(2)}</div>
-                </Row>
-              </Col>
-            </Row>
-            <Row>
-              {/* ValueToMoneyRating */}
-              <Col xs={6} md={4}>
-                <Row className="align-items-center">
-                  Price-Quality Rating
-                  <Spacer grow='1' />
-                  <div className="ratingBar">
-                    <ProgressBar now={(c.vtmrRating) / 5 * 100} />
-                  </div>
-                  <div className="ratingFontSize">{c.vtmrRating?.toFixed(2)}</div>
-                </Row>
-              </Col>
-              <Col xs={3} md={3}>
-              </Col>
-              {/* ExperienceRating */}
-              <Col xs={6} md={4}>
-                <Row className="align-items-center">
-                  Experience Rating
-                <Spacer grow='1' />
-                  <div className="ratingBar">
-                    <ProgressBar now={(c.expRating) / 5 * 100} />
-                  </div>
-                  <div className="ratingFontSize">{c.expRating?.toFixed(2)}</div>
-                </Row>
-              </Col>
-            </Row>
-          </Container>
-          {/* Feedback Comments */}
-          <Container>
-            <Row xs={1} md={2}>
-              {c.feedbacks.map((f) => (
-                <Col key={f.id}>
-                  <Container>
-                    <Row>
-                      <Col xs={12} md={2}>
-                        <Image src={f.reviewer.avatar} className="reviewerImage" roundedCircle />
-                      </Col>
-                      <Col xs={12} md={10}>
-                        {f.reviewer.name}
-                        <p>{dayjs(f.feedbackDate).format('MMMM YYYY')}</p>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <div className="feedbackDescription">
-                          <p>
-                            {f.overallRating}
-                          </p>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Container>
-                </Col>
+            <ColoredLine color="gray" />
+            <h3>Upcoming Dates <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" /></h3>
+            <ul>
+              {futureDates.map((date) => (
+                <li key={date}>{date.format('dddd, DD MMM, h:mm A')} - {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}</li>
               ))}
-            </Row>
-          </Container>
-          <ColoredLine color="gray" />
+            </ul>
+            <ColoredLine color="gray" />
+            <h3>Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" /></h3>
+            <Row className="rowFormat">{c.description}</Row>
+            <ColoredLine color="gray" />
+            <h3>What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" /></h3>
+            <Row className="rowFormat">{c.toBring}</Row>
+            <ColoredLine color="gray" />
 
-          {/* Host Information */}
-          <Container>
-            <Row>
-              <Col xs={12} md={3}>
-                <div className="text-center">
-                  <Image src={c.host.avatar} className="hostImage" roundedCircle />
-                </div>
-              </Col>
-              <Col xs={12} md={9}>
-                <h3>Get to know your host: {c.host.name}</h3>
-                <p>
-                  {c.host.description}
-                </p>
-              </Col>
-            </Row>
+            {/* Dietary preferences */}
+            <h3>Dietary preferences</h3>
+            <Container>
+              <Row className="dietaryRows">
+                <Col><FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />{c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'} </Col>
+                <Col> <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />{c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'} </Col>
+                <Col> <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />{c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'} </Col>
+              </Row>
+              <Row className="dietaryRows">
+                <Col><FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" />{c.pescatarianFriendly ? 'pescatarian ✔' : 'pescatarian ❌'} </Col>
+                <Col> <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" />{c.eggFree ? 'egg-free ✔ ' : 'egg-free ❌'} </Col>
+                <Col> <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" />{c.soyFree ? 'soy-free  ✔' : 'soy-free ❌'} </Col>
+              </Row>
+            </Container>
+            <ColoredLine color="gray" />
+            {/* Class Feedback */}
+            <h3>Feedback <FontAwesomeIcon icon="star" size="1x" className="iconPos fa-fw" /></h3>
+            <h6>Average: {c.avgRating?.toFixed(2)} ({numFeedback} Ratings)</h6>
+            <Container className="ratingContainer">
+              <Row>
+                {/* OverallRating */}
+                <Col xs={6} md={4}>
+                  <Row className="align-items-center">
+                    Overall Rating
+                  <Spacer grow='1' />
+                    <div className="ratingBar">
+                      <ProgressBar now={(c.avgRating) / 5 * 100} />
+                    </div>
+                    <div className="ratingFontSize">{c.avgRating?.toFixed(2)}</div>
+                  </Row>
+                </Col>
+                <Col xs={3} md={3}>
+                </Col>
+                {/* HostRating */}
+                <Col xs={6} md={4}>
+                  <Row className="align-items-center">
+                    Host Rating
+                <Spacer grow='1' />
+                    <div className="ratingBar">
+                      <ProgressBar now={(c.hostRating) / 5 * 100} />
+                    </div>
+                    <div className="ratingFontSize">{c.hostRating?.toFixed(2)}</div>
+                  </Row>
+                </Col>
+              </Row>
+              <Row>
+                {/* TasteRating */}
+                <Col xs={6} md={4}>
+                  <Row className="align-items-center">
+                    Taste Rating
+                  <Spacer grow='1' />
+                    <div className="ratingBar">
+                      <ProgressBar now={(c.tasteRating) / 5 * 100} />
+                    </div>
+                    <div className="ratingFontSize">{c.tasteRating?.toFixed(2)}</div>
+                  </Row>
+                </Col>
+                <Col xs={3} md={3}>
+                </Col>
+                {/* LocationRating */}
+                <Col xs={6} md={4}>
+                  <Row className="align-items-center">
+                    Location Rating
+                <Spacer grow='1' />
+                    <div className="ratingBar">
+                      <ProgressBar now={(c.locationRating) / 5 * 100} />
+                    </div>
+                    <div className="ratingFontSize">{c.locationRating?.toFixed(2)}</div>
+                  </Row>
+                </Col>
+              </Row>
+              <Row>
+                {/* ValueToMoneyRating */}
+                <Col xs={6} md={4}>
+                  <Row className="align-items-center">
+                    Price-Quality Rating
+                  <Spacer grow='1' />
+                    <div className="ratingBar">
+                      <ProgressBar now={(c.vtmrRating) / 5 * 100} />
+                    </div>
+                    <div className="ratingFontSize">{c.vtmrRating?.toFixed(2)}</div>
+                  </Row>
+                </Col>
+                <Col xs={3} md={3}>
+                </Col>
+                {/* ExperienceRating */}
+                <Col xs={6} md={4}>
+                  <Row className="align-items-center">
+                    Experience Rating
+                <Spacer grow='1' />
+                    <div className="ratingBar">
+                      <ProgressBar now={(c.expRating) / 5 * 100} />
+                    </div>
+                    <div className="ratingFontSize">{c.expRating?.toFixed(2)}</div>
+                  </Row>
+                </Col>
+              </Row>
+            </Container>
+            {/* Feedback Comments */}
+            <Container>
+              <Row xs={1} md={2}>
+                {c.feedbacks.map((f) => (
+                  <Col key={f.id}>
+                    <Container>
+                      <Row>
+                        <Col xs={12} md={2}>
+                          <Image src={f.reviewer.avatar} className="reviewerImage" roundedCircle />
+                        </Col>
+                        <Col xs={12} md={10}>
+                          {f.reviewer.name}
+                          <p>{dayjs(f.feedbackDate).format('MMMM YYYY')}</p>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <div className="feedbackDescription">
+                            <p>
+                              {f.overallRating}
+                            </p>
+                          </div>
+                        </Col>
+                      </Row>
+                    </Container>
+                  </Col>
+                ))}
+              </Row>
+            </Container>
+            <ColoredLine color="gray" />
+            {/* Host Information */}
+            <Container>
+              <Row>
+                <Col xs={12} md={3}>
+                  <div className="text-center">
+                    <Image src={c.host.avatar} className="hostImage" roundedCircle />
+                  </div>
+                </Col>
+                <Col xs={12} md={9}>
+                  <h3>Get to know your host: {c.host.name}</h3>
+                  <p>
+                    {c.host.description}
+                  </p>
+                </Col>
+              </Row>
+            </Container>
+            <div className="text-center">
+              <LinkContainer to={`/classes/${c.id}/booking`}>
+                <Button variant="primary">Book Now</Button>
+              </LinkContainer>
+            </div>
           </Container>
-          <div className="text-center">
-            <LinkContainer to={`/classes/${c.id}/booking`}>
-              <Button variant="primary">Book Now</Button>
-            </LinkContainer>
-          </div>
         </div>
       </Layout>
     );
