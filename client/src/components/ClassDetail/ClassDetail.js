@@ -108,6 +108,32 @@ const ClassDetail = () => {
     );
   }
   if (c) {
+    const ratings = [
+      {
+        name: 'Overall Rating',
+        rating: c.avgRating,
+      },
+      {
+        name: 'Host Rating',
+        rating: c.hostRating,
+      },
+      {
+        name: 'Taste Rating',
+        rating: c.tasteRating,
+      },
+      {
+        name: 'Location Rating',
+        rating: c.locationRating,
+      },
+      {
+        name: 'Price-Quality Rating',
+        rating: c.vtmrRating,
+      },
+      {
+        name: 'Experience Rating',
+        rating: c.expRating,
+      },
+    ]
     return (
       <Layout>
         <div className="mt-2">
@@ -126,17 +152,19 @@ const ClassDetail = () => {
           )}
 
           <Container>
-            <Carousel>{carouselImages}</Carousel>
+            <Carousel className="carousel slide" data-ride="carousel">
+              {carouselImages}
+            </Carousel>
             <h1 className="classTitle">{c.title}</h1>
             <Row>
               <Col className="classDetail">
                 <FontAwesomeIcon icon="euro-sign" size="2x" className="iconPos fa-fw" />
                 {c.pricePerPerson} € per person
-            </Col>
+              </Col>
               <Col className="classDetail">
                 <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" />{c.minGuests} -{' '}
                 {c.maxGuests} persons
-            </Col>
+              </Col>
               <Col className="classDetail">
                 <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />
                 {formatAddress(c.meetingAddress)}
@@ -172,89 +200,28 @@ const ClassDetail = () => {
               </Row>
             </Container>
             <ColoredLine color="gray" />
+
             {/* Class Feedback */}
             <h3>Feedback <FontAwesomeIcon icon="star" size="1x" className="iconPos fa-fw" /></h3>
             <h6>Average: {c.avgRating?.toFixed(2)} ({numFeedback} Ratings)</h6>
             <Container className="ratingContainer">
-              <Row>
-                {/* OverallRating */}
-                <Col xs={6} md={4}>
-                  <Row className="align-items-center">
-                    Overall Rating
-                  <Spacer grow='1' />
-                    <div className="ratingBar">
-                      <ProgressBar now={(c.avgRating) / 5 * 100} />
-                    </div>
-                    <div className="ratingFontSize">{c.avgRating?.toFixed(2)}</div>
-                  </Row>
-                </Col>
-                <Col xs={3} md={3}>
-                </Col>
-                {/* HostRating */}
-                <Col xs={6} md={4}>
-                  <Row className="align-items-center">
-                    Host Rating
-                <Spacer grow='1' />
-                    <div className="ratingBar">
-                      <ProgressBar now={(c.hostRating) / 5 * 100} />
-                    </div>
-                    <div className="ratingFontSize">{c.hostRating?.toFixed(2)}</div>
-                  </Row>
-                </Col>
-              </Row>
-              <Row>
-                {/* TasteRating */}
-                <Col xs={6} md={4}>
-                  <Row className="align-items-center">
-                    Taste Rating
-                  <Spacer grow='1' />
-                    <div className="ratingBar">
-                      <ProgressBar now={(c.tasteRating) / 5 * 100} />
-                    </div>
-                    <div className="ratingFontSize">{c.tasteRating?.toFixed(2)}</div>
-                  </Row>
-                </Col>
-                <Col xs={3} md={3}>
-                </Col>
-                {/* LocationRating */}
-                <Col xs={6} md={4}>
-                  <Row className="align-items-center">
-                    Location Rating
-                <Spacer grow='1' />
-                    <div className="ratingBar">
-                      <ProgressBar now={(c.locationRating) / 5 * 100} />
-                    </div>
-                    <div className="ratingFontSize">{c.locationRating?.toFixed(2)}</div>
-                  </Row>
-                </Col>
-              </Row>
-              <Row>
-                {/* ValueToMoneyRating */}
-                <Col xs={6} md={4}>
-                  <Row className="align-items-center">
-                    Price-Quality Rating
-                  <Spacer grow='1' />
-                    <div className="ratingBar">
-                      <ProgressBar now={(c.vtmrRating) / 5 * 100} />
-                    </div>
-                    <div className="ratingFontSize">{c.vtmrRating?.toFixed(2)}</div>
-                  </Row>
-                </Col>
-                <Col xs={3} md={3}>
-                </Col>
-                {/* ExperienceRating */}
-                <Col xs={6} md={4}>
-                  <Row className="align-items-center">
-                    Experience Rating
-                <Spacer grow='1' />
-                    <div className="ratingBar">
-                      <ProgressBar now={(c.expRating) / 5 * 100} />
-                    </div>
-                    <div className="ratingFontSize">{c.expRating?.toFixed(2)}</div>
-                  </Row>
-                </Col>
+              <Row xs={1} md={3}>
+                {ratings.map((rating, index) => [
+                  <Col xs={12} md={4}>
+                    <Row className="align-items-center">
+                      {rating.name}
+                      <Spacer grow='1' />
+                      <div className="ratingBar">
+                        <ProgressBar now={(rating.rating) / 5 * 100} />
+                      </div>
+                      <div className="ratingFontSize">{rating.rating?.toFixed(2)}</div>
+                    </Row>
+                  </Col>,
+                 (index%2 === 0) && <Col xs={0} md={4}></Col>
+                ])}
               </Row>
             </Container>
+
             {/* Feedback Comments */}
             <Container>
               <Row xs={1} md={2}>
