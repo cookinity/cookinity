@@ -3,6 +3,7 @@ import { Button, Card, ListGroup } from 'react-bootstrap';
 import { run as runHolder } from 'holderjs/holder';
 import { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
+import './ClassCard.scss';
 
 const truncateString = function (str, num) {
   if (str.length > num) {
@@ -140,12 +141,12 @@ export default function ClassCard({ c, date }) {
   }
   return (
     <Card border="primary" className="shadow classCard">
-      <Card.Img className="image-class-name" variant="top" src={c.coverPhoto} />
+        <Card.Img className="image-class-name" variant="top" src={c.coverPhoto} />
       <Card.Body>
         <Card.Title>{c.title}</Card.Title>
         <Card.Subtitle></Card.Subtitle>
         <Card.Text>
-          <div>
+          <div className="cardDescription">
             {shortdescription}
             <p></p>
           </div>
