@@ -5,7 +5,9 @@ const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 export const validationSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
   category: Yup.string().required('Category is required'),
-  description: Yup.string().required('Description is required'),
+  description: Yup.string()
+    .required('Description is required')
+    .max(1000, 'Maximum of 2000 characters'),
   toBring: Yup.string(),
   country: Yup.string().required('Country is required'),
   city: Yup.string().required('City is required'),
