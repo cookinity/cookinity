@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import './ClassCard.scss';
 import dayjs from 'dayjs';
@@ -11,7 +11,7 @@ export default function ClassCard({ c, filterDate }) {
   const guests = c.minGuests === c.maxGuests ? `${c.minGuests}` : `${c.minGuests}-${c.maxGuests}`;
   const meetingAddress = `${c.meetingAddress.city}, ${c.meetingAddress.street}`;
   const stars = generateStars();
-  const bookableDatesAroundOrientationDate = generateBookableDates();
+  const bookableDatesAroundOrientationDate = useMemo(() => generateBookableDates(), [c]);
 
   return (
     <div className="card border-light mb-4 animate-up-5">
