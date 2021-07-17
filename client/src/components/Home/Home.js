@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import FilterBar from './FilterBar';
 import FilterSideBar from './FilterSideBar';
+import ClassesMap from './ClassesMap';
 dayjs.extend(utc);
 export const Home = () => {
   const [numberOfEntries, setNumberOfEntries] = useState(0);
@@ -18,7 +19,7 @@ export const Home = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(5);
   const [skip, setSkip] = useState(0);
 
   const [startDate, setStartDate] = useState(undefined);
@@ -116,7 +117,7 @@ export const Home = () => {
 
   const classCards = filteredClasses.map((c) => {
     return (
-      <Col className="mb-1" sm={12} md={6} lg={4}>
+      <Col className="mb-1" sm={12} lg={4}>
         <ClassCard c={c} date={startDate} key={c.id}></ClassCard>
       </Col>
     );
@@ -160,25 +161,33 @@ export const Home = () => {
             </Col>
           </Row>
           <Row>
-            <Col xs={12} md={3}>
+            <Col xs={12} lg={12} xl={1}>
               <FilterSideBar></FilterSideBar>
             </Col>
-            <Col xs={12} md={9}>
+            <Col xs={12} lg={12} xl={7}>
               <Container fluid>
                 <Row>{classCards}</Row>
+                <Row>
+                  <Col xs={12} className="text-center mt-2">
+                    <div className="btn-group" role="group">
+                      <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
+                        Previous
+                      </Button>
+                      <Button
+                        onClick={nextPage}
+                        disabled={skip + filteredClasses.length >= numberOfEntries ? true : false}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
               </Container>
             </Col>
-          </Row>
-          <Row>
-            <Col xs={12} className="text-center mt-2">
-              <div className="btn-group" role="group">
-                <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
-                  Previous
-                </Button>
-                <Button onClick={nextPage} disabled={skip >= numberOfEntries - 1 ? true : false}>
-                  Next
-                </Button>
-              </div>
+            <Col xs={12} lg={12} xl={4}>
+              {filteredClasses.length > 0 ? (
+                <ClassesMap classes={filteredClasses}></ClassesMap>
+              ) : null}
             </Col>
           </Row>
         </Layout>

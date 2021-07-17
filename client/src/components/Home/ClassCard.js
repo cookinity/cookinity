@@ -14,10 +14,12 @@ const truncateString = function (str, num) {
 
 const getRating = function (res) {
   if (res == -1) {
-    return "No Feedback given"
-  } else if (res < 1) { //Error Handling
-    return "Something with the feedback went wrong."
-  } else if (res < 1.25) { //1 Stern
+    return 'No Feedback given';
+  } else if (res < 1) {
+    //Error Handling
+    return 'Something with the feedback went wrong.';
+  } else if (res < 1.25) {
+    //1 Stern
     return (
       <div>
         <i className="fa fa-star text-warning"></i>
@@ -25,8 +27,10 @@ const getRating = function (res) {
         <i className="fa fa-star-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
-      </div>);
-  } else if (res < 1.75) { //1.5 Sterne
+      </div>
+    );
+  } else if (res < 1.75) {
+    //1.5 Sterne
     return (
       <div>
         <i className="fa fa-star text-warning"></i>
@@ -34,8 +38,10 @@ const getRating = function (res) {
         <i className="fa fa-star-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
-      </div>);
-  } else if (res < 2.25) { //2 Sterne
+      </div>
+    );
+  } else if (res < 2.25) {
+    //2 Sterne
     return (
       <div>
         <i className="fa fa-star text-warning"></i>
@@ -43,8 +49,10 @@ const getRating = function (res) {
         <i className="fa fa-star-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
-      </div>);
-  } else if (res < 2.75) { //2.5 Sterne
+      </div>
+    );
+  } else if (res < 2.75) {
+    //2.5 Sterne
     return (
       <div>
         <i className="fa fa-star text-warning"></i>
@@ -52,8 +60,10 @@ const getRating = function (res) {
         <i className="fa fa-star-half-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
-      </div>);
-  } else if (res < 3.25) { //3 Sterne
+      </div>
+    );
+  } else if (res < 3.25) {
+    //3 Sterne
     return (
       <div>
         <i className="fa fa-star text-warning"></i>
@@ -61,8 +71,10 @@ const getRating = function (res) {
         <i className="fa fa-star text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
-      </div>);
-  } else if (res < 3.75) { //3.5 Sterne
+      </div>
+    );
+  } else if (res < 3.75) {
+    //3.5 Sterne
     return (
       <div>
         <i className="fa fa-star text-warning"></i>
@@ -70,8 +82,10 @@ const getRating = function (res) {
         <i className="fa fa-star text-warning"></i>
         <i className="fa fa-star-half-o text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
-      </div>);
-  } else if (res < 4.25) { //4 Sterne
+      </div>
+    );
+  } else if (res < 4.25) {
+    //4 Sterne
     return (
       <div>
         <i className="fa fa-star text-warning"></i>
@@ -79,8 +93,10 @@ const getRating = function (res) {
         <i className="fa fa-star text-warning"></i>
         <i className="fa fa-star text-warning"></i>
         <i className="fa fa-star-o text-warning"></i>
-      </div>);
-  } else if (res < 4.75) { //4.5 Sterne
+      </div>
+    );
+  } else if (res < 4.75) {
+    //4.5 Sterne
     return (
       <div>
         <i className="fa fa-star text-warning"></i>
@@ -88,8 +104,10 @@ const getRating = function (res) {
         <i className="fa fa-star text-warning"></i>
         <i className="fa fa-star text-warning"></i>
         <i className="fa fa-star-half-o text-warning"></i>
-      </div>);
-  } else if (res <= 5) { //5 Sterne
+      </div>
+    );
+  } else if (res <= 5) {
+    //5 Sterne
     return (
       <div>
         <i className="fa fa-star text-warning"></i>
@@ -97,9 +115,11 @@ const getRating = function (res) {
         <i className="fa fa-star text-warning"></i>
         <i className="fa fa-star text-warning"></i>
         <i className="fa fa-star text-warning"></i>
-      </div>);
-  } else { //Error Handling
-    return "Something with the feedback went wrong."
+      </div>
+    );
+  } else {
+    //Error Handling
+    return 'Something with the feedback went wrong.';
   }
 };
 
@@ -110,10 +130,9 @@ const getDates = function (c) {
       let date = c.timeSlots[0].date;
       alldates.push(date);
     }
-    debugger;
     return alldates;
   }
-}
+};
 
 const filterDates = function (filterdate, c) {
   if (filterdate != null) {
@@ -121,7 +140,7 @@ const filterDates = function (filterdate, c) {
   } else {
     return filterdate;
   }
-}
+};
 
 export default function ClassCard({ c, date }) {
   useEffect(() => {
@@ -132,7 +151,7 @@ export default function ClassCard({ c, date }) {
   const allratings = c.feedbacks;
   let sum = 0;
   for (var i = 0; i < allratings.length; i++) {
-    sum = sum + allratings[i].overallRatingStars
+    sum = sum + allratings[i].overallRatingStars;
   }
   let classrating = -1;
   if (allratings.length > 0) {

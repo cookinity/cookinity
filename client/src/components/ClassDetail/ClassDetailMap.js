@@ -25,7 +25,7 @@ const ClassDetailMap = ({ c }) => {
         <FontAwesomeIcon icon="map-marker-alt" className="iconPos fa-fw" />
       </h3>
       <MapContainer
-        className="mapContainer"
+        className="detailMapContainer"
         center={[c.lat, c.lon]}
         zoom={16}
         scrollWheelZoom={false}
