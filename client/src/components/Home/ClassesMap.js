@@ -3,8 +3,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import Fullscreen from 'react-leaflet-fullscreen-plugin';
 import './ClassesMap.scss';
-import { Card } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import { Link } from 'react-router-dom';
 
 const ClassesMap = ({ classes }) => {
   const points = [];
@@ -17,7 +18,10 @@ const ClassesMap = ({ classes }) => {
           <Popup>
             {c.title}
             <br />
-            {c.meetingAddress.street + ', ' + c.meetingAddress.zip + ' ' + c.meetingAddress.city}
+            <div>
+              {c.meetingAddress.street + ', ' + c.meetingAddress.zip + ' ' + c.meetingAddress.city}
+            </div>
+            <Link to={`/classes/${c.id}`}>More Details</Link>
           </Popup>
         </Marker>,
       );
