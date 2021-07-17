@@ -206,7 +206,7 @@ export const HostManagement = () => {
         <Row>
           <Col>
             {' '}
-            <Alert variant="success">Order confirmed!</Alert>
+            <Alert variant="success">Stripe Account Created! Please reload this page</Alert>
           </Col>
         </Row>
       </Layout>
