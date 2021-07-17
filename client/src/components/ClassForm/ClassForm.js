@@ -3,7 +3,6 @@ import { Button, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { validationSchema } from './classValidation';
-import { DateObject } from 'react-multi-date-picker';
 import _ from 'lodash';
 import AddressSection from './FormSections/AddressSection';
 import EatingHabitsSection from './FormSections/EatingHabitsSection';

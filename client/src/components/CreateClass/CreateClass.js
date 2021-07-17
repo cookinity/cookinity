@@ -32,6 +32,30 @@ const CreateClass = () => {
         config.headers['x-auth-token'] = token;
       }
 
+      const city = formData.get('meetingAddress[city]');
+      const country = formData.get('meetingAddress[country]');
+      const postalcode = formData.get('meetingAddress[zip]');
+      const state = formData.get('meetingAddress[state]');
+      const street = formData.get('meetingAddress[street]');
+
+      const result = await axios.get('https://nominatim.openstreetmap.org/search', {
+        params: {
+          format: 'json',
+          city,
+          country,
+          state,
+          postalcode,
+          street,
+        },
+      });
+
+      if (result.data.length === 0) {
+        throw new Error('We could not verify the address you have entered!');
+      }
+
+      formData.append('lat', result.data[0].lat);
+      formData.append('lon', result.data[0].lon);
+
       await axios.post('/api/classes', formData, config);
       setIsLoading(false);
       setClassCreated(true);

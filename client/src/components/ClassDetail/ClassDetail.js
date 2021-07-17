@@ -8,15 +8,16 @@ import dayjs from 'dayjs';
 import Loader from 'components/Shared/Loader/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
-const Spacer = require('react-spacer')
-const { render } = require('react-dom')
+import ClassDetailMap from './ClassDetailMap';
+const Spacer = require('react-spacer');
+const { render } = require('react-dom');
 
 function formatAddress(address) {
   return address.street + ', ' + address.zip + ' ' + address.city;
 }
 
 function dateWithDuration(date, duration) {
-  return date.add(duration, 'minute')
+  return date.add(duration, 'minute');
 }
 
 const ColoredLine = ({ color }) => (
@@ -56,8 +57,8 @@ const ClassDetail = () => {
       try {
         const result = await axios(`/api/classes/${classId}`);
         result.data.class.feedbacks.sort((a, b) => {
-          const aDate = dayjs(a.feedbackDate)
-          const bDate = dayjs(b.feedbackDate)
+          const aDate = dayjs(a.feedbackDate);
+          const bDate = dayjs(b.feedbackDate);
           if (aDate.isBefore(bDate)) {
             return 1;
           } else if (aDate.isAfter(bDate)) {
@@ -65,9 +66,9 @@ const ClassDetail = () => {
           } else {
             return 0;
           }
-        })
-        setNumFeedback(result.data.class.feedbacks.length)
-        result.data.class.feedbacks = result.data.class.feedbacks.slice(0, 10)
+        });
+        setNumFeedback(result.data.class.feedbacks.length);
+        result.data.class.feedbacks = result.data.class.feedbacks.slice(0, 10);
         setClass(result.data.class);
         //set available photos
         const p = [];
@@ -82,14 +83,14 @@ const ClassDetail = () => {
         }
         setPhotos(p);
         //set future dates
-        const d = []
+        const d = [];
         const today = dayjs(new Date());
         for (const timeslot of result.data.class.timeSlots) {
           if (dayjs(timeslot.date).isAfter(today) && !timeslot.isBooked) {
             d.push(dayjs(timeslot.date));
           }
         }
-        setFutureDates(d)
+        setFutureDates(d);
       } catch (err) {
         setIsError(true);
         setErrorMessage(err?.response?.data.message || err.message);
@@ -98,7 +99,6 @@ const ClassDetail = () => {
     };
     fetchClass();
   }, []);
-
 
   if (isLoading) {
     return (
@@ -133,7 +133,7 @@ const ClassDetail = () => {
         name: 'Experience Rating',
         rating: c.expRating,
       },
-    ]
+    ];
     return (
       <Layout>
         <div className="mt-2">
@@ -162,8 +162,8 @@ const ClassDetail = () => {
                 {c.pricePerPerson} € per person
               </Col>
               <Col className="classDetail">
-                <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" />{c.minGuests} -{' '}
-                {c.maxGuests} persons
+                <FontAwesomeIcon icon="users" size="2x" className="iconPos fa-fw" />
+                {c.minGuests} - {c.maxGuests} persons
               </Col>
               <Col className="classDetail">
                 <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />
@@ -171,17 +171,31 @@ const ClassDetail = () => {
               </Col>
             </Row>
             <ColoredLine color="gray" />
-            <h3>Upcoming Dates <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" /></h3>
+            <div className="mr-4 ml-4">
+              <ClassDetailMap c={c}></ClassDetailMap>
+            </div>
+            <ColoredLine color="gray" />
+            <h3>
+              Upcoming Dates{' '}
+              <FontAwesomeIcon icon="calendar-alt" size="1x" className="iconPos fa-fw" />
+            </h3>
             <ul>
               {futureDates.map((date) => (
-                <li key={date}>{date.format('dddd, DD MMM, h:mm A')} - {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}</li>
+                <li key={date}>
+                  {date.format('dddd, DD MMM, h:mm A')} -{' '}
+                  {dateWithDuration(date, c.durationInMinutes).format('h:mm A')}
+                </li>
               ))}
             </ul>
             <ColoredLine color="gray" />
-            <h3>Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" /></h3>
+            <h3>
+              Description <FontAwesomeIcon icon="info-circle" size="1x" className="iconPos fa-fw" />
+            </h3>
             <Row className="rowFormat">{c.description}</Row>
             <ColoredLine color="gray" />
-            <h3>What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" /></h3>
+            <h3>
+              What to bring <FontAwesomeIcon icon="utensils" size="1x" className="iconPos fa-fw" />
+            </h3>
             <Row className="rowFormat">{c.toBring}</Row>
             <ColoredLine color="gray" />
 
@@ -189,35 +203,61 @@ const ClassDetail = () => {
             <h3>Dietary preferences</h3>
             <Container>
               <Row className="dietaryRows">
-                <Col><FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />{c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'} </Col>
-                <Col> <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />{c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'} </Col>
-                <Col> <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />{c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'} </Col>
+                <Col>
+                  <FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />
+                  {c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'}{' '}
+                </Col>
+                <Col>
+                  {' '}
+                  <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />
+                  {c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'}{' '}
+                </Col>
+                <Col>
+                  {' '}
+                  <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />
+                  {c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'}{' '}
+                </Col>
               </Row>
               <Row className="dietaryRows">
-                <Col><FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" />{c.pescatarianFriendly ? 'pescatarian ✔' : 'pescatarian ❌'} </Col>
-                <Col> <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" />{c.eggFree ? 'egg-free ✔ ' : 'egg-free ❌'} </Col>
-                <Col> <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" />{c.soyFree ? 'soy-free  ✔' : 'soy-free ❌'} </Col>
+                <Col>
+                  <FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" />
+                  {c.pescatarianFriendly ? 'pescatarian ✔' : 'pescatarian ❌'}{' '}
+                </Col>
+                <Col>
+                  {' '}
+                  <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" />
+                  {c.eggFree ? 'egg-free ✔ ' : 'egg-free ❌'}{' '}
+                </Col>
+                <Col>
+                  {' '}
+                  <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" />
+                  {c.soyFree ? 'soy-free  ✔' : 'soy-free ❌'}{' '}
+                </Col>
               </Row>
             </Container>
             <ColoredLine color="gray" />
 
             {/* Class Feedback */}
-            <h3>Feedback <FontAwesomeIcon icon="star" size="1x" className="iconPos fa-fw" /></h3>
-            <h6>Average: {c.avgRating?.toFixed(2)} ({numFeedback} Ratings)</h6>
+            <h3>
+              Feedback <FontAwesomeIcon icon="star" size="1x" className="iconPos fa-fw" />
+            </h3>
+            <h6>
+              Average: {c.avgRating?.toFixed(2)} ({numFeedback} Ratings)
+            </h6>
             <Container className="ratingContainer">
               <Row xs={1} md={3}>
                 {ratings.map((rating, index) => [
                   <Col xs={12} md={4}>
                     <Row className="align-items-center">
                       {rating.name}
-                      <Spacer grow='1' />
+                      <Spacer grow="1" />
                       <div className="ratingBar">
-                        <ProgressBar now={(rating.rating) / 5 * 100} />
+                        <ProgressBar now={(rating.rating / 5) * 100} />
                       </div>
                       <div className="ratingFontSize">{rating.rating?.toFixed(2)}</div>
                     </Row>
                   </Col>,
-                 (index%2 === 0) && <Col xs={0} md={4}></Col>
+                  index % 2 === 0 && <Col xs={0} md={4}></Col>,
                 ])}
               </Row>
             </Container>
@@ -240,9 +280,7 @@ const ClassDetail = () => {
                       <Row>
                         <Col>
                           <div className="feedbackDescription">
-                            <p>
-                              {f.overallRating}
-                            </p>
+                            <p>{f.overallRating}</p>
                           </div>
                         </Col>
                       </Row>
@@ -262,9 +300,7 @@ const ClassDetail = () => {
                 </Col>
                 <Col xs={12} md={9}>
                   <h3>Get to know your host: {c.host.name}</h3>
-                  <p>
-                    {c.host.description}
-                  </p>
+                  <p>{c.host.description}</p>
                 </Col>
               </Row>
             </Container>

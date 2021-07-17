@@ -116,6 +116,14 @@ const classSchema = new Schema(
       type: addressSchema,
       required: true,
     },
+    lat: {
+      type: Number,
+      required: true,
+    },
+    lon: {
+      type: Number,
+      required: true,
+    },
     host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -208,6 +216,8 @@ classSchema.methods.toJSON = function () {
     toBring: this.toBring,
     meetingAddress: this.meetingAddress.toJSON(),
     host: this.host.toJSON(),
+    lat: this.lat,
+    lon: this.lon,
     pricePerPerson: this.pricePerPerson,
     durationInMinutes: this.durationInMinutes,
     minGuests: this.minGuests,
@@ -264,6 +274,8 @@ export const validateClass = (c) => {
     description: Joi.string().required(),
     toBring: Joi.string(),
     pricePerPerson: Joi.number().precision(2).positive(), // by default we assume in euro right now
+    lon: Joi.number(),
+    lat: Joi.number(),
     durationInMinutes: Joi.number().integer().min(1).positive().required(),
     minGuests: Joi.number().integer().min(1).max(100).positive().required(),
     maxGuests: Joi.number().integer().min(1).max(100).positive().required(),
