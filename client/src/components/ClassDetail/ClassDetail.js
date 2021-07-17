@@ -39,6 +39,9 @@ const ClassDetail = () => {
   const [futureDates, setFutureDates] = useState([]);
   const [numFeedback, setNumFeedback] = useState(0);
 
+  const prevIcon = <i className="fa fa-arrow-left" />;
+  const nextIcon = <i className="fa fa-arrow-right" />;
+
   const carouselImages = photos.map((src) => (
     <Carousel.Item interval={3000} key={src}>
       <div className="photoFrame">
@@ -152,7 +155,12 @@ const ClassDetail = () => {
           )}
 
           <Container>
-            <Carousel className="carousel slide" data-ride="carousel">
+            <Carousel
+              className="carousel slide"
+              data-ride="carousel"
+              nextIcon={nextIcon}
+              prevIcon={prevIcon}
+            >
               {carouselImages}
             </Carousel>
             <h1 className="classTitle">{c.title}</h1>
