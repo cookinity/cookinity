@@ -40,11 +40,11 @@ router.post('/query', async (req, res, next) => {
     // Apply Date Filter
     if (date) {
       classes = classes.filter((c) => {
-        if (c.bookableDates) {
-          const foundFittingDate = c.bookableDates.find((d) => {
-            return dayjs(d).format('DD/MM/YYYY') === date.format('DD/MM/YYYY');
+        if (c.timeSlots) {
+          const foundFittingTimeSlots = c.timeSlots.find((ts) => {
+            return !ts.isBooked && dayjs(ts.date).format('DD/MM/YYYY') === date.format('DD/MM/YYYY');
           });
-          return foundFittingDate ? true : false;
+          return foundFittingTimeSlots ? true : false;
         } else {
           return false;
         }
