@@ -14,7 +14,7 @@ export default function ClassCard({ c, filterDate }) {
   const bookableDatesAroundOrientationDate = generateBookableDates();
 
   return (
-    <div className="card border-light mb-4 animate-up-5 classCard">
+    <div className="card border-light mb-4 animate-up-5">
       <Link to={`/classes/${c.id}`} className="position-relative">
         <img src={c.coverPhoto} className="card-img-top rounded-xl p-2 image" />
       </Link>

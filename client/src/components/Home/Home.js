@@ -116,9 +116,11 @@ export const Home = () => {
 
   const classCards = filteredClasses.map((c) => {
     return (
-      <Col className="mb-1" sm={12} md={6} lg={4} key={c.id}>
-        <ClassCard c={c} filterDate={startDate} key={c.id}></ClassCard>
-      </Col>
+      <>
+        <Col className="mb-1" sm={12} xl={6} key={c.id}>
+          <ClassCard c={c} filterDate={startDate} key={c.id}></ClassCard>
+        </Col>
+      </>
     );
   });
 
