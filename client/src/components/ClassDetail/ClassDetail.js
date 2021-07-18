@@ -254,7 +254,7 @@ const ClassDetail = () => {
             <div className="ratingContainer">
               <Row xs={1} md={2}>
                 {ratings.map((rating, index) => [
-                  <Col xs={12} md={6} className="progressBars">
+                  <Col xs={12} md={6} className="progressBars" key={index}>
                     <div className="ratingRow">
                       {rating.name}
                       <div className="ratingInnerRow">
