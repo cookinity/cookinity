@@ -41,7 +41,7 @@ export default function ClassCard({ c, filterDate }) {
           <span>No free dates to book available!</span>
         )}
         <hr></hr>
-        <div className="cardDescription">
+        <div>
           <p className="mb-0">{description}</p>
         </div>
       </div>
