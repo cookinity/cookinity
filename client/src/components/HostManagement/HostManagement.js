@@ -176,11 +176,15 @@ export const HostManagement = () => {
             <FontAwesomeIcon icon="info-circle" /> Booked classes
           </Button>
         </LinkContainer>
-        <h1 className="text-center">Upcoming Classes</h1>
-        <ClassesTable classes={upcomingClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
-        <hr></hr>
-        <h1 className="text-center">Past Classes</h1>
-        <ClassesTable classes={pastClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+        <div className="tableBackground">
+          <h1 className="text-center">Upcoming Classes</h1>
+          <ClassesTable classes={upcomingClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+          <hr></hr>
+        </div>
+        <div className="tableBackground">
+          <h1 className="text-center">Past Classes</h1>
+          <ClassesTable classes={pastClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+        </div>
       </>
     ) : (
       <>
@@ -213,28 +217,32 @@ export const HostManagement = () => {
     );
   } else
     return (
-      <Layout>
-        <Row>
-          <Col>
-            <div>
-              {isError && (
-                <Alert
-                  variant="danger"
-                  onClose={() => {
-                    setIsError(false);
-                    setErrorMessage('');
-                  }}
-                  dismissible
-                >
-                  {' '}
-                  {errorMessage}
-                </Alert>
-              )}
-              {content}
-            </div>
-          </Col>
-        </Row>
-      </Layout>
+      <div className="bgHostManagement">
+        <Layout>
+
+          <Row>
+            <Col>
+              <div>
+                {isError && (
+                  <Alert
+                    variant="danger"
+                    onClose={() => {
+                      setIsError(false);
+                      setErrorMessage('');
+                    }}
+                    dismissible
+                  >
+                    {' '}
+                    {errorMessage}
+                  </Alert>
+                )}
+                {content}
+              </div>
+            </Col>
+          </Row>
+
+        </Layout>
+      </div>
     );
 };
 

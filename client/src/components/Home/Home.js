@@ -166,7 +166,7 @@ export const Home = () => {
             </Col>
             <Col xs={12} lg={12} xl={6}>
               <Container fluid>
-                <Row>{classCards}</Row>
+                <Row xs={1} md={2} lg={2}>{classCards}</Row>
                 <Row>
                   <Col xs={12} className="text-center mt-2">
                     <div className="btn-group" role="group">
