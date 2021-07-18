@@ -2,33 +2,32 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Layout from '../Layout/Layout';
-import { Alert, Col, Row, Button } from 'react-bootstrap';
+import { Alert, Col, Row, Button, Container } from 'react-bootstrap';
 
 import ClassCard from './ClassCard';
-import Filters from './Filters';
 import Loader from 'components/Shared/Loader/Loader';
-import { CLASS_CATEGORIES } from 'constants/ClassCategories';
-import { CITY_CATEGORIES } from 'constants/CityCategories';
-import DatePicker from 'react-multi-date-picker';
+
 import './Home.scss';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import FilterBar from './FilterBar';
+import FilterSideBar from './FilterSideBar';
+import ClassesMap from './ClassesMap';
 dayjs.extend(utc);
 
 export const Home = () => {
-  const [classes, setClasses] = useState([]);
   const [numberOfEntries, setNumberOfEntries] = useState(0);
   const [filteredClasses, setFilteredClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(5);
   const [skip, setSkip] = useState(0);
 
-  const [startDate, setStartDate] = useState('');
-  const [cat, setCat] = useState('');
-  const [city, setCity] = useState('');
+  const [startDate, setStartDate] = useState(undefined);
+  const [cat, setCat] = useState(undefined);
+  const [city, setCity] = useState(undefined);
   const [guests, setGuests] = useState('');
   const [priceLow, setPriceLow] = useState('');
   const [priceUp, setPriceUp] = useState('');
@@ -91,7 +90,6 @@ export const Home = () => {
       };
 
       const result = await axios.post(`/api/classes/query`, queryObject);
-      setClasses(result.data.classes);
       setNumberOfEntries(result.data.numberOfEntries);
       setFilteredClasses(result.data.classes);
     } catch (err) {
@@ -111,12 +109,20 @@ export const Home = () => {
 
   const handleFilterCategory = (e) => {
     let value = e.target.value;
-    setCat(value);
+    if (value === 'All Categories') {
+      setCat(undefined);
+    } else {
+      setCat(value);
+    }
   };
 
   const handleFilterCity = (e) => {
     let value = e.target.value;
-    setCity(value);
+    if (value === 'All Cities') {
+      setCity(undefined);
+    } else {
+      setCity(value);
+    }
   };
 
   const handleFilterDate = (e) => {
@@ -187,21 +193,10 @@ export const Home = () => {
     }
   };
 
-  const openNav = () => {
-    document.getElementById('sidebar').style.width = '20%';
-    document.getElementById('main').style.width = '65%';
-  };
-
-  const closeNav = () => {
-    document.getElementById('sidebar').style.width = '0';
-    document.getElementById('main').style.width = '100%';
-  };
-
-  // All classes
   const classCards = filteredClasses.map((c) => {
     return (
-      <Col sm={12} md={6} lg={4}>
-        <ClassCard c={c} key={c.id}></ClassCard>
+      <Col className="mb-1" sm={12} lg={4}>
+        <ClassCard c={c} date={startDate} key={c.id}></ClassCard>
       </Col>
     );
   });
@@ -214,217 +209,9 @@ export const Home = () => {
         </Layout>
       </div>
       <div style={{ display: isLoading ? 'none' : 'block' }}>
-        <div id="sidebar" className="sidebar">
-          <a href="javascript:void(0)" className="closebtn" onClick={closeNav}>
-            &times;
-          </a>
-          <a>
-            <h5>Filters</h5>
-          </a>
-
-          <a>
-            <label htmlFor="averageRating" className="form-label">
-              Overall rating
-            </label>
-
-            <li
-              id="starRating4"
-              className="list-group pointer"
-              onClick={() => handleFilterRating(starRating4, 4)}
-            >
-              <div className="row col-auto">
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <p className="small px-2">& More</p>
-              </div>
-            </li>
-            <li
-              id="starRating3"
-              className="list-group pointer"
-              onClick={() => handleFilterRating(starRating3, 3)}
-            >
-              <div className="row col-auto">
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <p className="small px-2">& More</p>
-              </div>
-            </li>
-            <li
-              id="starRating2"
-              className="list-group pointer"
-              onClick={() => handleFilterRating(starRating2, 2)}
-            >
-              <div className="row col-auto">
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <p className="small px-2">& More</p>
-              </div>
-            </li>
-            <li
-              id="starRating1"
-              className="list-group pointer"
-              onClick={() => handleFilterRating(starRating1, 1)}
-            >
-              <div className="row col-auto">
-                <i className="fa fa-star text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <i className="fa fa-star-o text-warning"></i>
-                <p className="small px-2">& More</p>
-              </div>
-            </li>
-          </a>
-          <a>
-            <label htmlFor="price" className="form-label">
-              Price
-            </label>
-            <li
-              id="priceUnder25"
-              className="list-group pointer"
-              onClick={() => handleFilterPrice(priceUnder25, 1, 25)}
-            >
-              <div className="row col-auto">
-                <i className="fa fa-eur"></i>
-                <p className="small px-2">1 - 25€</p>
-              </div>
-            </li>
-            <li
-              id="priceUnder50"
-              className="list-group pointer"
-              onClick={() => handleFilterPrice(priceUnder50, 26, 50)}
-            >
-              <div className="row col-auto">
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <p className="small px-2">26 - 50€</p>
-              </div>
-            </li>
-            <li
-              id="priceUnder100"
-              className="list-group pointer"
-              onClick={() => handleFilterPrice(priceUnder100, 51, 100)}
-            >
-              <div className="row col-auto">
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <p className="small px-2">51 - 100€</p>
-              </div>
-            </li>
-            <li
-              id="priceOver100"
-              className="list-group pointer"
-              onClick={() => handleFilterPrice(priceOver100, 100, 1000)}
-            >
-              <div className="row col-auto">
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <i className="fa fa-eur"></i>
-                <p className="small px-2">over 100€</p>
-              </div>
-            </li>
-            <div className="row col-auto">
-            <div className="d-flex ">
-              <input
-                placeholder="Min"
-                type="number"
-                className="form-control custom-width-min-max"
-                min="1"
-                max="1000"
-                onChange={handleFilterPriceMinField}
-              />
-              <p className="px-2">-</p>
-              <input
-                placeholder="Max"
-                type="number"
-                className="form-control custom-width-min-max"
-                min="1"
-                max="1000"
-                onChange={handleFilterPriceMaxField}
-              />
-            </div>
-            <p>&nbsp;</p>
-            <Button onClick={fetchClasses}>Go</Button>
-            </div>
-          </a>
-
-          <a>
-            <label htmlFor="customRange" className="form-label">
-              Number of participants
-            </label>
-            <div className="row col-auto">
-              <label>1</label>
-              <input
-                type="range"
-                id="customRange"
-                min="1"
-                max="10"
-                step="1"
-                onChange={handleFilterCapacity}
-              />
-              <label>10</label>
-              <p>&nbsp;</p>
-              <div className="d-flex ">
-                <input id="amount" type="number" className="form-control custom-width" disabled />
-              </div>
-              <Button onClick={clearCapacityFilter}>Clear</Button>
-            </div>
-          </a>
-
-          <a>
-            <label htmlFor="vegan" className="form-label">
-              Dietary preference
-            </label>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                onChange={(event) => handleVegan(event)}
-                type="checkbox"
-                id="vegan"
-              />
-              <label className="form-check-label small" htmlFor="vegan">
-                Vegan
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                onChange={(event) => handleVegetarian(event)}
-                type="checkbox"
-                id="vegetarian"
-              />
-              <label className="form-check-label small" htmlFor="vegetarian">
-                Vegetarian
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                onChange={(event) => handleNutAllergy(event)}
-                type="checkbox"
-                id="nutAllergy"
-              />
-              <label className="form-check-label small" htmlFor="nutAllergy">
-                Nut free
-              </label>
-            </div>
-          </a>
-        </div>
-
         <Layout>
-          <div id="main" className="container">
-            <div className="mt-2">
+          <Row>
+            <Col>
               {isError && (
                 <Alert
                   variant="danger"
@@ -438,64 +225,68 @@ export const Home = () => {
                   {errorMessage}
                 </Alert>
               )}
-
-              <div className="d-flex justify-content-center">
-                <div className="filter">
-                  <Filters
-                    options={CLASS_CATEGORIES}
-                    prompt="Select category"
-                    fun={(event) => handleFilterCategory(event)}
-                  />
-                </div>
-                <p>&nbsp;</p>
-                <div className="filter">
-                  <Filters
-                    options={CITY_CATEGORIES}
-                    prompt="Select city"
-                    fun={(event) => handleFilterCity(event)}
-                  />
-                </div>
-                <p>&nbsp;</p>
-                <div className="filter">
-                  <div className="form-group row">
-                    <div className="col-sm-10">
-                      <DatePicker
-                        style={{
-                          width: '100%',
-                          height: '36px',
-                        }}
-                        containerStyle={{
-                          width: '100%',
-                        }}
-                        calendarPosition="bottom-center"
-                        type="input-icon"
-                        id="datePicker"
-                        value={startDate}
-                        onChange={(e) => {
-                          handleFilterDate(e);
-                        }}
-                        placeholder="Select date"
-                      />
+            </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col>
+              <FilterBar
+                handleFilterCity={handleFilterCity}
+                handleFilterCategory={handleFilterCategory}
+                handleFilterDate={handleFilterDate}
+                startDate={startDate}
+                fetchClasses={fetchClasses}
+              ></FilterBar>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={6} lg={12} xl={1}>
+              <FilterSideBar
+                handleFilterRating={handleFilterRating}
+                starRating4={starRating4}
+                starRating3={starRating3}
+                starRating2={starRating2}
+                starRating1={starRating1}
+                handleFilterPrice={handleFilterPrice}
+                priceUnder25={priceUnder25}
+                priceUnder50={priceUnder50}
+                priceUnder100={priceUnder100}
+                priceOver100={priceOver100}
+                handleFilterCapacity={handleFilterCapacity}
+                clearCapacityFilter={clearCapacityFilter}
+                handleFilterPriceMinField={handleFilterPriceMinField}
+                handleFilterPriceMaxField={handleFilterPriceMaxField}
+                fetchClasses={fetchClasses}
+                handleVegetarian={handleVegetarian}
+                handleVegan={handleVegan}
+                handleNutAllergy={handleNutAllergy}
+              ></FilterSideBar>
+            </Col>
+            <Col xs={12} lg={12} xl={7}>
+              <Container fluid>
+                <Row>{classCards}</Row>
+                <Row>
+                  <Col xs={12} className="text-center mt-2">
+                    <div className="btn-group" role="group">
+                      <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
+                        Previous
+                      </Button>
+                      <Button
+                        onClick={nextPage}
+                        disabled={skip + filteredClasses.length >= numberOfEntries ? true : false}
+                      >
+                        Next
+                      </Button>
                     </div>
-                  </div>
-                </div>
-
-                <Button onClick={openNav}>Add more filters</Button>
-              </div>
-
-              <Row> {classCards} </Row>
-              <label htmlFor=""></label>
-
-              <div className="btn-group" role="group">
-                <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
-                  Previous Page
-                </Button>
-                <Button onClick={nextPage} disabled={skip >= numberOfEntries - 1 ? true : false}>
-                  Next Page
-                </Button>
-              </div>
-            </div>
-          </div>
+                  </Col>
+                </Row>
+              </Container>
+            </Col>
+            <Col xs={12} lg={12} xl={4}>
+              {filteredClasses.length > 0 ? (
+                <ClassesMap classes={filteredClasses}></ClassesMap>
+              ) : null}
+            </Col>
+          </Row>
         </Layout>
       </div>
     </>

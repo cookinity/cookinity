@@ -30,9 +30,8 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
 
   // Handle the checkout.session.completed event --> customer payment for the cooking class
   if (event.type === 'checkout.session.completed') {
-    debugger;
     const session = event.data.object;
-    const { userId, classId, timeSlotId, guestNumber} = session.metadata;
+    const { userId, classId, timeSlotId, guestNumber } = session.metadata;
     const c = await Class.findById(classId);
     const ts = c.timeSlots.id(timeSlotId);
 
@@ -45,7 +44,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       numberOfGuests: guestNumber,
       totalPrice: session.amount_total,
       currency: session.currency,
-      bookingDate: dayjs().utc().toJSON()
+      bookingDate: dayjs().utc().toJSON(),
     };
 
     try {

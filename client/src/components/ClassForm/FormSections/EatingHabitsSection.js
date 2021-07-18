@@ -62,6 +62,63 @@ const EatingHabitsSection = ({ formik }) => {
           ) : null}
         </Form.Group>
       </Form.Row>
+      <Form.Row>
+        <Form.Group as={Col} controlId="pescatarianFriendly">
+          <Form.Check
+            label="Pescatarian"
+            type="checkbox"
+            value="true"
+            name="pescatarianFriendly"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            checked={formik.values.pescatarianFriendly}
+            className={
+              formik.touched.pescatarianFriendly && formik.errors.pescatarianFriendly
+                ? 'form-error'
+                : null
+            }
+          />
+          {formik.touched.pescatarianFriendly && formik.errors.pescatarianFriendly ? (
+            <div className="form-error-message">{formik.errors.pescatarianFriendly}</div>
+          ) : null}
+        </Form.Group>
+        <Form.Group as={Col} controlId="eggFree">
+          <Form.Check
+            label="Egg-Free"
+            type="checkbox"
+            value="true"
+            name="eggFree"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            checked={formik.values.eggFree}
+            className={
+              formik.touched.eggFree && formik.errors.eggFree ? 'form-error' : null
+            }
+          />
+          {formik.touched.eggFree && formik.errors.eggFree ? (
+            <div className="form-error-message">{formik.errors.eggFree}</div>
+          ) : null}
+        </Form.Group>
+        <Form.Group as={Col} controlId="soyFree">
+          <Form.Check
+            label="Soy-free"
+            type="checkbox"
+            value="true"
+            name="soyFree"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            checked={formik.values.soyFree}
+            className={
+              formik.touched.soyFree && formik.errors.soyFree
+                ? 'form-error'
+                : null
+            }
+          />
+          {formik.touched.soyFree && formik.errors.soyFree ? (
+            <div className="form-error-message">{formik.errors.soyFree}</div>
+          ) : null}
+        </Form.Group>
+      </Form.Row>
     </>
   );
 };
