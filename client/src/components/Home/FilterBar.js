@@ -54,6 +54,8 @@ const FilterBar = ({
                     </Form.Group>
                     <Form.Group as={Col} xs={12} md="3" className="my-auto">
                       <DatePicker
+                        // make no date in the past selectable
+                        minDate={new Date()}
                         value={startDate}
                         onChange={handleFilterDate}
                         type="custom"
