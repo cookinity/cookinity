@@ -32,7 +32,7 @@ const FilterBar = ({
                         <Form.Control as="select" custom onChange={handleFilterCity}>
                           <option>All Cities</option>
                           {CITY_CATEGORIES.map((c) => (
-                            <option>{c}</option>
+                            <option key={c}>{c}</option>
                           ))}
                         </Form.Control>
                       </InputGroup>
@@ -47,7 +47,7 @@ const FilterBar = ({
                         <Form.Control as="select" custom onChange={handleFilterCategory}>
                           <option>All Categories</option>
                           {CLASS_CATEGORIES.map((c) => (
-                            <option>{c}</option>
+                            <option key={c}>{c}</option>
                           ))}
                         </Form.Control>
                       </InputGroup>

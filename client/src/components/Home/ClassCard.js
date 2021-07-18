@@ -78,7 +78,9 @@ export default function ClassCard({ c, filterDate }) {
       stars.push(<i className="star fa fa-star-o text-warning" key={i} />);
     }
     stars.push(
-      <span className="badge badge-pill badge-primary ml-2">{c.avgRating ? c.avgRating : 0}</span>,
+      <span key="avgRatingBadge" className="badge badge-pill badge-primary ml-2">
+        {c.avgRating ? c.avgRating : 0}
+      </span>,
     );
     return stars;
   }
@@ -110,7 +112,9 @@ export default function ClassCard({ c, filterDate }) {
       const date = dayjs(timeSlot.date);
       const diff = Math.abs(date.diff(orientationDate, 'days'));
       if (diff < 3 && !timeSlot.isBooked) {
-        bookableDatesAroundOrientationDate.push(<li>{date.format('llll')}</li>);
+        bookableDatesAroundOrientationDate.push(
+          <li key={date.format('llll')}>{date.format('llll')}</li>,
+        );
         if (bookableDatesAroundOrientationDate.length === 3) {
           break;
         }
