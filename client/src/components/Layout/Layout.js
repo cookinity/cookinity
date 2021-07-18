@@ -7,7 +7,8 @@ import { Col, Container, Row } from 'react-bootstrap';
 const Layout = ({ children }) => {
   return (
     <>
-      <NavigationBar />
+      <NavigationBar/>
+    
       <Container fluid>
         <Row noGutters>
           <Col className="mt-4 mb-4" xs={{ span: 10, offset: 1 }}>

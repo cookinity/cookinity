@@ -15,7 +15,7 @@ const FilterBar = ({
 }) => {
   return (
     <>
-      <div className="container">
+      <div>
         <div className="row">
           <div className="col-12">
             <div className="card border-light">

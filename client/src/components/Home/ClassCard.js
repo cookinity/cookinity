@@ -41,7 +41,9 @@ export default function ClassCard({ c, filterDate }) {
           <span>No free dates to book available!</span>
         )}
         <hr></hr>
-        <p className="mb-0">{description}</p>
+        <div className="cardDescription">
+          <p className="mb-0">{description}</p>
+        </div>
       </div>
       <div className="card-footer bg-soft border-top">
         <div className="d-flex justify-content-between">
@@ -93,17 +95,13 @@ export default function ClassCard({ c, filterDate }) {
     bookableTimeSlots.sort((a, b) => {
       const aDate = dayjs(a.date);
       const bDate = dayjs(b.date);
-      // if the date is the same we take the earlier time slot
-      if (aDate.isSame(bDate, 'day')) {
-        const aTime = a.time.split(':');
-        const bTime = b.time.split(':');
-        // if the times are the same we take the earlier time slot
-        if (aTime[0] === bTime[0] && aTime[1] === bTime[1]) {
-          return a.date < b.date ? -1 : 1;
-        }
-        return a.date < b.date ? 1 : -1;
+      if (aDate.isBefore(bDate)) {
+        return -1;
       }
-      return aDate < bDate ? -1 : 1;
+      if (aDate.isAfter(bDate)) {
+        return 1;
+      }
+      return 0;
     });
 
     const bookableDatesAroundOrientationDate = [];
