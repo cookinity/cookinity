@@ -5,6 +5,7 @@ import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 import { logOutUser } from '../../../store/features/authentication/authActions';
 import { LinkContainer } from 'react-router-bootstrap';
+import './Navbar.scss';
 
 export const NavigationBar = () => {
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ export const NavigationBar = () => {
   }
 
   return (
-    <Navbar bg="primary" variant="dark" expand="lg">
+    <Navbar bg="primary" variant="dark" expand="lg" className="shadowNav">
       <LinkContainer to="/">
         <Navbar.Brand>Cookinity</Navbar.Brand>
       </LinkContainer>
