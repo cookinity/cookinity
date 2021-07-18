@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Col, InputGroup, Button } from 'react-bootstrap';
 import { CITY_CATEGORIES } from '../../constants/CityCategories';
 import { CLASS_CATEGORIES } from '../../constants/ClassCategories';
 import Toolbar from 'react-multi-date-picker/plugins/toolbar';
 import DatePicker from 'react-multi-date-picker';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const FilterBar = ({
   handleFilterCity,
