@@ -86,11 +86,7 @@ const Profile = ({
   return (
     <LayoutNarrow>
       <div className="profile">
-        <h1>Profile page</h1>
-        <p>
-          This is the profile page. User can edit his own profile and Admin can edit any user's
-          profile. Only authenticated users can see this page.
-        </p>
+        <h1>Your Profile</h1>
         {isLoading ? (
           <Loader />
         ) : (
