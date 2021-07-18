@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
-import './Home.scss';
+import { Form, Button } from 'react-bootstrap';
 
 const FilterSideBar = ({
   handleFilterRating,
@@ -21,9 +20,12 @@ const FilterSideBar = ({
   handleVegetarian,
   handleVegan,
   handleNutAllergy,
+  handlePescatarian,
+  handleEggFree,
+  handleSoyFree,
 }) => {
   return (
-    <div >
+    <Form>
     <a>
       <h5>Filters</h5>
     </a>
@@ -47,6 +49,7 @@ const FilterSideBar = ({
           <p className="small px-2">& More</p>
         </div>
       </li>
+
       <li
         id="starRating3"
         className="list-group pointer"
@@ -90,6 +93,7 @@ const FilterSideBar = ({
         </div>
       </li>
     </a>
+   
     <a>
       <label htmlFor="price" className="form-label">
         Price
@@ -225,8 +229,42 @@ const FilterSideBar = ({
           Nut free
         </label>
       </div>
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          onChange={(event) => handlePescatarian(event)}
+          type="checkbox"
+          id="pescatarian"
+        />
+        <label className="form-check-label small" htmlFor="pescatarian">
+          Pescatarian
+        </label>
+      </div>
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          onChange={(event) => handleEggFree(event)}
+          type="checkbox"
+          id="eggfree"
+        />
+        <label className="form-check-label small" htmlFor="eggfree">
+          Egg free
+        </label>
+      </div>
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          onChange={(event) => handleSoyFree(event)}
+          type="checkbox"
+          id="soyfree"
+        />
+        <label className="form-check-label small" htmlFor="soyfree">
+          Soy free
+        </label>
+      </div>
     </a>
-  </div>
+    <p>&nbsp;</p>
+    </Form>
   );
 };
 

@@ -21,7 +21,7 @@ var photosUpload = upload.fields([
 ]);
 
 router.post('/query', async (req, res, next) => {
-  let { city, category, date, guests, priceLow, priceUp, priceLowField, priceUpField, rating, vegan, vegetarian, nutAllergy, limit, skip } = req.body;
+  let { city, category, date, guests, priceLow, priceUp, priceLowField, priceUpField, rating, vegan, vegetarian, nutAllergy, pescatarian, eggFree, soyFree, limit, skip } = req.body;
 
   if (date) {
     date = dayjs(date);
@@ -90,6 +90,18 @@ router.post('/query', async (req, res, next) => {
 
     if (nutAllergy) {
       classes = classes.filter((c) => c.nutAllergyFriendly);
+    }
+
+    if (pescatarian) {
+      classes = classes.filter((c) => c.pescatarianFriendly);
+    }
+
+    if (eggFree) {
+      classes = classes.filter((c) => c.eggFree);
+    }
+
+    if (soyFree) {
+      classes = classes.filter((c) => c.soyFree);
     }
 
     const numberOfEntries = classes.length;

@@ -37,6 +37,9 @@ export const Home = () => {
   const [vegan, setVegan] = useState(false);
   const [vegetarian, setVegetarian] = useState(false);
   const [nutAllergy, setNutAllergy] = useState(false);
+  const [pescatarian, setPescatarian] = useState(false);
+  const [eggFree, setEggFree] = useState(false);
+  const [soyFree, setSoyFree] = useState(false);
 
   const starRating4 = document.getElementById('starRating4');
   const starRating3 = document.getElementById('starRating3');
@@ -62,6 +65,9 @@ export const Home = () => {
     vegan,
     vegetarian,
     nutAllergy,
+    pescatarian,
+    eggFree,
+    soyFree,
   ]);
 
   const fetchClasses = async () => {
@@ -87,6 +93,9 @@ export const Home = () => {
         vegan,
         vegetarian,
         nutAllergy,
+        pescatarian,
+        eggFree,
+        soyFree,
       };
 
       const result = await axios.post(`/api/classes/query`, queryObject);
@@ -179,6 +188,21 @@ export const Home = () => {
     else setNutAllergy(false);
   };
 
+  const handlePescatarian = (e) => {
+    if (e.target.checked) setPescatarian(true);
+    else setPescatarian(false);
+  }
+
+  const handleEggFree = (e) => {
+    if (e.target.checked) setEggFree(true);
+    else setEggFree(false);
+  }
+
+  const handleSoyFree = (e) => {
+    if (e.target.checked) setSoyFree(true);
+    else setSoyFree(false);
+  }
+
   const handleFilterRating = (starRating, e) => {
     if (starRating.style.color != 'dodgerblue') {
       starRating.style.color = 'dodgerblue';
@@ -259,6 +283,9 @@ export const Home = () => {
                 handleVegetarian={handleVegetarian}
                 handleVegan={handleVegan}
                 handleNutAllergy={handleNutAllergy}
+                handlePescatarian={handlePescatarian}
+                handleEggFree={handleEggFree}
+                handleSoyFree={handleSoyFree}
               ></FilterSideBar>
             </Col>
             <Col xs={12} lg={12} xl={7}>
