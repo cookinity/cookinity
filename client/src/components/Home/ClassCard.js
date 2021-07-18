@@ -79,7 +79,7 @@ export default function ClassCard({ c, filterDate }) {
     }
     stars.push(
       <span key="avgRatingBadge" className="badge badge-pill badge-primary ml-2">
-        {c.avgRating ? c.avgRating.toFixed(2) : 0}
+        {c.avgRating ? c.avgRating : 0}
       </span>,
     );
     return stars;
