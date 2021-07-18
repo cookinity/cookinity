@@ -41,7 +41,9 @@ export default function ClassCard({ c, filterDate }) {
           <span>No free dates to book available!</span>
         )}
         <hr></hr>
-        <p className="mb-0">{description}</p>
+        <div className="cardDescription">
+          <p className="mb-0">{description}</p>
+        </div>
       </div>
       <div className="card-footer bg-soft border-top">
         <div className="d-flex justify-content-between">
