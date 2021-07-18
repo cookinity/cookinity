@@ -252,39 +252,38 @@ const ClassDetail = () => {
             <h6>
               Average: {c.avgRating?.toFixed(2)} ({numFeedback} Ratings)
             </h6>
-            <Container className="ratingContainer">
-              <Row xs={1} md={3}>
+            <div className="ratingContainer">
+              <Row xs={1} md={2}>
                 {ratings.map((rating, index) => [
-                  <Col xs={12} md={4}>
-                    <Row className="align-items-center">
+                  <Col xs={12} md={6} className="progressBars">
+                    <div className="ratingRow">
                       {rating.name}
-                      <Spacer grow="1" />
-                      <div className="ratingBar">
-                        <ProgressBar now={(rating.rating / 5) * 100} />
+                      <div className="ratingInnerRow">
+                        <div className="ratingBar">
+                          <ProgressBar now={(rating.rating / 5) * 100} />
+                        </div>
+                        <div className="ratingFontSize">{rating.rating?.toFixed(2)}</div>
                       </div>
-                      <div className="ratingFontSize">{rating.rating?.toFixed(2)}</div>
-                    </Row>
+                    </div>
                   </Col>,
-                  index % 2 === 0 && <Col xs={0} md={4}></Col>,
+                  // index % 2 === 0 && <Col xs={0} md={4}></Col>,
                 ])}
               </Row>
-            </Container>
+            </div>
 
             {/* Feedback Comments */}
-            <Container>
+            <div>
               <Row xs={1} md={2}>
                 {c.feedbacks.map((f) => (
                   <Col key={f.id}>
-                    <Container>
-                      <Row>
-                        <Col xs={12} md={2}>
-                          <Image src={f.reviewer.avatar} className="reviewerImage" roundedCircle />
-                        </Col>
-                        <Col xs={12} md={10}>
+                    <div className="feedbackContainer">
+                      <div className="feedbackProfile">
+                        <Image src={f.reviewer.avatar} className="reviewerImage" roundedCircle />
+                        <div>
                           {f.reviewer.name}
-                          <p>{dayjs(f.feedbackDate).format('MMMM YYYY')}</p>
-                        </Col>
-                      </Row>
+                          <div>{dayjs(f.feedbackDate).format('MMMM YYYY')}</div>
+                        </div>
+                      </div>
                       <Row>
                         <Col>
                           <div className="feedbackDescription">
@@ -292,11 +291,11 @@ const ClassDetail = () => {
                           </div>
                         </Col>
                       </Row>
-                    </Container>
+                    </div>
                   </Col>
                 ))}
               </Row>
-            </Container>
+            </div>
             <ColoredLine color="gray" />
             {/* Host Information */}
             <Container>
@@ -308,7 +307,7 @@ const ClassDetail = () => {
                 </Col>
                 <Col xs={12} md={9}>
                   <h3>Get to know your host: {c.host.name}</h3>
-                  <p>{c.host.description}</p>
+                  <p className="breakWords">{c.host.description}</p>
                 </Col>
               </Row>
             </Container>
