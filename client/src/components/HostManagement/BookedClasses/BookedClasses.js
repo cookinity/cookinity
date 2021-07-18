@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { useSelector } from 'react-redux';
 import { Alert, Col, Row } from 'react-bootstrap';
 import { BookedClassesTable } from './BookedClassesTable';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
 const BookedClasses = () => {
   const [futureBookings, setFutureBookings] = useState([]);
@@ -61,14 +62,15 @@ const BookedClasses = () => {
   };
 
   if (isLoading) {
+    // @ts-ignore
     return (
-      <Layout>
+      <LayoutNarrow>
         <Loader></Loader>
-      </Layout>
+      </LayoutNarrow>
     );
   } else {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Row>
           <Col>
             <div>
@@ -93,7 +95,7 @@ const BookedClasses = () => {
             </div>
           </Col>
         </Row>
-      </Layout>
+      </LayoutNarrow>
     );
   }
 };

@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import ClassForm from 'components/ClassForm/ClassForm';
 import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
 const CreateClass = () => {
   const [isError, setIsError] = useState(false);
@@ -69,7 +70,7 @@ const CreateClass = () => {
   };
 
   return (
-    <Layout>
+    <LayoutNarrow>
       <Row>
         <Col>
           {' '}
@@ -112,7 +113,7 @@ const CreateClass = () => {
           </div>
         </Col>
       </Row>
-    </Layout>
+    </LayoutNarrow>
   );
 };
 

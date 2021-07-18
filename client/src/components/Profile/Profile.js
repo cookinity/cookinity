@@ -14,6 +14,7 @@ import { profileSchema } from './validation';
 import { Button, Form, Image } from 'react-bootstrap';
 
 import './styles.scss';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
 const Profile = ({
   getProfile,
@@ -83,7 +84,7 @@ const Profile = ({
   });
 
   return (
-    <Layout>
+    <LayoutNarrow>
       <div className="profile">
         <h1>Profile page</h1>
         <p>
@@ -242,7 +243,7 @@ const Profile = ({
           </Form>
         )}
       </div>
-    </Layout>
+    </LayoutNarrow>
   );
 };
 

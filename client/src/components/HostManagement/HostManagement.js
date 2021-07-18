@@ -17,6 +17,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { ClassesTable } from './ClassesTable';
 import { LinkContainer } from 'react-router-bootstrap';
 import './HostManagementStyles.scss';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
@@ -178,7 +179,10 @@ export const HostManagement = () => {
         </LinkContainer>
         <div className="tableBackground">
           <h1 className="text-center">Upcoming Classes</h1>
-          <ClassesTable classes={upcomingClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+          <ClassesTable
+            classes={upcomingClasses}
+            onDeleteCallback={onDeleteCallback}
+          ></ClassesTable>
           <hr></hr>
         </div>
         <div className="tableBackground">
@@ -200,26 +204,25 @@ export const HostManagement = () => {
 
   if (isLoading) {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Loader></Loader>
-      </Layout>
+      </LayoutNarrow>
     );
   } else if (stripeAccountCreated) {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Row>
           <Col>
             {' '}
             <Alert variant="success">Stripe Account Created! Please reload this page</Alert>
           </Col>
         </Row>
-      </Layout>
+      </LayoutNarrow>
     );
   } else
     return (
       <div className="bgHostManagement">
-        <Layout>
-
+        <LayoutNarrow>
           <Row>
             <Col>
               <div>
@@ -240,8 +243,7 @@ export const HostManagement = () => {
               </div>
             </Col>
           </Row>
-
-        </Layout>
+        </LayoutNarrow>
       </div>
     );
 };

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '../Layout/Layout';
 import { Alert, Carousel, Container, Row, Col, Image, Button, ProgressBar } from 'react-bootstrap';
 import './classDetail.scss';
 import { useParams } from 'react-router-dom';
@@ -9,6 +8,7 @@ import Loader from 'components/Shared/Loader/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
 import ClassDetailMap from './ClassDetailMap';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 const Spacer = require('react-spacer');
 const { render } = require('react-dom');
 
@@ -105,9 +105,9 @@ const ClassDetail = () => {
 
   if (isLoading) {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Loader></Loader>
-      </Layout>
+      </LayoutNarrow>
     );
   }
   if (c) {
@@ -138,7 +138,7 @@ const ClassDetail = () => {
       },
     ];
     return (
-      <Layout>
+      <LayoutNarrow>
         <div className="mt-2">
           {isError && (
             <Alert
@@ -153,8 +153,7 @@ const ClassDetail = () => {
               {errorMessage}
             </Alert>
           )}
-
-          <Container>
+          <Container fluid>
             <Carousel
               className="carousel slide"
               data-ride="carousel"
@@ -318,7 +317,7 @@ const ClassDetail = () => {
             </div>
           </Container>
         </div>
-      </Layout>
+      </LayoutNarrow>
     );
   } else {
     return <div>Class not found!</div>;

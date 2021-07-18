@@ -24,6 +24,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
       <th>Min Guests</th>
       <th>Max Guests</th>
       <th>Duration</th>
+      <th>Dates</th>
       <th>Actions</th>
     </tr>
   );
@@ -61,11 +62,9 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
             )}
             {c.futureDates.length !== 0 ? (
               <Card>
-                <Card.Header>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                    Upcoming Dates
-                  </Accordion.Toggle>
-                </Card.Header>
+                <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                  Upcoming Dates
+                </Accordion.Toggle>
                 <Accordion.Collapse eventKey="1">
                   <Card.Body>
                     {' '}
@@ -104,7 +103,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
 
   return (
     <>
-      <Table striped bordered hover>
+      <Table bordered hover responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>

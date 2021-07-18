@@ -9,6 +9,7 @@ import FeedbackForm from 'components/FeedbackForm/FeedbackForm';
 import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
 import { useParams } from 'react-router-dom';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
 const FeedbackUser = () => {
   const [isError, setIsError] = useState(false);
@@ -50,7 +51,7 @@ const FeedbackUser = () => {
   };
 
   return (
-    <Layout>
+    <LayoutNarrow>
       <Row>
         <Col>
           {' '}
@@ -93,7 +94,7 @@ const FeedbackUser = () => {
           </div>
         </Col>
       </Row>
-    </Layout>
+    </LayoutNarrow>
   );
 };
 

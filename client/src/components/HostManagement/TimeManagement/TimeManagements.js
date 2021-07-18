@@ -16,6 +16,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { TimeSlotTable } from './TimeSlotTable';
 import './TimeSlotStyles.scss';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 dayjs.extend(utc);
 
 const TimeManagement = () => {
@@ -124,13 +125,13 @@ const TimeManagement = () => {
 
   if (isLoading) {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Loader></Loader>
-      </Layout>
+      </LayoutNarrow>
     );
   } else {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Row>
           <Col>
             <div className="mt-2">
@@ -180,7 +181,7 @@ const TimeManagement = () => {
             </div>
           </Col>
         </Row>
-      </Layout>
+      </LayoutNarrow>
     );
   }
 };

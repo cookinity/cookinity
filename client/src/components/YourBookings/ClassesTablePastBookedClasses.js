@@ -6,7 +6,6 @@ import { LinkContainer } from 'react-router-bootstrap';
 import dayjs from 'dayjs';
 
 export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
-
   const columns = (
     <tr>
       <th>Title</th>
@@ -55,7 +54,7 @@ export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
 
   return (
     <>
-      <Table striped bordered hover>
+      <Table bordered responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>
