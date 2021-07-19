@@ -5,23 +5,11 @@ const { Schema } = mongoose;
 export const feedbackHostSchema = new Schema(
     {
         //Stars
-        ratingCustomerStar: {
+        numberOfStars: {
             type: Number,
             required: true,
         },
-        //text
-        ratingCustomer: {
-            type: String,
-            default: '',
-            required: true,
-        },
         //persons
-        customer: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-        },
-
         reviewer: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
@@ -33,16 +21,13 @@ export const feedbackHostSchema = new Schema(
 feedbackHostSchema.methods.toJSON = function () {
     return {
         id: this._id,
-        ratingCustomerStar: this.overallRatingStars,
-        ratingCustomer: this.overallRating,
+        numberOfStars: this.numberOfStars,
         reviewer: this.reviewer.toJSON(),
-        customer: this.customer.toJSON(),
     };
 };
 
 export const feedbackHostJoiSchema = Joi.object().keys({
-    ratingCustomerStar: Joi.number().min(1).max(5).positive().required(),
-    ratingCustomer: Joi.string().required(),
+    numberOfStars: Joi.number().min(1).max(5).positive().required(),
 });
 
 export const validateFeedback = (f) => {
