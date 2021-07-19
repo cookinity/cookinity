@@ -53,6 +53,7 @@ const ClassDetail = () => {
   // id of the class in the route
   let { classId } = useParams();
 
+  //test
   useEffect(() => {
     const fetchClass = async () => {
       setIsError(false);
