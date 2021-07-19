@@ -68,10 +68,8 @@ router.post('/query', passport.authenticate(['jwt', 'anonymous'], { session: fal
     //}
 
     // if the user is logged in we want to show only the classes where he/she fulfills the minimum rating requirement
-    if (req.user && req.user.avgRatingAsGuest) {
-      classes = classes.filter(
-        (c) => c.minGuestRatingRequired && c.minGuestRatingRequired <= req.user.avgRatingAsGuest,
-      );
+    if (req.user && req.user.avgRatingAsGuest && c.minGuestRatingRequired) {
+      classes = classes.filter((c) => c.minGuestRatingRequired <= req.user.avgRatingAsGuest);
     }
     const numberOfEntries = classes.length;
     // Apply Skip and Limit
