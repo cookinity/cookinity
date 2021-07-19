@@ -81,7 +81,7 @@ const FilterSideBar = ({
     <div>
       <h5>Filters</h5>
 
-      <div>
+      <div className="filterOrder">
         <div>Overall rating</div>
         <div>{fourStarsAndMore}</div>
         <div>{threeStarsAndMore}</div>
@@ -89,7 +89,7 @@ const FilterSideBar = ({
         <div>{oneStarAndMore}</div>
       </div>
 
-      <div className="mt-2">
+      <div className="mt-2 filterOrder">
         <div>Price per Person</div>
         <div>{belowTwentyFiveEuros}</div>
         <div>{twentyFiveEurosUntilFiftyEuros}</div>
@@ -97,7 +97,7 @@ const FilterSideBar = ({
         <div>{aboveHundredEuros}</div>
       </div>
 
-      <div className="mt-2">
+      <div className="mt-2 filterOrder">
         <div>Number of Guests</div>
         <div>{onePerson}</div>
         <div>{twoPersons}</div>
@@ -113,7 +113,7 @@ const FilterSideBar = ({
         ></input>
       </div>
 
-      <div>
+      <div className="filterOrder">
         <div>Dietary Preference</div>
         <div className="form-check">
           <input

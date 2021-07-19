@@ -22,7 +22,12 @@ const FilterBar = ({
               <div className="card-body">
                 <Form>
                   <Form.Row>
-                    <Form.Group as={Col} xs={12} md={{ span: 3, offset: 1 }} className="my-auto">
+                    <Form.Group
+                      as={Col}
+                      xs={12}
+                      md={{ span: 3, offset: 1 }}
+                      className="my-auto filterOrder"
+                    >
                       <InputGroup>
                         <InputGroup.Prepend>
                           <InputGroup.Text>
@@ -52,7 +57,7 @@ const FilterBar = ({
                         </Form.Control>
                       </InputGroup>
                     </Form.Group>
-                    <Form.Group as={Col} xs={12} md="3" className="my-auto">
+                    <Form.Group as={Col} xs={12} md="3" className="my-auto filterOrder">
                       <DatePicker
                         // make no date in the past selectable
                         minDate={new Date()}
@@ -87,7 +92,7 @@ const FilterBar = ({
                         ]}
                       />
                     </Form.Group>
-                    <Col xs={12} md={1} className="text-left">
+                    <Col xs={12} md={1} className=" filterOrder">
                       <Button onClick={fetchClasses}> Search</Button>
                     </Col>
                   </Form.Row>

@@ -213,7 +213,7 @@ export const Home = () => {
             </Col>
           </Row>
           <Row>
-            <Col xs={12} lg={12} xl={2}>
+            <Col xs={12} lg={12} xl={2} className="mb-4">
               <FilterSideBar
                 handleFilterRating={handleFilterRating}
                 handleFilterPrice={handleFilterPrice}
@@ -242,7 +242,7 @@ export const Home = () => {
                   {classCards}
                 </Row>
                 <Row>
-                  <Col xs={12} className="text-center mt-2">
+                  <Col xs={12} className="text-center mt-2 mb-4">
                     <div className="btn-group" role="group">
                       <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
                         Previous
