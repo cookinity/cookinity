@@ -19,6 +19,7 @@ import HostManagement from 'components/HostManagement/HostManagement';
 import CreateClass from 'components/CreateClass/CreateClass';
 import ClassDetail from 'components/ClassDetail/ClassDetail';
 import EditClass from 'components/EditClass/EditClass';
+import {Landing} from 'components/Landing/Landing';
 
 import FeedbackUser from 'components/FeedbackUser/FeedbackUser';
 
@@ -106,6 +107,7 @@ const App = ({ auth, loadMe }) => {
           <Route path="/classes/:classId/booking" component={BookClass} exact />
           <Route path="/classes/:classId/create-feedback" component={FeedbackUser} exact />
           <Route path="/hostmanagement/edit-class/:classId" component={EditClass} exact />
+          <Route path="/landing" component={Landing} exact/>
           <Route
             path="/hostmanagement/edit-class/:classId/times"
             component={TimeManagements}
