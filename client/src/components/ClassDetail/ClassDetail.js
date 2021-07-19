@@ -43,9 +43,9 @@ const ClassDetail = () => {
   const nextIcon = <i className="fa fa-arrow-right" />;
 
   const carouselImages = photos.map((src) => (
-    <Carousel.Item interval={3000} key={src}>
+    <Carousel.Item interval={3000} key={src} >
       <div className="photoFrame">
-        <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration" rounded/>
+        <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration"/>
       </div>
     </Carousel.Item>
   ));
@@ -53,7 +53,6 @@ const ClassDetail = () => {
   // id of the class in the route
   let { classId } = useParams();
 
-  //test
   useEffect(() => {
     const fetchClass = async () => {
       setIsError(false);
@@ -156,7 +155,7 @@ const ClassDetail = () => {
           )}
           <Container fluid>
             <Carousel
-              className="carousel slide"
+              className="carousel slide photoAttribute"
               data-ride="carousel"
               nextIcon={nextIcon}
               prevIcon={prevIcon}
@@ -212,7 +211,7 @@ const ClassDetail = () => {
             <Container>
               <Row className="dietaryRows">
                 <Col>
-                  <FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" color="blue"/>
                   {c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'}{' '}
                 </Col>
                 <Col>

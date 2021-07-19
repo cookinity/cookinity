@@ -5,6 +5,7 @@ import { CLASS_CATEGORIES } from '../../constants/ClassCategories';
 import Toolbar from 'react-multi-date-picker/plugins/toolbar';
 import DatePicker from 'react-multi-date-picker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './FilterBar.scss';
 
 const FilterBar = ({
   handleFilterCity,
@@ -18,15 +19,13 @@ const FilterBar = ({
       <div>
         <div className="row">
           <div className="col-12">
-            <div className="card border-light">
-              <div className="card-body">
                 <Form>
                   <Form.Row>
                     <Form.Group
                       as={Col}
                       xs={12}
-                      md={{ span: 3, offset: 1 }}
-                      className="my-auto filterOrder"
+                      md={{ span: 3, offset: 0 }}
+                      className="my-auto filterOrder test1"
                     >
                       <InputGroup>
                         <InputGroup.Prepend>
@@ -57,7 +56,7 @@ const FilterBar = ({
                         </Form.Control>
                       </InputGroup>
                     </Form.Group>
-                    <Form.Group as={Col} xs={12} md="3" className="my-auto filterOrder">
+                    <Form.Group as={Col} xs={12} md="3" className="my-auto filterOrder filterDatePicker">
                       <DatePicker
                         // make no date in the past selectable
                         minDate={new Date()}
@@ -97,8 +96,6 @@ const FilterBar = ({
                     </Col>
                   </Form.Row>
                 </Form>
-              </div>
-            </div>
           </div>
         </div>
       </div>
