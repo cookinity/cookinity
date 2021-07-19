@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import './FilterSideBar.scss';
 
 const FilterSideBar = ({
   handleFilterRating,
@@ -104,7 +104,7 @@ const FilterSideBar = ({
         <div>{threePersons}</div>
         <div>{fourPersons}</div>
         <input
-          className="form-control form-control-sm mt-3"
+          className="form-control form-control-sm mt-1 guestInput"
           placeholder="Custom"
           type="number"
           value={selectedNumberOfGuests}
