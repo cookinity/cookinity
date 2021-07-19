@@ -211,33 +211,33 @@ const ClassDetail = () => {
             <Container>
               <Row className="dietaryRows">
                 <Col>
-                  <FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" color="blue"/>
+                  <FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" color="#ff9900"/>
                   {c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" color="#339933"/>
                   {c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" color="#dea95d" />
                   {c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'}{' '}
                 </Col>
               </Row>
               <Row className="dietaryRows">
                 <Col>
-                  <FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" color="#99ccff" />
                   {c.pescatarianFriendly ? 'pescatarian ✔' : 'pescatarian ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" color="#ffdab3"/>
                   {c.eggFree ? 'egg-free ✔ ' : 'egg-free ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" color="#267326"/>
                   {c.soyFree ? 'soy-free  ✔' : 'soy-free ❌'}{' '}
                 </Col>
               </Row>
