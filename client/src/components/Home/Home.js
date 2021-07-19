@@ -6,6 +6,8 @@ import { Alert, Col, Row, Button, Container } from 'react-bootstrap';
 
 import ClassCard from './ClassCard';
 import Loader from 'components/Shared/Loader/Loader';
+
+import './Home.scss';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import FilterBar from './FilterBar';
@@ -13,6 +15,7 @@ import FilterSideBar from './FilterSideBar';
 import ClassesMap from './ClassesMap';
 import { useSelector } from 'react-redux';
 dayjs.extend(utc);
+
 export const Home = () => {
   const [numberOfEntries, setNumberOfEntries] = useState(0);
   const [filteredClasses, setFilteredClasses] = useState([]);
@@ -27,15 +30,37 @@ export const Home = () => {
   const [cat, setCat] = useState(undefined);
   const [city, setCity] = useState(undefined);
   const [guests, setGuests] = useState('');
-  const [price, setPrice] = useState('');
+  const [priceLow, setPriceLow] = useState('');
+  const [priceUp, setPriceUp] = useState('');
   const [rating, setRating] = useState('');
+  const [vegan, setVegan] = useState(false);
+  const [vegetarian, setVegetarian] = useState(false);
+  const [nutAllergy, setNutAllergy] = useState(false);
+  const [pescatarian, setPescatarian] = useState(false);
+  const [eggFree, setEggFree] = useState(false);
+  const [soyFree, setSoyFree] = useState(false);
 
   // @ts-ignore
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
     fetchClasses();
-  }, [skip, limit]);
+  }, [
+    skip,
+    limit,
+    cat,
+    city,
+    startDate,
+    priceLow && priceUp,
+    guests,
+    rating,
+    vegan,
+    vegetarian,
+    nutAllergy,
+    pescatarian,
+    eggFree,
+    soyFree,
+  ]);
 
   const fetchClasses = async () => {
     setIsError(false);
@@ -52,8 +77,15 @@ export const Home = () => {
         category: cat,
         date,
         guests,
-        price,
+        priceLow,
+        priceUp,
         rating,
+        vegan,
+        vegetarian,
+        nutAllergy,
+        pescatarian,
+        eggFree,
+        soyFree,
       };
 
       let result;
@@ -90,7 +122,7 @@ export const Home = () => {
     if (skip >= limit) setSkip(skip - limit);
   };
 
-  const handleFilterCategory = async (e) => {
+  const handleFilterCategory = (e) => {
     let value = e.target.value;
     if (value === 'All Categories') {
       setCat(undefined);
@@ -108,37 +140,57 @@ export const Home = () => {
     }
   };
 
-  const handleFilterDate = (e) => {
-    setStartDate(e);
+  const handleFilterDate = (date) => {
+    setStartDate(date);
   };
 
-  const handleFilterCapacity = () => {
-    document.getElementById('amount')['value'] = document.getElementById('customRange')['value'];
-    setGuests(document.getElementById('customRange')['value']);
+  const handleFilterCapacity = (numberOfGuest) => {
+    setGuests(numberOfGuest);
   };
 
-  const handleFilterPrice = (e) => {
-    setPrice(e);
+  const handleFilterPrice = (priceRange) => {
+    setPriceLow(priceRange[0]);
+    setPriceUp(priceRange[1]);
   };
 
-  const handleFilterRating = (e) => {
-    setRating(e);
+  const handleVegan = (e) => {
+    if (e.target.checked) setVegan(true);
+    else setVegan(false);
   };
 
-  const openNav = () => {
-    document.getElementById('sidebar').style.width = '20%';
-    document.getElementById('main').style.width = '65%';
+  const handleVegetarian = (e) => {
+    if (e.target.checked) setVegetarian(true);
+    else setVegetarian(false);
   };
 
-  const closeNav = () => {
-    document.getElementById('sidebar').style.width = '0';
-    document.getElementById('main').style.width = '100%';
+  const handleNutAllergy = (e) => {
+    if (e.target.checked) setNutAllergy(true);
+    else setNutAllergy(false);
+  };
+
+  const handlePescatarian = (e) => {
+    if (e.target.checked) setPescatarian(true);
+    else setPescatarian(false);
+  };
+
+  const handleEggFree = (e) => {
+    if (e.target.checked) setEggFree(true);
+    else setEggFree(false);
+  };
+
+  const handleSoyFree = (e) => {
+    if (e.target.checked) setSoyFree(true);
+    else setSoyFree(false);
+  };
+
+  const handleFilterRating = (minimumStars) => {
+    setRating(minimumStars);
   };
 
   const classCards = filteredClasses.map((c) => {
     return (
-      <Col className="mb-1" sm={12} lg={4}>
-        <ClassCard c={c} date={startDate} key={c.id}></ClassCard>
+      <Col className="mb-1" sm={12} xl={6} key={c.id}>
+        <ClassCard c={c} filterDate={startDate} key={c.id}></ClassCard>
       </Col>
     );
   });
@@ -169,7 +221,7 @@ export const Home = () => {
               )}
             </Col>
           </Row>
-          <Row className="mb-2">
+          <Row className="mb-4">
             <Col>
               <FilterBar
                 handleFilterCity={handleFilterCity}
@@ -181,14 +233,36 @@ export const Home = () => {
             </Col>
           </Row>
           <Row>
-            <Col xs={12} lg={12} xl={1}>
-              <FilterSideBar></FilterSideBar>
+            <Col xs={12} lg={12} xl={2} className="mb-4">
+              <FilterSideBar
+                handleFilterRating={handleFilterRating}
+                handleFilterPrice={handleFilterPrice}
+                handleFilterCapacity={handleFilterCapacity}
+                handleVegetarian={handleVegetarian}
+                handleVegan={handleVegan}
+                handleNutAllergy={handleNutAllergy}
+                handlePescatarian={handlePescatarian}
+                handleEggFree={handleEggFree}
+                handleSoyFree={handleSoyFree}
+              ></FilterSideBar>
             </Col>
-            <Col xs={12} lg={12} xl={7}>
+            <Col xs={12} lg={12} xl={6}>
               <Container fluid>
-                <Row>{classCards}</Row>
+                <Row xs={1} md={2} lg={2}>
+                  {filteredClasses.length === 0 ? (
+                    <div className="alert alert-warning mx-auto text-center" role="alert">
+                      <span>🥺 We are sry! We found no classes for your selected filters! 🥺</span>
+                      <br />
+                      <span>💡 Try a different combination of filters 💡</span>
+                      <br />
+                      <span>🍽️ Maybe even try hosting your own cooking class 🍽️ </span>
+                    </div>
+                  ) : null}
+
+                  {classCards}
+                </Row>
                 <Row>
-                  <Col xs={12} className="text-center mt-2">
+                  <Col xs={12} className="text-center mt-2 mb-4">
                     <div className="btn-group" role="group">
                       <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
                         Previous
@@ -205,11 +279,12 @@ export const Home = () => {
               </Container>
             </Col>
             <Col xs={12} lg={12} xl={4}>
-              {filteredClasses.length > 0 ? (
+              <div style={{ display: filteredClasses.length > 0 ? 'block' : 'none' }}>
                 <ClassesMap classes={filteredClasses}></ClassesMap>
-              ) : null}
+              </div>
             </Col>
           </Row>
+          )
         </Layout>
       </div>
     </>

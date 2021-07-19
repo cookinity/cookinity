@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { ClassesTableYourBookings } from './ClassesTableYourBookings';
 import { ClassesTablePastBookedClasses } from './ClassesTablePastBookedClasses';
-
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
 export const HostManagement = () => {
   const [upcomingClasses, setUpcomingClasses] = useState([]);
@@ -56,7 +56,6 @@ export const HostManagement = () => {
 
       setUpcomingClasses(classesBookedFuture);
       setPastClasses(classesBookedPast);
-
     } catch (err) {
       setIsError(true);
       setErrorMessage(err?.response?.data.message || err.message);
@@ -66,13 +65,13 @@ export const HostManagement = () => {
 
   if (isLoading) {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Loader></Loader>
-      </Layout>
+      </LayoutNarrow>
     );
   } else {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Row>
           <Col>
             <div>
@@ -91,9 +90,7 @@ export const HostManagement = () => {
               )}
               <p></p>
               <h1 className="text-center">Booked Classes</h1>
-              <ClassesTableYourBookings
-                yourbookings={upcomingClasses}
-              ></ClassesTableYourBookings>
+              <ClassesTableYourBookings yourbookings={upcomingClasses}></ClassesTableYourBookings>
               <hr></hr>
               <h1 className="text-center">Past Classes</h1>
               <ClassesTablePastBookedClasses
@@ -102,7 +99,7 @@ export const HostManagement = () => {
             </div>
           </Col>
         </Row>
-      </Layout>
+      </LayoutNarrow>
     );
   }
 };

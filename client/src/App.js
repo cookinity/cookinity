@@ -36,17 +36,40 @@ import {
   faUtensils,
   faSeedling,
   faCarrot,
+  faMapMarker,
+  faHamburger,
+  faCalendar,
   faCookie,
   faStar,
   faFish,
   faEgg,
-  faLeaf
+  faLeaf,
 } from '@fortawesome/free-solid-svg-icons';
 import TimeManagements from 'components/HostManagement/TimeManagement/TimeManagements';
 import BookedClasses from 'components/HostManagement/BookedClasses/BookedClasses';
 import BookClass from 'components/ClassBooking/BookClass';
 
-library.add(fab, faCalendarAlt, faClock, faEuroSign, faUsers, faMapMarkerAlt, faCheckCircle, faInfoCircle, faUtensils, faSeedling, faCarrot, faCookie, faStar, faFish, faEgg, faLeaf);
+library.add(
+  fab,
+  faCalendarAlt,
+  faClock,
+  faEuroSign,
+  faUsers,
+  faMapMarkerAlt,
+  faCheckCircle,
+  faInfoCircle,
+  faUtensils,
+  faSeedling,
+  faCarrot,
+  faMapMarker,
+  faHamburger,
+  faCalendar,
+  faCookie,
+  faStar,
+  faFish,
+  faEgg,
+  faLeaf,
+);
 
 const App = ({ auth, loadMe }) => {
   useEffect(() => {

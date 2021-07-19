@@ -17,6 +17,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { ClassesTable } from './ClassesTable';
 import { LinkContainer } from 'react-router-bootstrap';
 import './HostManagementStyles.scss';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
@@ -176,11 +177,18 @@ export const HostManagement = () => {
             <FontAwesomeIcon icon="info-circle" /> Booked classes
           </Button>
         </LinkContainer>
-        <h1 className="text-center">Upcoming Classes</h1>
-        <ClassesTable classes={upcomingClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
-        <hr></hr>
-        <h1 className="text-center">Past Classes</h1>
-        <ClassesTable classes={pastClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+        <div className="tableBackground">
+          <h1 className="text-center">Upcoming Classes</h1>
+          <ClassesTable
+            classes={upcomingClasses}
+            onDeleteCallback={onDeleteCallback}
+          ></ClassesTable>
+          <hr></hr>
+        </div>
+        <div className="tableBackground">
+          <h1 className="text-center">Past Classes</h1>
+          <ClassesTable classes={pastClasses} onDeleteCallback={onDeleteCallback}></ClassesTable>
+        </div>
       </>
     ) : (
       <>
@@ -196,45 +204,47 @@ export const HostManagement = () => {
 
   if (isLoading) {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Loader></Loader>
-      </Layout>
+      </LayoutNarrow>
     );
   } else if (stripeAccountCreated) {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Row>
           <Col>
             {' '}
-            <Alert variant="success">Order confirmed!</Alert>
+            <Alert variant="success">Stripe Account Created! Please reload this page</Alert>
           </Col>
         </Row>
-      </Layout>
+      </LayoutNarrow>
     );
   } else
     return (
-      <Layout>
-        <Row>
-          <Col>
-            <div>
-              {isError && (
-                <Alert
-                  variant="danger"
-                  onClose={() => {
-                    setIsError(false);
-                    setErrorMessage('');
-                  }}
-                  dismissible
-                >
-                  {' '}
-                  {errorMessage}
-                </Alert>
-              )}
-              {content}
-            </div>
-          </Col>
-        </Row>
-      </Layout>
+      <div className="bgHostManagement">
+        <LayoutNarrow>
+          <Row>
+            <Col>
+              <div>
+                {isError && (
+                  <Alert
+                    variant="danger"
+                    onClose={() => {
+                      setIsError(false);
+                      setErrorMessage('');
+                    }}
+                    dismissible
+                  >
+                    {' '}
+                    {errorMessage}
+                  </Alert>
+                )}
+                {content}
+              </div>
+            </Col>
+          </Row>
+        </LayoutNarrow>
+      </div>
     );
 };
 

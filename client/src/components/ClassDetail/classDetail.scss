@@ -48,12 +48,13 @@
 .hostImage {
     width: 180px;
     height: 180px;
+    flex-shrink: 0;
     padding: 5px;
-    margin: auto
+    margin: auto;
 }
 
 .ratingBar {
-    width: 20%;
+    width: 80px;
     height: 2px;
     margin: 15px;
 }
@@ -64,6 +65,7 @@
 
 .ratingFontSize {
     font-size: 12px;
+    min-width: 30px;
 }
 
 .ratingContainer {
@@ -71,16 +73,51 @@
 }
 
 .reviewerImage {
-    width: 90px;
-    height: 90px;
-    padding: 5px;
-    margin: auto
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    margin-right: 5px;
 }
 
 .feedbackDescription {
-    padding: 5px;
+    margin-top: 16px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .dietaryRows {
     padding: 5px;
+}
+
+.feedbackProfile {
+    display: flex;
+    align-items: center;
+}
+
+.progressBars {
+    padding-right: 10%;
+}
+
+.feedbackContainer {
+    margin-bottom: 2rem;
+    padding-right: 10%;
+}
+
+.ratingRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ratingInnerRow {
+    display: flex;
+    align-items: center;
+}
+
+.breakWords {
+    overflow-wrap: break-word;
 }

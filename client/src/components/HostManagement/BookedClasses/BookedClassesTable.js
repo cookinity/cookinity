@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button, Table } from 'react-bootstrap';
 import dayjs from 'dayjs';
@@ -47,7 +46,7 @@ export const BookedClassesTable = ({ bookings, isPastTable }) => {
 
   return (
     <>
-      <Table striped bordered hover>
+      <Table bordered responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>

@@ -3,8 +3,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import * as L from 'leaflet';
 import Fullscreen from 'react-leaflet-fullscreen-plugin';
 import './ClassesMap.scss';
-import { Card } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import { Link } from 'react-router-dom';
 
 const ClassesMap = ({ classes }) => {
   const points = [];
@@ -17,12 +18,17 @@ const ClassesMap = ({ classes }) => {
           <Popup>
             {c.title}
             <br />
-            {c.meetingAddress.street + ', ' + c.meetingAddress.zip + ' ' + c.meetingAddress.city}
+            <div>
+              {c.meetingAddress.street + ', ' + c.meetingAddress.zip + ' ' + c.meetingAddress.city}
+            </div>
+            <Link to={`/classes/${c.id}`}>More Details</Link>
           </Popup>
         </Marker>,
       );
     }
   });
+
+  const markerGroup = <MarkerClusterGroup key={Date.now()}>{markers}</MarkerClusterGroup>;
 
   const options = {
     position: 'topleft',
@@ -38,30 +44,32 @@ const ClassesMap = ({ classes }) => {
   function UpdateMap({ bounds }) {
     const map = useMap();
     setTimeout(() => {
-      map.fitBounds(bounds);
-      map.invalidateSize();
-    }, 250);
+      if (classes.length > 0) {
+        map.fitBounds(bounds);
+        map.invalidateSize();
+      }
+    }, 500);
     return null;
   }
 
+  // update markers
+
   return (
-    <Card className="shadow">
-      <Card.Body>
-        <MapContainer
-          className="mapContainer"
-          scrollWheelZoom={false}
-          boundsOptions={{ padding: [50, 50] }}
-        >
-          <UpdateMap bounds={bounds} />
-          <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <Fullscreen {...options} />
-          <MarkerClusterGroup>{markers}</MarkerClusterGroup>
-        </MapContainer>
-      </Card.Body>
-    </Card>
+    <div className="card border-light">
+      <MapContainer
+        className="mapContainer"
+        scrollWheelZoom={false}
+        boundsOptions={{ padding: [50, 50] }}
+      >
+        <UpdateMap bounds={bounds} />
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Fullscreen {...options} />
+        {markerGroup}
+      </MapContainer>
+    </div>
   );
 };
 

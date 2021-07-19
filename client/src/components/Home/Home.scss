@@ -1,25 +1,27 @@
 .filter {
-  display: block;
-  width: 430px;
+  width: 400px;
 }
 
 .custom-width {
-  width: 165px;
+  width: 60px;
 }
 
+.custom-width-min-max {
+  width: 75px;
+}
 
 .container {
   max-width: 100%;
 }
 
 .sidebar {
-  height: 100%; 
-  width: 0; 
-  position: fixed; 
+  height: 100%;
+  width: 0;
+  position: fixed;
   top: 25px;
   left: 0;
-  overflow-x: hidden; 
-  padding-top: 60px; 
+  overflow-x: hidden;
+  padding-top: 60px;
 }
 
 .sidebar a {
@@ -36,4 +38,8 @@
   right: 25px;
   font-size: 36px;
   margin-left: 50px;
+}
+
+.pointer {
+  cursor: pointer;
 }

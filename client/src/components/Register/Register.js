@@ -1,6 +1,5 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { withRouter, Redirect } from 'react-router-dom';
 
 import { compose } from 'redux';
@@ -28,137 +27,165 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
   if (auth.isAuthenticated) return <Redirect to="/" />;
 
   return (
-    <div className="card mb-3 mx-auto shadow " style={{ width: 500 }}>
+    <main>
+      <div
+        className="preloader bg-dark flex-column justify-content-center align-items-center"
+        style={{ display: 'none' }}
+      ></div>
       <Form onSubmit={formik.handleSubmit} noValidate>
-        <div id="main" className="container">
-          <div className="mt-2">
-            <p>
-              Back to <a href="/">Home page</a>
-            </p>
-
-            <h3 className="text-center">Create new account</h3>
-            <div>
-              <Form.Group controlId="formName">
-                <div className="input-group mb-3">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">
-                      <i className="fa fa-user"></i>
-                    </span>
-                  </div>
-                  <Form.Control
-                    placeholder="Enter name"
-                    name="name"
-                    pattern=".{2,30}"
-                    required
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.name}
-                  />
+        <section
+          className="min-vh-100 d-flex align-items-center section-image overlay-soft-dark py-5 py-lg-0"
+          // data-background=""
+        >
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-12">
+                <div className="text-center text-md-center mb-5 mt-md-0 text-white">
+                  <h1 className="mb-0 h3">Create an account</h1>
                 </div>
-              </Form.Group>
+              </div>
+              <div className="col-12 d-flex align-items-center justify-content-center">
+                <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
+                  <p>
+                    Back to <a href="/">Home page</a>
+                  </p>
+                      
+                  <div>
+                    <div className="form-group">
+                      <label htmlFor="name">Your name</label>
+                      <div className="input-group mb-4">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text">
+                            <span className="fa fa-user"></span>
+                          </span>
+                        </div>
+                        <input
+                          className="form-control"
+                          id="name"
+                          placeholder="Enter name"
+                          type="text"
+                          aria-label="name"
+                          required
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.name}
+                        />
+                      </div>
+                    </div>
 
-              {formik.touched.name && formik.errors.name ? (
-                <p className="error">{formik.errors.name}</p>
-              ) : null}
+                    {formik.touched.name && formik.errors.name ? (
+                      <p className="error">{formik.errors.name}</p>
+                    ) : null}
 
-              <Form.Group controlId="formUsername">
-                <div className="input-group mb-3">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">
-                      <i className="fa fa-at"></i>
+                    <div className="form-group">
+                      <label htmlFor="username">Your username</label>
+                      <div className="input-group mb-4">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text">
+                            <span className="fa fa-at"></span>
+                          </span>
+                        </div>
+                        <input
+                          className="form-control"
+                          id="username"
+                          placeholder="Enter username"
+                          type="text"
+                          aria-label="username"
+                          required
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.username}
+                        />
+                      </div>
+                    </div>
+
+                    {formik.touched.username && formik.errors.username ? (
+                      <p className="error">{formik.errors.username}</p>
+                    ) : null}
+
+                    <div className="form-group">
+                      <label htmlFor="email">Your email</label>
+                      <div className="input-group mb-4">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text">
+                            <span className="fa fa-envelope"></span>
+                          </span>
+                        </div>
+                        <input
+                          className="form-control"
+                          id="email"
+                          placeholder="Enter email address"
+                          type="text"
+                          aria-label="email"
+                          required
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.email}
+                        />
+                      </div>
+                    </div>
+
+                    {formik.touched.email && formik.errors.email ? (
+                      <p className="error">{formik.errors.email}</p>
+                    ) : null}
+
+                    <div className="form-group">
+                      <label htmlFor="password">Your password</label>
+                      <div className="input-group mb-4">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text">
+                            <span className="fa fa-unlock-alt"></span>
+                          </span>
+                        </div>
+                        <input
+                          className="form-control"
+                          id="password"
+                          placeholder="Enter password"
+                          type="password"
+                          aria-label="password"
+                          required
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.password}
+                        />
+                      </div>
+
+                      {formik.touched.password && formik.errors.password ? (
+                      <p className="error">{formik.errors.password}</p>
+                    ) : null}
+                    
+                      <small id="passwortHelp" className="form-text text-muted">
+                        Password must be at least 6 characters!
+                      </small>
+                    </div>
+                    
+                  </div>
+
+                  {error && <p className="error">{error}</p>}
+
+                  <button
+                    type="submit"
+                    disabled={isLoading || !formik.isValid}
+                    className="btn btn-block btn-primary"
+                  >
+                    Create an account
+                  </button>
+
+                  <div className="d-block d-sm-flex justify-content-center align-items-center mt-4">
+                    <span className="font-weight-normal">
+                      Already have an account?{' '}
+                      <a href="/login" className="font-weight-bold">
+                        Login here
+                      </a>
                     </span>
                   </div>
-                <Form.Control
-                  placeholder="Enter username"
-                  name="username"
-                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{2,20}"
-                  required
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.username}
-                />
                 </div>
-              </Form.Group>
-
-              {formik.touched.username && formik.errors.username ? (
-                <p className="error">{formik.errors.username}</p>
-              ) : null}
-
-              <Form.Group controlId="formEmail">
-              <div className="input-group mb-3">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">
-                      <i className="fa fa-envelope"></i>
-                    </span>
-                  </div>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email address"
-                  name="email"
-                  required
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                />
-                </div>
-              </Form.Group>
-
-              {formik.touched.email && formik.errors.email ? (
-                <p className="error">{formik.errors.email}</p>
-              ) : null}
-
-              <Form.Group controlId="formPassword">
-              <div className="input-group mb-3">
-                  <div className="input-group-prepend">
-                    <span className="input-group-text">
-                      <i className="fa fa-key"></i>
-                    </span>
-                  </div>
-                
-                <Form.Control
-                  type="password"
-                  placeholder="Enter password"
-                  name="password"
-                  required
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.password}
-                />
-                 </div>
-                <small id="passwortHelp" className="form-text text-muted">
-                  Password must be at least 6 characters!
-                </small>
-               
-               
-              </Form.Group>
-
-              {formik.touched.password && formik.errors.password ? (
-                <p className="error">{formik.errors.password}</p>
-              ) : null}
+              </div>
             </div>
-
-            {error && <p className="error">{error}</p>}
-
-            <Button
-              className="btn submit"
-              variant="primary"
-              type="submit"
-              disabled={isLoading || !formik.isValid}
-            >
-              Sign up now
-            </Button>
-
-            <p>
-              Have an account? <a href="/login">Log in</a>
-            </p>
-
-            <p className="forgot-password">
-              Forgot <a href="#">password</a>?
-            </p>
           </div>
-        </div>
+        </section>
       </Form>
-    </div>
+    </main>
   );
 };
 

@@ -14,6 +14,7 @@ import { profileSchema } from './validation';
 import { Button, Form, Image } from 'react-bootstrap';
 
 import './styles.scss';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
 const Profile = ({
   getProfile,
@@ -83,13 +84,9 @@ const Profile = ({
   });
 
   return (
-    <Layout>
+    <LayoutNarrow>
       <div className="profile">
-        <h1>Profile page</h1>
-        <p>
-          This is the profile page. User can edit his own profile and Admin can edit any user's
-          profile. Only authenticated users can see this page.
-        </p>
+        <h1>Your Profile</h1>
         {isLoading ? (
           <Loader />
         ) : (
@@ -242,7 +239,7 @@ const Profile = ({
           </Form>
         )}
       </div>
-    </Layout>
+    </LayoutNarrow>
   );
 };
 

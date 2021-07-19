@@ -10,6 +10,7 @@ import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
 const EditClass = () => {
   const [c, setClass] = useState(undefined);
@@ -91,7 +92,7 @@ const EditClass = () => {
   };
 
   return (
-    <Layout>
+    <LayoutNarrow>
       <Row>
         <Col>
           <div className="mt-2">
@@ -137,7 +138,7 @@ const EditClass = () => {
           </div>
         </Col>
       </Row>
-    </Layout>
+    </LayoutNarrow>
   );
 };
 

@@ -10,6 +10,7 @@ import requireAuth from '../../higherOrderComponents/requireAuth';
 import BookingForm from './BookingForm';
 import { loadStripe } from '@stripe/stripe-js';
 import { PUBLIC_STRIPE_KEY } from 'constants/StripeKey';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
 const stripePromise = loadStripe(PUBLIC_STRIPE_KEY);
 
@@ -89,24 +90,24 @@ const BookClass = () => {
 
   if (isLoading) {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Loader></Loader>
-      </Layout>
+      </LayoutNarrow>
     );
   } else if (isOrderDone) {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Row>
           <Col>
             {' '}
             <Alert variant="success">Order confirmed!</Alert>
           </Col>
         </Row>
-      </Layout>
+      </LayoutNarrow>
     );
   } else {
     return (
-      <Layout>
+      <LayoutNarrow>
         <Row>
           <Col>
             <div className="mt-2">
@@ -133,7 +134,7 @@ const BookClass = () => {
             </div>
           </Col>
         </Row>
-      </Layout>
+      </LayoutNarrow>
     );
   }
 };

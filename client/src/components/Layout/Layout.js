@@ -8,19 +8,14 @@ const Layout = ({ children }) => {
   return (
     <>
       <NavigationBar />
+
       <Container fluid>
         <Row noGutters>
-          <Col className="mt-4 mb-4" xs={{ span: 10, offset: 1 }}>
-            {children}
-          </Col>
+          <Col className="mt-2 mx-5">{children}</Col>
         </Row>
       </Container>
     </>
   );
-};
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
 };
 
 export default Layout;

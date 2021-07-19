@@ -1,0 +1,31 @@
+.guestInput {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: 120px;
+  font-size: 12px;
+}
+
+.mapContainer {
+  height: 500px;
+  z-index: 0;
+  border-radius: 0.45rem;
+}
+
+.filterOrder {
+  text-align: center;
+}
+
+@media (min-width: 1200px) {
+  // center content
+  .filterOrder {
+    text-align: left;
+  }
+
+  .guestInput {
+    width: 120px;
+    font-size: 12px;
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
