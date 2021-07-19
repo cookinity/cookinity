@@ -72,7 +72,7 @@ router.post('/query', passport.authenticate(['jwt', 'anonymous'], { session: fal
         if (!c.minGuestRatingRequired) {
           return true;
           // a user needs to be reviewed at least 5 timees before his avg rating is taken into account
-        } else if (req.user.feedbacksAsGuests && req.user.feedbacksAsGuests.length < 5) {
+        } else if (req.user.feedbacksAsGuests && req.user.feedbacksAsGuests.length < 4) {
           return true;
         } else {
           return c.minGuestRatingRequired <= req.user.avgRatingAsGuest;
