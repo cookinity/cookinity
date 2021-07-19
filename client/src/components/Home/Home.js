@@ -229,6 +229,16 @@ export const Home = () => {
             <Col xs={12} lg={12} xl={6}>
               <Container fluid>
                 <Row xs={1} md={2} lg={2}>
+                  {filteredClasses.length === 0 ? (
+                    <div className="alert alert-warning mx-auto text-center" role="alert">
+                      <span>🥺 We are sry! We found no classes for your selected filters! 🥺</span>
+                      <br />
+                      <span>💡 Try a different combination of filters 💡</span>
+                      <br />
+                      <span>🍽️ Maybe even try hosting your own cooking class 🍽️ </span>
+                    </div>
+                  ) : null}
+
                   {classCards}
                 </Row>
                 <Row>
@@ -254,6 +264,7 @@ export const Home = () => {
               </div>
             </Col>
           </Row>
+          )
         </Layout>
       </div>
     </>
