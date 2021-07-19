@@ -3,7 +3,6 @@ import { Button, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { validationSchema } from './classValidation';
-import { DateObject } from 'react-multi-date-picker';
 import _ from 'lodash';
 import AddressSection from './FormSections/AddressSection';
 import EatingHabitsSection from './FormSections/EatingHabitsSection';
@@ -66,7 +65,10 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('veganFriendly', _.get(originalClass, 'veganFriendly'));
       formik.setFieldValue('vegetarianFriendly', _.get(originalClass, 'vegetarianFriendly'));
       formik.setFieldValue('nutAllergyFriendly', _.get(originalClass, 'nutAllergyFriendly'));
-
+      formik.setFieldValue('pescatarianFriendly', _.get(originalClass, 'pescatarianFriendly'));
+      formik.setFieldValue('eggFree', _.get(originalClass, 'eggFree'));
+      formik.setFieldValue('soyFree', _.get(originalClass, 'soyFree'));
+      
       if (_.get(originalClass, 'coverPhoto')) {
         const coverPhotoURL = _.get(originalClass, 'coverPhoto');
         setCoverPhotoUrl(coverPhotoURL);
@@ -105,6 +107,9 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       veganFriendly: false,
       vegetarianFriendly: false,
       nutAllergyFriendly: false,
+      pescatarianFriendly: false,
+      eggFree: false,
+      soyFree: false,
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
@@ -130,6 +135,9 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             veganFriendly,
             vegetarianFriendly,
             nutAllergyFriendly,
+            pescatarianFriendly,
+            eggFree,
+            soyFree,
           } = values;
           const data = {
             title,
@@ -143,6 +151,9 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             veganFriendly,
             vegetarianFriendly,
             nutAllergyFriendly,
+            pescatarianFriendly,
+            eggFree,
+            soyFree,
             meetingAddress: {
               country,
               city,

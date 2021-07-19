@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { validateFeedback } from '../../models/Feedback';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -9,7 +10,6 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 import Class, { validateClass, validateTimeSlot } from '../../models/Class';
 import upload from '../../middleware/multer';
-import { validateFeedback } from '../../models/Feedback';
 var ObjectId = require('mongoose').Types.ObjectId;
 
 const router = Router();
@@ -40,11 +40,11 @@ router.post('/query', async (req, res, next) => {
     // Apply Date Filter
     if (date) {
       classes = classes.filter((c) => {
-        if (c.bookableDates) {
-          const foundFittingDate = c.bookableDates.find((d) => {
-            return dayjs(d).format('DD/MM/YYYY') === date.format('DD/MM/YYYY');
+        if (c.timeSlots) {
+          const foundFittingTimeSlots = c.timeSlots.find((ts) => {
+            return !ts.isBooked && dayjs(ts.date).format('DD/MM/YYYY') === date.format('DD/MM/YYYY');
           });
-          return foundFittingDate ? true : false;
+          return foundFittingTimeSlots ? true : false;
         } else {
           return false;
         }
@@ -58,9 +58,9 @@ router.post('/query', async (req, res, next) => {
     }
     // Apply Price Filter
     if (price) {
-      classes = classes.filter((c) => c.pricePerPerson < price)
+      classes = classes.filter((c) => c.pricePerPerson < price);
     }
-    // Apply Rating Filter 
+    // Apply Rating Filter
     //if(rating) {
     //  classes = classes.filter((c) => c. === rating)
     //}
@@ -121,7 +121,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const c = await Class.findById(req.params.id).populate('host');
+    const c = await Class.findById(req.params.id).populate('host').populate({ path: 'feedbacks.reviewer' });
     if (!c) return res.status(404).json({ message: 'No class found.' });
     res.json({ class: c.toJSON() });
   } catch (err) {
@@ -204,6 +204,8 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       category: req.body.category,
       description: req.body.description,
       toBring: req.body.toBring,
+      lon: req.body.lon,
+      lat: req.body.lat,
       meetingAddress: req.body.meetingAddress,
       pricePerPerson: req.body.pricePerPerson,
       durationInMinutes: req.body.durationInMinutes,
@@ -212,6 +214,9 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       veganFriendly: req.body.veganFriendly,
       vegetarianFriendly: req.body.vegetarianFriendly,
       nutAllergyFriendly: req.body.nutAllergyFriendly,
+      pescatarianFriendly: req.body.pescatarianFriendly,
+      eggFree: req.body.vegetarianFriendly,
+      soyFree: req.body.nutAllergyFriendly,
     };
 
     Object.keys(updatedClass).forEach((key) => (updatedClass[key] === undefined ? delete updatedClass[key] : {}));
@@ -244,6 +249,64 @@ router.delete('/:classId/timeslots/:tsId', [requireJwtAuth], async (req, res, ne
     res.status(200).json({ tempClass });
   } catch (err) {
     res.status(500).json({ message: 'Something went wrong.' });
+  }
+});
+
+router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
+  try {
+    const tempClass = await Class.findById(req.params.id).populate('host');
+    // check that the class exists in the database
+    if (!tempClass) {
+      return res.status(404).json({ message: 'Class not found!' });
+    }
+
+    const newFeedback = {
+      overallRatingStars: req.body.overallRatingStars,
+      overallRating: req.body.overallRating,
+      hostRatingStars: req.body.hostRatingStars,
+      hostRating: req.body.hostRating,
+      tasteRatingStars: req.body.tasteRatingStars,
+      tasteRating: req.body.tasteRating,
+      locationRatingStars: req.body.locationRatingStars,
+      locationRating: req.body.locationRating,
+      vtmrRatingStars: req.body.vtmrRatingStars,
+      vtmrRating: req.body.vtmrRating,
+      experienceRatingStars: req.body.experienceRatingStars,
+      experienceRating: req.body.experienceRating,
+      reviewer: req.user.id,
+      feedbackDate: dayjs().utc().toJSON(),
+    };
+
+    // ToDo: We need to add verification such that only people who have really booked the class can make a review
+
+    const { error } = validateFeedback(newFeedback);
+    if (error) return res.status(400).json({ message: error.details[0].message });
+    tempClass.feedbacks.push(newFeedback);
+    let updatedClass = {
+      feedbacks: tempClass.feedbacks,
+    };
+    //update Class Feedback Ratings
+    updatedClass.avgRating =
+      tempClass.feedbacks.map((f) => f.overallRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.hostRating =
+      tempClass.feedbacks.map((f) => f.hostRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.tasteRating =
+      tempClass.feedbacks.map((f) => f.tasteRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.locationRating =
+      tempClass.feedbacks.map((f) => f.locationRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.vtmrRating =
+      tempClass.feedbacks.map((f) => f.vtmrRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass.expRating =
+      tempClass.feedbacks.map((f) => f.experienceRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
+    updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
+
+    res.status(200).json({ updatedClass });
+  } catch (err) {
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -288,7 +351,11 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
 
     res.status(200).json({ updatedClass });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -355,6 +422,8 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     category: req.body.category,
     description: req.body.description,
     toBring: req.body.toBring,
+    lon: req.body.lon,
+    lat: req.body.lat,
     meetingAddress: req.body.meetingAddress,
     pricePerPerson: req.body.pricePerPerson,
     durationInMinutes: req.body.durationInMinutes,
@@ -363,6 +432,9 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     veganFriendly: req.body.veganFriendly,
     vegetarianFriendly: req.body.vegetarianFriendly,
     nutAllergyFriendly: req.body.nutAllergyFriendly,
+    pescatarianFriendly: req.body.pescatarianFriendly,
+    eggFree: req.body.eggFree,
+    soyFree: req.body.soyFree,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
   };
 

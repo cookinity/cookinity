@@ -116,6 +116,14 @@ const classSchema = new Schema(
       type: addressSchema,
       required: true,
     },
+    lat: {
+      type: Number,
+      required: true,
+    },
+    lon: {
+      type: Number,
+      required: true,
+    },
     host: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -134,6 +142,42 @@ const classSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    pescatarianFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    eggFree: {
+      type: Boolean,
+      default: false,
+    },
+    soyFree: {
+      type: Boolean,
+      required: false
+    },
+    avgRating: {
+      type: Number,
+      required: false
+    },
+    hostRating: {
+      type: Number,
+      required: false
+    },
+    tasteRating: {
+      type: Number,
+      required: false
+    },
+    locationRating: {
+      type: Number,
+      required: false
+    },
+    vtmrRating: {
+      type: Number,
+      required: false
+    },
+    expRating: {
+      type: Number,
+      required: false
+    }
   },
   { timestamps: true },
 );
@@ -172,6 +216,8 @@ classSchema.methods.toJSON = function () {
     toBring: this.toBring,
     meetingAddress: this.meetingAddress.toJSON(),
     host: this.host.toJSON(),
+    lat: this.lat,
+    lon: this.lon,
     pricePerPerson: this.pricePerPerson,
     durationInMinutes: this.durationInMinutes,
     minGuests: this.minGuests,
@@ -181,6 +227,15 @@ classSchema.methods.toJSON = function () {
     veganFriendly: this.veganFriendly,
     vegetarianFriendly: this.vegetarianFriendly,
     nutAllergyFriendly: this.nutAllergyFriendly,
+    pescatarianFriendly: this.pescatarianFriendly,
+    eggFree: this.eggFree,
+    soyFree: this.soyFree,
+    avgRating: this.avgRating,
+    hostRating: this.hostRating,
+    tasteRating: this.tasteRating,
+    locationRating: this.locationRating,
+    vtmrRating: this.vtmrRating,
+    expRating: this.expRating,
     timeSlots: this.timeSlots.map((timeSlot) => {
       return timeSlot.toJSON();
     }),
@@ -219,6 +274,8 @@ export const validateClass = (c) => {
     description: Joi.string().required(),
     toBring: Joi.string(),
     pricePerPerson: Joi.number().precision(2).positive(), // by default we assume in euro right now
+    lon: Joi.number(),
+    lat: Joi.number(),
     durationInMinutes: Joi.number().integer().min(1).positive().required(),
     minGuests: Joi.number().integer().min(1).max(100).positive().required(),
     maxGuests: Joi.number().integer().min(1).max(100).positive().required(),
@@ -226,6 +283,9 @@ export const validateClass = (c) => {
     timeSlots: Joi.array().items(timeSlotJoiSchema),
     veganFriendly: Joi.boolean(),
     vegetarianFriendly: Joi.boolean(),
+    pescatarianFriendly: Joi.boolean(),
+    eggFree: Joi.boolean(),
+    soyFree: Joi.boolean(),
     nutAllergyFriendly: Joi.boolean(),
     feedbacks: Joi.array().items(feedbackJoiSchema),
   });
