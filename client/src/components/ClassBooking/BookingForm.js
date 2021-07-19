@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Image } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import _ from 'lodash';
 import NumberFormat from 'react-number-format';
+import './BookingForm.scss';
 
 import axios from 'axios';
 dayjs.extend(utc);
@@ -94,8 +95,11 @@ const BookingForm = ({ c, submitCallback }) => {
     <>
       <Form className="mx-auto">
         <h1>{c.title}</h1>
-        <h2>{c.pricePerPerson} Euro per Person</h2>
         <p>{c.durationInMinutes} Minutes</p>
+        <div className="centerImg">
+            <Image className="classCoverPhoto" src={c.coverPhoto} rounded />
+        </div>
+        <h6>Description</h6>
         <p className="supporting-text">{c.description}</p>
         <hr></hr>
         <Form.Group controlId="numberOfGuests">
@@ -115,7 +119,7 @@ const BookingForm = ({ c, submitCallback }) => {
           <li>
             Cooking Class Price
             <span className="ml-2">
-              <NumberFormat value={classPrice} displayType={'text'} thousandSeparator={true} />€
+              <NumberFormat value={c.pricePerPerson.toFixed(2)} displayType={'text'} thousandSeparator={true} />€ x {numberOfGuests}
             </span>
           </li>
           <li>
@@ -126,14 +130,14 @@ const BookingForm = ({ c, submitCallback }) => {
           </li>
         </ul>
         <hr />
-        <span className="font-weight-bold">
+        <div className="totalPrice">
           Total Price{' '}
-          <NumberFormat value={totalPrice} displayType={'text'} thousandSeparator={true} />€
-        </span>
+          <NumberFormat value={totalPrice?.toFixed(2)} displayType={'text'} thousandSeparator={true} />€
+        </div>
         <hr></hr>
-        <div>
+        <div className="text-center">
           <Button variant="primary" onClick={submitCallback(timeSlot, numberOfGuests)}>
-            Book now
+            Confirm and Pay
           </Button>
         </div>
       </Form>

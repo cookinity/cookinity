@@ -45,7 +45,7 @@ const ClassDetail = () => {
   const carouselImages = photos.map((src) => (
     <Carousel.Item interval={3000} key={src}>
       <div className="photoFrame">
-        <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration" />
+        <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration" rounded/>
       </div>
     </Carousel.Item>
   ));
