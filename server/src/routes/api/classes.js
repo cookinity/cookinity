@@ -88,22 +88,14 @@ router.post('/query', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   try {
-    const limitValue = parseInt(req.query.limit);
-    const skipValue = parseInt(req.query.skip);
-
-    if (skipValue < 0) return res.status(400).json({ message: 'This is already the most previous page' });
-
-    const { hostId, category, city, date } = req.query;
+    const { hostId } = req.query;
     let classes = [];
 
     if (hostId) {
       // classes by the specified host
-      classes = await Class.find({ host: new ObjectId(hostId) })
-        .populate('host')
-        .skip(skipValue)
-        .limit(limitValue);
+      classes = await Class.find({ host: new ObjectId(hostId) }).populate('host');
     } else {
-      classes = await Class.find().populate('host').skip(skipValue).limit(limitValue);
+      classes = await Class.find().populate('host');
     }
     res.json({
       classes: classes.map((c) => {
@@ -211,6 +203,7 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       durationInMinutes: req.body.durationInMinutes,
       minGuests: req.body.minGuests,
       maxGuests: req.body.maxGuests,
+      minGuestRatingRequired: req.body.minGuestRatingRequired,
       veganFriendly: req.body.veganFriendly,
       vegetarianFriendly: req.body.vegetarianFriendly,
       nutAllergyFriendly: req.body.nutAllergyFriendly,
@@ -424,6 +417,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     toBring: req.body.toBring,
     lon: req.body.lon,
     lat: req.body.lat,
+    minGuestRatingRequired: req.body.minGuestRatingRequired,
     meetingAddress: req.body.meetingAddress,
     pricePerPerson: req.body.pricePerPerson,
     durationInMinutes: req.body.durationInMinutes,
