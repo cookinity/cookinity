@@ -104,11 +104,6 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
                         <p className="error">{formik.errors.password}</p>
                       ) : null}
 
-                      <div>
-                        <a href="./forgot-password-email.html" className="small ">
-                          Forgot password?
-                        </a>
-                      </div>
                     </div>
                   </div>
 
