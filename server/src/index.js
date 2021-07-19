@@ -37,6 +37,7 @@ app.use((req, res, next) => {
 
 require('./services/jwtStrategy');
 require('./services/localStrategy');
+require('./services/anonymousStrategy');
 
 const isProduction = process.env.NODE_ENV === 'production';
 

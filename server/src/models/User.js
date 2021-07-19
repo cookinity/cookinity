@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 import { isValidUrl } from '../utils/utils';
+import { guestFeedbackJoiSchema, guestFeedbackSchema } from './FeedbackHost';
 
 const { Schema } = mongoose;
 
@@ -43,6 +44,11 @@ const userSchema = new Schema(
       minlength: 6,
       maxlength: 60,
     },
+    feedbacksAsGuests: [guestFeedbackSchema],
+    avgRatingAsGuest: {
+      type: Number,
+      required: false
+    },
     description: {
       type: String,
       lowercase: true,
@@ -64,8 +70,8 @@ userSchema.methods.toJSON = function () {
   const avatar = isValidUrl(this.avatar)
     ? this.avatar
     : fs.existsSync(absoluteAvatarFilePath)
-    ? `${process.env.IMAGES_FOLDER_PATH}${this.avatar}`
-    : `${process.env.IMAGES_FOLDER_PATH}avatar1.jpg`;
+      ? `${process.env.IMAGES_FOLDER_PATH}${this.avatar}`
+      : `${process.env.IMAGES_FOLDER_PATH}avatar1.jpg`;
 
   return {
     id: this._id,
@@ -80,6 +86,7 @@ userSchema.methods.toJSON = function () {
     role: this.role,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
+    avgRatingAsGuest: this.avgRatingAsGuest,
   };
 };
 
@@ -147,6 +154,7 @@ export const validateUser = (user) => {
       .required(),
     password: Joi.string().min(6).max(20).allow('').allow(null),
     description: Joi.string().min(2).max(1000),
+    feedbacksAsGuests: Joi.array().items(guestFeedbackJoiSchema),
   });
 
   return schema.validate(user);

@@ -32,19 +32,19 @@ export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
         <td>{b.host.email}</td>
         <td>
           <LinkContainer to={`/${b.host.username}`}>
-            <Button className="mr-1" variant="info">
+            <Button className="mr-1 mt-1" variant="info">
               <FontAwesomeIcon icon="info-circle" /> {b.host.name}
             </Button>
           </LinkContainer>
         </td>
         <td>
           <LinkContainer to={`/classes/${b.class.id}`}>
-            <Button className="mr-1" variant="info">
+            <Button className="mr-1 mt-1" variant="info">
               <FontAwesomeIcon icon="info-circle" /> Go to Course
             </Button>
           </LinkContainer>
           <LinkContainer to={`/classes/${b.class.id}/create-feedback`}>
-            <Button className="mr-1" variant="sucess">
+            <Button className="mr-1 mt-1" variant="success">
               <FontAwesomeIcon icon={faPlus} /> Give Feedback
             </Button>
           </LinkContainer>

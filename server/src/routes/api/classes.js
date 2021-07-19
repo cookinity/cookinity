@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { validateFeedback } from '../../models/Feedback';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
+import passport from 'passport';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -20,7 +21,7 @@ var photosUpload = upload.fields([
   { name: 'photoTwo', maxCount: 1 },
 ]);
 
-router.post('/query', async (req, res, next) => {
+router.post('/query', passport.authenticate(['jwt', 'anonymous'], { session: false }), async (req, res, next) => {
   let { city, category, date, guests, price, rating, limit, skip } = req.body;
 
   if (date) {
@@ -65,6 +66,19 @@ router.post('/query', async (req, res, next) => {
     //  classes = classes.filter((c) => c. === rating)
     //}
 
+    // if the user is logged in we want to show only the classes where he/she fulfills the minimum rating requirement
+    if (req.user && req.user.avgRatingAsGuest) {
+      classes = classes.filter((c) => {
+        if (!c.minGuestRatingRequired) {
+          return true;
+          // a user needs to be reviewed at least 5 timees before his avg rating is taken into account
+        } else if (req.user.feedbacksAsGuests && req.user.feedbacksAsGuests.length < 4) {
+          return true;
+        } else {
+          return c.minGuestRatingRequired <= req.user.avgRatingAsGuest;
+        }
+      });
+    }
     const numberOfEntries = classes.length;
     // Apply Skip and Limit
     if (skip !== undefined && limit !== undefined) {
@@ -88,22 +102,14 @@ router.post('/query', async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
   try {
-    const limitValue = parseInt(req.query.limit);
-    const skipValue = parseInt(req.query.skip);
-
-    if (skipValue < 0) return res.status(400).json({ message: 'This is already the most previous page' });
-
-    const { hostId, category, city, date } = req.query;
+    const { hostId } = req.query;
     let classes = [];
 
     if (hostId) {
       // classes by the specified host
-      classes = await Class.find({ host: new ObjectId(hostId) })
-        .populate('host')
-        .skip(skipValue)
-        .limit(limitValue);
+      classes = await Class.find({ host: new ObjectId(hostId) }).populate('host');
     } else {
-      classes = await Class.find().populate('host').skip(skipValue).limit(limitValue);
+      classes = await Class.find().populate('host');
     }
     res.json({
       classes: classes.map((c) => {
@@ -211,6 +217,7 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       durationInMinutes: req.body.durationInMinutes,
       minGuests: req.body.minGuests,
       maxGuests: req.body.maxGuests,
+      minGuestRatingRequired: req.body.minGuestRatingRequired,
       veganFriendly: req.body.veganFriendly,
       vegetarianFriendly: req.body.vegetarianFriendly,
       nutAllergyFriendly: req.body.nutAllergyFriendly,
@@ -359,7 +366,6 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
   }
 });
 
-//router.post suchen
 router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
   try {
     const tempClass = await Class.findById(req.params.id).populate('host');
@@ -425,6 +431,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     toBring: req.body.toBring,
     lon: req.body.lon,
     lat: req.body.lat,
+    minGuestRatingRequired: req.body.minGuestRatingRequired,
     meetingAddress: req.body.meetingAddress,
     pricePerPerson: req.body.pricePerPerson,
     durationInMinutes: req.body.durationInMinutes,

@@ -60,6 +60,10 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('street', _.get(originalClass, 'meetingAddress.street'));
       formik.setFieldValue('pricePerPerson', _.get(originalClass, 'pricePerPerson'));
       formik.setFieldValue('durationInMinutes', _.get(originalClass, 'durationInMinutes'));
+      formik.setFieldValue(
+        'minGuestRatingRequired',
+        _.get(originalClass, 'minGuestRatingRequired'),
+      );
       formik.setFieldValue('minGuests', _.get(originalClass, 'minGuests'));
       formik.setFieldValue('maxGuests', _.get(originalClass, 'maxGuests'));
       formik.setFieldValue('veganFriendly', _.get(originalClass, 'veganFriendly'));
@@ -68,7 +72,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('pescatarianFriendly', _.get(originalClass, 'pescatarianFriendly'));
       formik.setFieldValue('eggFree', _.get(originalClass, 'eggFree'));
       formik.setFieldValue('soyFree', _.get(originalClass, 'soyFree'));
-      
+
       if (_.get(originalClass, 'coverPhoto')) {
         const coverPhotoURL = _.get(originalClass, 'coverPhoto');
         setCoverPhotoUrl(coverPhotoURL);
@@ -101,6 +105,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       durationInMinutes: '',
       minGuests: '',
       maxGuests: '',
+      minGuestRatingRequired: 0,
       coverPhoto: null,
       photoOne: null,
       photoTwo: null,
@@ -127,6 +132,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             street,
             pricePerPerson,
             durationInMinutes,
+            minGuestRatingRequired,
             minGuests,
             maxGuests,
             coverPhoto,
@@ -144,6 +150,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             category,
             pricePerPerson,
             durationInMinutes,
+            minGuestRatingRequired,
             minGuests,
             maxGuests,
             description,

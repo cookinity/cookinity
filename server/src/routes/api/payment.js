@@ -152,6 +152,16 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
     if (!c) {
       return res.status(404).json({ message: 'Class not found!' });
     }
+    // check that the user meets the minimum required guest rating for the class
+    if (
+      c.minGuestRatingRequired &&
+      req.user.avgRatingAsGuest &&
+      req.user.feedbacksAsGuests &&
+      req.user.feedbacksAsGuests.length >= 5 &&
+      c.minGuestRatingRequired > req.user.avgRatingAsGuest
+    ) {
+      return res.status(400).json({ message: 'User rating too low!' });
+    }
     const ts = c.timeSlots.id(timeSlotId);
     if (!ts) {
       return res.status(404).json({ message: 'Time slot not found!' });
@@ -159,6 +169,7 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
     if (ts.isBooked) {
       return res.status(400).json({ message: 'Time slot already booked!' });
     }
+
     // calculate prices
     const eventPrice = (c.pricePerPerson * Number(numberOfGuests)).toFixed(2);
     const cookinityFee = (Number(eventPrice) * 0.1).toFixed(2); // we take 10% of the purchase price
@@ -195,7 +206,13 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
       cancel_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?canceled=true`,
     });
     res.json({ session });
-  } catch (err) {}
+  } catch (err) {
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
+  }
 });
 
 export default router;

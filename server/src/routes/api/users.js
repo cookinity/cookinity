@@ -3,8 +3,48 @@ import upload from '../../middleware/multer';
 
 import requireJwtAuth from '../../middleware/requireJwtAuth';
 import User, { hashPassword, validateUser } from '../../models/User';
+import { validateFeedback } from '../../models/FeedbackHost';
 
 const router = Router();
+
+router.post('/:id/feedback-guests', [requireJwtAuth], async (req, res, next) => {
+  try {
+    //Check that Guest exists
+    const tempUser = await User.findById(req.params.id);
+    if (!tempUser) return res.status(404).json({ message: 'No such user.' });
+    //Reviewer
+    const reviewerId = req.user.id;
+    //ToDo: Validate that User is allowed to give Feedback
+
+    const newGuestFeedback = {
+      numberOfStars: req.body.numberOfStars,
+      reviewer: reviewerId,
+    };
+
+    //Validate feedback
+    const { error } = validateFeedback(newGuestFeedback);
+    if (error) return res.status(400).json({ message: error.details[0].message });
+
+    //save
+    tempUser.feedbacksAsGuests.push(newGuestFeedback);
+    let updatedUser = {
+      feedbacksAsGuests: tempUser.feedbacksAsGuests,
+    };
+
+    //update Average Rating
+    updatedUser.avgRatingAsGuest =
+      tempUser.feedbacksAsGuests.map((f) => f.numberOfStars).reduce((a, b) => a + b) /
+      tempUser.feedbacksAsGuests.length;
+    updatedUser = await User.findByIdAndUpdate(tempUser._id, { $set: updatedUser }, { new: true });
+    res.status(200).json({ updatedUser });
+  } catch (err) {
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the feedback creation of the customer.' });
+    }
+  }
+});
 
 router.put('/:id', [requireJwtAuth, upload.single('avatar')], async (req, res, next) => {
   try {

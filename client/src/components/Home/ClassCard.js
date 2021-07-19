@@ -3,6 +3,7 @@ import { Button, Card, ListGroup } from 'react-bootstrap';
 import { run as runHolder } from 'holderjs/holder';
 import { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
+import dayjs from 'dayjs';
 
 const truncateString = function (str, num) {
   if (str.length > num) {
@@ -126,9 +127,11 @@ const getRating = function (res) {
 const getDates = function (c) {
   if (c != null) {
     const alldates = [];
+    alldates.push(<div></div>);
     for (var i = 0; i < c.timeSlots.length; i++) {
-      let date = c.timeSlots[0].date;
+      let date = dayjs(c.timeSlots[0].date).format('llll');
       alldates.push(date);
+      alldates.push(<div></div>);
     }
     return alldates;
   }
