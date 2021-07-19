@@ -83,7 +83,7 @@ const App = ({ auth, loadMe }) => {
           <Route path="/classes/:classId" component={ClassDetail} exact />
           <Route path="/classes/:classId/booking" component={BookClass} exact />
           <Route path="/classes/:classId/create-feedback" component={FeedbackUser} exact />
-          <Route path="/classes/:classId/create-feedback-host" component={FeedbackHost} exact />
+          <Route path="/classes/:userId/create-feedback-host" component={FeedbackHost} exact />
           <Route path="/hostmanagement/edit-class/:classId" component={EditClass} exact />
           <Route
             path="/hostmanagement/edit-class/:classId/times"

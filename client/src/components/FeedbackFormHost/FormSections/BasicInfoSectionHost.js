@@ -1,15 +1,14 @@
 import Rating from 'components/Home/Rating';
 import React, { useState } from 'react';
-import { Col, Form, InputGroup } from 'react-bootstrap';
 
 const BasicInfoSection = ({ formik,
-  setRatingCustomerStar, ratingCustomerStar
+  setRatingNumberOfStars, numberOfStars
 }) => {
 
   return (
     <>
       <div className='col text-center'>
-        <Rating rating={ratingCustomerStar} onRating={rate => setRatingCustomerStar(rate)} />
+        <Rating rating={numberOfStars} onRating={rate => setRatingNumberOfStars(rate)} />
       </div>
     </>
   );
