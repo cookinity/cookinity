@@ -149,7 +149,7 @@ export const Home = () => {
               )}
             </Col>
           </Row>
-          <Row className="mb-2">
+          <Row className="mb-4">
             <Col>
               <FilterBar
                 handleFilterCity={handleFilterCity}
