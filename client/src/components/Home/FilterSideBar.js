@@ -67,7 +67,6 @@ const FilterSideBar = ({
   const threeStarsAndMore = generateStars(3);
   const twoStarsAndMore = generateStars(2);
   const oneStarAndMore = generateStars(1);
-  const zeroStarsAndMore = generateStars(0);
 
   const belowTwentyFiveEuros = generatePriceRange(1, undefined, 25);
   const twentyFiveEurosUntilFiftyEuros = generatePriceRange(2, 25, 50);
@@ -88,7 +87,6 @@ const FilterSideBar = ({
         <div>{threeStarsAndMore}</div>
         <div>{twoStarsAndMore}</div>
         <div>{oneStarAndMore}</div>
-        <div>{zeroStarsAndMore}</div>
       </div>
 
       <div className="mt-2">
