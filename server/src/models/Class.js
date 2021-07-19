@@ -152,32 +152,37 @@ const classSchema = new Schema(
     },
     soyFree: {
       type: Boolean,
-      required: false
+      required: false,
     },
     avgRating: {
       type: Number,
-      required: false
+      required: false,
     },
     hostRating: {
       type: Number,
-      required: false
+      required: false,
     },
     tasteRating: {
       type: Number,
-      required: false
+      required: false,
     },
     locationRating: {
       type: Number,
-      required: false
+      required: false,
     },
     vtmrRating: {
       type: Number,
-      required: false
+      required: false,
     },
     expRating: {
       type: Number,
-      required: false
-    }
+      required: false,
+    },
+    minGuestRatingRequired: {
+      type: Number,
+      required: false,
+      default: 0, // 0 means all guests are allowed to book this class
+    },
   },
   { timestamps: true },
 );
@@ -220,6 +225,7 @@ classSchema.methods.toJSON = function () {
     lon: this.lon,
     pricePerPerson: this.pricePerPerson,
     durationInMinutes: this.durationInMinutes,
+    minGuestRatingRequired: this.minGuestRatingRequired,
     minGuests: this.minGuests,
     maxGuests: this.maxGuests,
     createdAt: this.createdAt,
@@ -279,6 +285,8 @@ export const validateClass = (c) => {
     durationInMinutes: Joi.number().integer().min(1).positive().required(),
     minGuests: Joi.number().integer().min(1).max(100).positive().required(),
     maxGuests: Joi.number().integer().min(1).max(100).positive().required(),
+    // guest rating can be an integer between 0 and 4 (5 makes no sense)
+    minGuestRatingRequired: Joi.number().integer().min(0).max(4).positive().required(),
     meetingAddress: addressJoiSchema.required(),
     timeSlots: Joi.array().items(timeSlotJoiSchema),
     veganFriendly: Joi.boolean(),

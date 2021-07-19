@@ -5,7 +5,7 @@ const GuestsSection = ({ formik }) => {
   return (
     <>
       <Form.Row>
-        <Form.Group as={Col} controlId="pricePerPerson">
+        <Form.Group as={Col} xs={12} md={3} controlId="pricePerPerson">
           <Form.Label>Price Per Person</Form.Label>
           <InputGroup>
             <Form.Control
@@ -27,7 +27,7 @@ const GuestsSection = ({ formik }) => {
             <div className="form-error-message">{formik.errors.pricePerPerson}</div>
           ) : null}
         </Form.Group>
-        <Form.Group as={Col} controlId="minGuests">
+        <Form.Group as={Col} xs={12} md={3} controlId="minGuests">
           <Form.Label>Minimum Number of Guests</Form.Label>
           <InputGroup>
             <Form.Control
@@ -47,7 +47,7 @@ const GuestsSection = ({ formik }) => {
             <div className="form-error-message">{formik.errors.minGuests}</div>
           ) : null}
         </Form.Group>
-        <Form.Group as={Col} controlId="maxGuests">
+        <Form.Group as={Col} xs={12} md={3} controlId="maxGuests">
           <Form.Label>Maximum Number of Guests</Form.Label>
           <InputGroup>
             <Form.Control
@@ -65,6 +65,29 @@ const GuestsSection = ({ formik }) => {
           </InputGroup>
           {formik.touched.maxGuests && formik.errors.maxGuests ? (
             <div className="form-error-message">{formik.errors.maxGuests}</div>
+          ) : null}
+        </Form.Group>
+        <Form.Group as={Col} xs={12} md={3} controlId="minGuestRatingRequired">
+          <Form.Label>Minimum Guest Rating</Form.Label>
+          <InputGroup>
+            <Form.Control
+              type="number"
+              name="minGuestRatingRequired"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.minGuestRatingRequired}
+              className={
+                formik.touched.minGuestRatingRequired && formik.errors.minGuestRatingRequired
+                  ? 'form-error'
+                  : null
+              }
+            />
+            <InputGroup.Append>
+              <InputGroup.Text>Stars</InputGroup.Text>
+            </InputGroup.Append>
+          </InputGroup>
+          {formik.touched.minGuestRatingRequired && formik.errors.minGuestRatingRequired ? (
+            <div className="form-error-message">{formik.errors.minGuestRatingRequired}</div>
           ) : null}
         </Form.Group>
       </Form.Row>

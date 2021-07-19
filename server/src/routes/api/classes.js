@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { validateFeedback } from '../../models/Feedback';
 import requireJwtAuth from '../../middleware/requireJwtAuth';
+import passport from 'passport';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -20,7 +21,8 @@ var photosUpload = upload.fields([
   { name: 'photoTwo', maxCount: 1 },
 ]);
 
-router.post('/query', async (req, res, next) => {
+router.post('/query', passport.authenticate(['jwt', 'anonymous'], { session: false }), async (req, res, next) => {
+  debugger;
   let { city, category, date, guests, price, rating, limit, skip } = req.body;
 
   if (date) {
@@ -65,6 +67,12 @@ router.post('/query', async (req, res, next) => {
     //  classes = classes.filter((c) => c. === rating)
     //}
 
+    // if the user is logged in we want to show only the classes where he/she fulfills the minimum rating requirement
+    if (req.user && req.user.avgRatingAsGuest) {
+      classes = classes.filter(
+        (c) => c.minGuestRatingRequired && c.minGuestRatingRequired <= req.user.avgRatingAsGuest,
+      );
+    }
     const numberOfEntries = classes.length;
     // Apply Skip and Limit
     if (skip !== undefined && limit !== undefined) {

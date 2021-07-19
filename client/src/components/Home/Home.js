@@ -11,6 +11,7 @@ import utc from 'dayjs/plugin/utc';
 import FilterBar from './FilterBar';
 import FilterSideBar from './FilterSideBar';
 import ClassesMap from './ClassesMap';
+import { useSelector } from 'react-redux';
 dayjs.extend(utc);
 export const Home = () => {
   const [numberOfEntries, setNumberOfEntries] = useState(0);
@@ -28,6 +29,10 @@ export const Home = () => {
   const [guests, setGuests] = useState('');
   const [price, setPrice] = useState('');
   const [rating, setRating] = useState('');
+
+  // @ts-ignore
+  const auth = useSelector((state) => state.auth);
+  console.log(auth);
 
   useEffect(() => {
     fetchClasses();
@@ -52,7 +57,23 @@ export const Home = () => {
         rating,
       };
 
-      const result = await axios.post(`/api/classes/query`, queryObject);
+      let result;
+      if (auth.isAuthenticated) {
+        // adding the necessary security header
+        const token = auth.token;
+        const config = {
+          headers: {
+            'Content-type': 'application/json',
+          },
+        };
+        if (token) {
+          config.headers['x-auth-token'] = token;
+        }
+        result = await axios.post(`/api/classes/query`, queryObject, config);
+      } else {
+        result = await axios.post(`/api/classes/query`, queryObject);
+      }
+
       setNumberOfEntries(result.data.numberOfEntries);
       setFilteredClasses(result.data.classes);
     } catch (err) {

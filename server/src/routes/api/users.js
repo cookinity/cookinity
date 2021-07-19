@@ -10,7 +10,6 @@ const router = Router();
 router.post('/:id/feedback-guests', [requireJwtAuth], async (req, res, next) => {
   try {
     //Check that Guest exists
-    debugger;
     const tempUser = await User.findById(req.params.id);
     if (!tempUser) return res.status(404).json({ message: 'No such user.' });
     //Reviewer
@@ -20,7 +19,7 @@ router.post('/:id/feedback-guests', [requireJwtAuth], async (req, res, next) => 
     const newGuestFeedback = {
       numberOfStars: req.body.numberOfStars,
       reviewer: reviewerId,
-    }
+    };
 
     //Validate feedback
     const { error } = validateFeedback(newGuestFeedback);
@@ -34,10 +33,10 @@ router.post('/:id/feedback-guests', [requireJwtAuth], async (req, res, next) => 
 
     //update Average Rating
     updatedUser.avgRatingAsGuest =
-      tempUser.feedbacksAsGuests.map((f) => f.numberOfStars).reduce((a, b) => a + b) / tempUser.feedbacksAsGuests.length;
+      tempUser.feedbacksAsGuests.map((f) => f.numberOfStars).reduce((a, b) => a + b) /
+      tempUser.feedbacksAsGuests.length;
     updatedUser = await User.findByIdAndUpdate(tempUser._id, { $set: updatedUser }, { new: true });
     res.status(200).json({ updatedUser });
-
   } catch (err) {
     if (err.message) {
       res.status(500).json({ message: err.message });
