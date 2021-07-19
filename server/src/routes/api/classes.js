@@ -91,7 +91,7 @@ router.post('/query', async (req, res, next) => {
 
     // Apply Rating Filter
     if (rating) {
-      classes = classes.filter((c) => c.feedbacks.overallRatingStars >= rating);
+      classes = classes.filter((c) => c.avgRating >= rating);
     }
 
     // Apply Dietary Preferences Filters
