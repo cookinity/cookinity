@@ -21,7 +21,23 @@ var photosUpload = upload.fields([
 ]);
 
 router.post('/query', async (req, res, next) => {
-  let { city, category, date, guests, price, rating, limit, skip } = req.body;
+  let {
+    city,
+    category,
+    date,
+    guests,
+    priceLow,
+    priceUp,
+    rating,
+    vegan,
+    vegetarian,
+    nutAllergy,
+    pescatarian,
+    eggFree,
+    soyFree,
+    limit,
+    skip,
+  } = req.body;
 
   if (date) {
     date = dayjs(date);
@@ -29,14 +45,17 @@ router.post('/query', async (req, res, next) => {
 
   try {
     let classes = await Class.find();
+
     // Apply City Filter
     if (city) {
       classes = classes.filter((c) => c.meetingAddress.city === city);
     }
+
     // Apply Category Filter
     if (category) {
       classes = classes.filter((c) => c.category === category);
     }
+
     // Apply Date Filter
     if (date) {
       classes = classes.filter((c) => {
@@ -50,20 +69,55 @@ router.post('/query', async (req, res, next) => {
         }
       });
     }
+
     // Apply Capacity Filter
     if (guests) {
       classes = classes.filter((c) => {
         return c.maxGuests >= guests && c.minGuests <= guests;
       });
     }
+
     // Apply Price Filter
-    if (price) {
-      classes = classes.filter((c) => c.pricePerPerson < price);
+    if (priceLow || priceUp) {
+      classes = classes.filter((c) => {
+        if (priceUp && c.pricePerPerson > priceUp) {
+          return false;
+        } else if (priceLow && c.pricePerPerson < priceLow) {
+          return false;
+        }
+        return true;
+      });
     }
+
     // Apply Rating Filter
-    //if(rating) {
-    //  classes = classes.filter((c) => c. === rating)
-    //}
+    if (rating) {
+      classes = classes.filter((c) => c.feedbacks.overallRatingStars >= rating);
+    }
+
+    // Apply Dietary Preferences Filters
+    if (vegan) {
+      classes = classes.filter((c) => c.veganFriendly);
+    }
+
+    if (vegetarian) {
+      classes = classes.filter((c) => c.vegetarianFriendly);
+    }
+
+    if (nutAllergy) {
+      classes = classes.filter((c) => c.nutAllergyFriendly);
+    }
+
+    if (pescatarian) {
+      classes = classes.filter((c) => c.pescatarianFriendly);
+    }
+
+    if (eggFree) {
+      classes = classes.filter((c) => c.eggFree);
+    }
+
+    if (soyFree) {
+      classes = classes.filter((c) => c.soyFree);
+    }
 
     const numberOfEntries = classes.length;
     // Apply Skip and Limit

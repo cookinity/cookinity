@@ -1,12 +1,15 @@
 .filter {
-  display: block;
-  width: 430px;
+  
+  width: 400px;
 }
 
 .custom-width {
-  width: 165px;
+  width: 60px;
 }
 
+.custom-width-min-max {
+  width: 75px;
+}
 
 .container {
   max-width: 100%;
@@ -30,6 +33,7 @@
   transition: 0.3s;
 }
 
+
 .sidebar .closebtn {
   position: absolute;
   top: 25px;
@@ -37,3 +41,6 @@
   font-size: 36px;
   margin-left: 50px;
 }
+
+.pointer       { cursor: pointer; }
+

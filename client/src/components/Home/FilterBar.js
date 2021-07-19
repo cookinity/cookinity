@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Col, InputGroup, Button } from 'react-bootstrap';
 import { CITY_CATEGORIES } from '../../constants/CityCategories';
 import { CLASS_CATEGORIES } from '../../constants/ClassCategories';
