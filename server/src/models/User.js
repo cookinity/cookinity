@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 import { isValidUrl } from '../utils/utils';
-import { feedbackHostJoiSchema, feedbackHostSchema } from './FeedbackHost';
+import { guestFeedbackJoiSchema, guestFeedbackSchema } from './FeedbackHost';
 
 const { Schema } = mongoose;
 
@@ -44,7 +44,11 @@ const userSchema = new Schema(
       minlength: 6,
       maxlength: 60,
     },
-    feedbacksHosts: [feedbackHostSchema],
+    feedbacksAsGuests: [guestFeedbackSchema],
+    avgRatingAsGuest: {
+      type: Number,
+      required: false
+    },
     description: {
       type: String,
       lowercase: true,
@@ -82,9 +86,7 @@ userSchema.methods.toJSON = function () {
     role: this.role,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
-    feedbacksHosts: this.feedbacksHosts.map((feedbackhost) => {
-      return feedbackhost.toJSON();
-    }),
+    avgRatingAsGuest: this.avgRatingAsGuest,
   };
 };
 
@@ -152,7 +154,7 @@ export const validateUser = (user) => {
       .required(),
     password: Joi.string().min(6).max(20).allow('').allow(null),
     description: Joi.string().min(2).max(1000),
-    feedbacksHosts: Joi.array().items(feedbackHostJoiSchema),
+    feedbacksAsGuests: Joi.array().items(guestFeedbackJoiSchema),
   });
 
   return schema.validate(user);

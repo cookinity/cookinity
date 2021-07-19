@@ -7,29 +7,36 @@ import { validateFeedback } from '../../models/FeedbackHost';
 
 const router = Router();
 
-// ToDo: router.post für host feedback
-router.post('/:id/feedbacks-hosts', [requireJwtAuth], async (req, res, next) => {
+router.post('/:id/feedback-guests', [requireJwtAuth], async (req, res, next) => {
   try {
-    const tempClass = await Class.findById(req.params.id).populate('host');
-    // check that the class exists in the database
-    if (!tempClass) {
-      return res.status(404).json({ message: 'Class not found!' });
-    }
-    const newFeedbackHost = {
-      ratingCustomerStars: req.body.ratingCustomerStars,
-      ratingCustomer: req.body.ratingCustomer,
-      reviewer: req.user.id,
-      customer: req.host.id,
+    //Check that Guest exists
+    debugger;
+    const tempUser = await User.findById(req.params.id);
+    if (!tempUser) return res.status(404).json({ message: 'No such user.' });
+    //Reviewer
+    const reviewerId = req.user.id;
+    //ToDo: Validate that User is allowed to give Feedback
+
+    const newGuestFeedback = {
+      numberOfStars: req.body.numberOfStars,
+      reviewer: reviewerId,
     }
 
-    const { error } = validateFeedback(newFeedbackHost);
+    //Validate feedback
+    const { error } = validateFeedback(newGuestFeedback);
     if (error) return res.status(400).json({ message: error.details[0].message });
-    tempClass.feedbacksHosts.push(newFeedbackHost);
-    let updatedClass = {
-      feedbacksHosts: tempClass.feedbacksHosts,
+
+    //save
+    tempUser.feedbacksAsGuests.push(newGuestFeedback);
+    let updatedUser = {
+      feedbacksAsGuests: tempUser.feedbacksAsGuests,
     };
-    updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
-    res.status(200).json({ updatedClass });
+
+    //update Average Rating
+    updatedUser.avgRatingAsGuest =
+      tempUser.feedbacksAsGuests.map((f) => f.numberOfStars).reduce((a, b) => a + b) / tempUser.feedbacksAsGuests.length;
+    updatedUser = await User.findByIdAndUpdate(tempUser._id, { $set: updatedUser }, { new: true });
+    res.status(200).json({ updatedUser });
 
   } catch (err) {
     if (err.message) {

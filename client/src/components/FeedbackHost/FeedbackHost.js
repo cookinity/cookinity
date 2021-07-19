@@ -20,7 +20,7 @@ const FeedbackHost = () => {
 
     // id of the class in the route ToDo:
     // @ts-ignore
-    let { classId } = useParams();
+    let { userId } = useParams();
 
     const onSubmit = async (newFeedback) => {
         setIsLoading(true);
@@ -37,7 +37,7 @@ const FeedbackHost = () => {
                 config.headers['x-auth-token'] = token;
             }
 
-            await axios.post(`/api/users/${classId}/feedbacks-hosts`, newFeedback, config);
+            await axios.post(`/api/users/${userId}/feedbacks-hosts`, newFeedback, config);
             setIsLoading(false);
             setFeedbackCreated(true);
             return Promise.resolve(); // tell the form that there was not an error during submitting --> reset form
