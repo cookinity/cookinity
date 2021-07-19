@@ -153,7 +153,13 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
       return res.status(404).json({ message: 'Class not found!' });
     }
     // check that the user meets the minimum required guest rating for the class
-    if (c.minGuestRatingRequired && req.user.avgRatingAsGuest && c.minGuestRatingRequired > req.user.avgRatingAsGuest) {
+    if (
+      c.minGuestRatingRequired &&
+      req.user.avgRatingAsGuest &&
+      req.user.feedbacksAsGuests &&
+      req.user.feedbacksAsGuests.length >= 5 &&
+      c.minGuestRatingRequired > req.user.avgRatingAsGuest
+    ) {
       return res.status(400).json({ message: 'User rating too low!' });
     }
     const ts = c.timeSlots.id(timeSlotId);

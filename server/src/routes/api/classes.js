@@ -22,7 +22,6 @@ var photosUpload = upload.fields([
 ]);
 
 router.post('/query', passport.authenticate(['jwt', 'anonymous'], { session: false }), async (req, res, next) => {
-  debugger;
   let { city, category, date, guests, price, rating, limit, skip } = req.body;
 
   if (date) {
@@ -71,6 +70,9 @@ router.post('/query', passport.authenticate(['jwt', 'anonymous'], { session: fal
     if (req.user && req.user.avgRatingAsGuest) {
       classes = classes.filter((c) => {
         if (!c.minGuestRatingRequired) {
+          return true;
+          // a user needs to be reviewed at least 5 timees before his avg rating is taken into account
+        } else if (req.user.feedbacksAsGuests && req.user.feedbacksAsGuests.length < 5) {
           return true;
         } else {
           return c.minGuestRatingRequired <= req.user.avgRatingAsGuest;

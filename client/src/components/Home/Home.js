@@ -32,7 +32,6 @@ export const Home = () => {
 
   // @ts-ignore
   const auth = useSelector((state) => state.auth);
-  console.log(auth);
 
   useEffect(() => {
     fetchClasses();
