@@ -109,6 +109,7 @@ const FilterSideBar = ({
           type="number"
           value={selectedNumberOfGuests}
           onChange={handleGuestCustomChange}
+          min={1}
         ></input>
       </div>
 
