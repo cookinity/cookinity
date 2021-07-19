@@ -37,7 +37,7 @@ const FeedbackHost = () => {
                 config.headers['x-auth-token'] = token;
             }
 
-            await axios.post(`/api/users/${userId}/feedbacks-hosts`, newFeedback, config);
+            await axios.post(`/api/users/${userId}/feedback-guests`, newFeedback, config);
             setIsLoading(false);
             setFeedbackCreated(true);
             return Promise.resolve(); // tell the form that there was not an error during submitting --> reset form

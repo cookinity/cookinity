@@ -86,10 +86,10 @@ const BookedClasses = () => {
                 </Alert>
               )}
               <h1 className="text-center">Future Bookings</h1>
-              <BookedClassesTable bookings={futureBookings}></BookedClassesTable>
+              <BookedClassesTable bookings={futureBookings} isPastTable={false}></BookedClassesTable>
               <hr></hr>
               <h1 className="text-center">Past Bookings</h1>
-              <BookedClassesTable bookings={pastBookings}></BookedClassesTable>
+              <BookedClassesTable bookings={pastBookings} isPastTable={true}></BookedClassesTable>
             </div>
           </Col>
         </Row>
