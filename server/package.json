@@ -13,7 +13,7 @@
     "build-babel": "babel -d ./build ./src -s",
     "start-dev": "node --exec babel-node src/index.js",
     "server": "nodemon --inspect --exec babel-node src/index.js",
-    "stripe": "stripe listen --forward-to https://localhost:5000/api/payment/webhook --skip-verify",
+    "stripe": "stripe listen --forward-to http://localhost:5000/api/payment/webhook --skip-verify --log-level debug",
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },

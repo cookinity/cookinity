@@ -44,7 +44,7 @@
     "yup": "^0.32.9"
   },
   "scripts": {
-    "start": "set HTTPS=true&&react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -52,7 +52,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "https://localhost:5000",
+  "proxy": "http://localhost:5000",
   "browserslist": [
     ">0.2%",
     "not dead",
