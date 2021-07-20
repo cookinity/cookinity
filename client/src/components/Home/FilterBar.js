@@ -24,8 +24,8 @@ const FilterBar = ({
                     <Form.Group
                       as={Col}
                       xs={12}
-                      md={{ span: 3, offset: 0 }}
-                      className="my-auto filterOrder test1"
+                      md={{ span: 4, offset: 0 }}
+                      className="my-auto filterOrder"
                     >
                       <InputGroup>
                         <InputGroup.Prepend>
@@ -41,7 +41,7 @@ const FilterBar = ({
                         </Form.Control>
                       </InputGroup>
                     </Form.Group>
-                    <Form.Group as={Col} xs={12} md="3" className="my-auto">
+                    <Form.Group as={Col} xs={12} md="4" className="my-auto">
                       <InputGroup>
                         <InputGroup.Prepend>
                           <InputGroup.Text>
@@ -92,7 +92,7 @@ const FilterBar = ({
                       />
                     </Form.Group>
                     <Col xs={12} md={1} className=" filterOrder">
-                      <Button onClick={fetchClasses}> Search</Button>
+                      <Button onClick={fetchClasses} className="searchButton"> Search</Button>
                     </Col>
                   </Form.Row>
                 </Form>
