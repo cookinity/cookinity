@@ -37,7 +37,7 @@ router.post('/webhook', express.json({ type: 'application/json' }), async (req, 
       totalPrice: session.amount_total,
       currency: session.currency,
       bookingDate: dayjs().utc().toJSON(),
-      privacyDetailsOrder: c.privacyDetails,
+      privacyDetailsOrder: c.privacyDetails ? c.privacyDetails : '',
     };
     // 1. Create New Order
     await Order.create(order);
