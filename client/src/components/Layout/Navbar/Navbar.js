@@ -14,7 +14,7 @@ export const NavigationBar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
-  
+
   const onLogOut = (event) => {
     event.preventDefault();
     dispatch(logOutUser(history));
@@ -35,11 +35,6 @@ export const NavigationBar = () => {
           <LinkContainer to={`/${auth.me.username}`}>
             <NavDropdown.Item>Your Profile</NavDropdown.Item>
           </LinkContainer>
-          {auth.me?.role === 'ADMIN' && (
-            <LinkContainer to="/admin">
-              <NavDropdown.Item>Admin</NavDropdown.Item>
-            </LinkContainer>
-          )}
           <NavDropdown.Item onClick={onLogOut}>Log Out</NavDropdown.Item>
         </NavDropdown>
       </>
@@ -54,12 +49,12 @@ export const NavigationBar = () => {
 
   return (
     <Navbar bg="primary" variant="dark" expand="lg" className="shadowNav">
-      
-        <Navbar.Brand href="/"><img src={logo} width="30" height="40" />
+
+      <Navbar.Brand href="/"><img src={logo} width="30" height="40" />
         {' '}
         <img src={name} width="140" height="40" />
-          </Navbar.Brand>
-     
+      </Navbar.Brand>
+
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">

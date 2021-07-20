@@ -8,7 +8,6 @@ import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
 import YourBookings from './components/YourBookings/YourBookings';
-import Admin from './components/Admin/Admin';
 import NotFound from './components/NotFound/NotFound';
 
 import Loader from './components/Shared/Loader/Loader';
@@ -99,7 +98,6 @@ const App = ({ auth, loadMe }) => {
           <Route path="/register" component={Register} />
           <Route path="/your-bookings" component={YourBookings} />
           <Route path="/notfound" component={NotFound} />
-          <Route path="/admin" component={Admin} />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
           <Route path="/hostmanagement/booked-classes" component={BookedClasses} exact />
