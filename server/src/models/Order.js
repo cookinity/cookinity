@@ -6,53 +6,52 @@ dayjs.extend(utc);
 
 const { Schema } = mongoose;
 
-const orderSchema = new Schema(
-  {
-    customer: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    host: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    class: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Class',
-      required: true,
-    },
-    bookedTimeSlot: {
-      type: timeSlotSchema,
-      required: true,
-    },
-    stripeSession: {
-      type: mongoose.Schema.Types.Mixed,
-      required: true,
-    },
-    numberOfGuests: {
-      type: mongoose.Schema.Types.Number,
-      required: true,
-    },
-    totalPrice: {
-      type: mongoose.Schema.Types.Number,
-      required: true,
-    },
-    currency: {
-      type: mongoose.Schema.Types.Mixed,
-      required: true,
-    },
-    bookingDate: {
-      type: mongoose.Schema.Types.Date,
-      required: true,
-    },
-    privacyDetailsOrder: {
-      type: String,
-      required: true,
-    }
-  }
-);
+const orderSchema = new Schema({
+  customer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  host: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  class: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Class',
+    required: true,
+  },
+  bookedTimeSlot: {
+    type: timeSlotSchema,
+    required: true,
+  },
+  stripeSession: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+  },
+  numberOfGuests: {
+    type: mongoose.Schema.Types.Number,
+    required: true,
+  },
+  totalPrice: {
+    type: mongoose.Schema.Types.Number,
+    required: true,
+  },
+  currency: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+  },
+  bookingDate: {
+    type: mongoose.Schema.Types.Date,
+    required: true,
+  },
+  privacyDetailsOrder: {
+    type: String,
+    required: false,
+    default: '',
+  },
+});
 
 orderSchema.methods.toJSON = function () {
   return {

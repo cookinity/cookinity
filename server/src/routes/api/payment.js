@@ -15,20 +15,12 @@ dayjs.extend(localizedFormat);
 const router = Router();
 
 // Stripe will contact this endpoint throughout the payment lifecycle
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  const payload = req.body;
-  const sig = req.headers['stripe-signature'];
+router.post('/webhook', express.json({ type: 'application/json' }), async (req, res) => {
+  const event = req.body;
 
-  let event;
+  // ToDo: For Production we have to check the signature of the request to verify it really comes from stripe
 
-  // verify that request really came from stripe
-  try {
-    event = stripe.webhooks.constructEvent(payload, sig, process.env.STRIPE_ENDPOINT_SECRET);
-  } catch (err) {
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  // Handle the checkout.session.completed event --> customer payment for the cooking class
+  // Handle the checkout.session.completed event --> customer payment for the coçoking class
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const { userId, classId, timeSlotId, guestNumber } = session.metadata;
@@ -47,17 +39,11 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       bookingDate: dayjs().utc().toJSON(),
       privacyDetailsOrder: c.privacyDetails,
     };
-
-    try {
-      // 1. Create New Order
-      let newOrder = await Order.create(order);
-      // 2. Set Time Slot IsBooked
-      c.timeSlots.id(timeSlotId).isBooked = true;
-      await c.save();
-      res.status(200);
-    } catch (err) {
-      res.status(500).json({ message: 'Something went wrong during the class creation.' });
-    }
+    // 1. Create New Order
+    await Order.create(order);
+    // 2. Set Time Slot IsBooked
+    c.timeSlots.id(timeSlotId).isBooked = true;
+    await c.save();
   }
 
   if (event.type === 'account.updated') {
@@ -77,7 +63,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
   }
 
   // Return a 200 response to acknowledge receipt of the event
-  res.json({ received: true });
+  res.send();
 });
 
 router.post('/generate-dashboard-link', [requireJwtAuth], async (req, res) => {
@@ -206,6 +192,7 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
       success_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?success=true`,
       cancel_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?canceled=true`,
     });
+    debugger;
     res.json({ session });
   } catch (err) {
     if (err.message) {
