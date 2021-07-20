@@ -27,22 +27,13 @@ JWT_SECRET_DEV=secret
 JWT_SECRET_PROD=
 
 #site urls
-CLIENT_URL_DEV=https://localhost:3000
-CLIENT_URL_PROD=https://cookinity.herokuapp.com
-SERVER_URL_DEV=https://localhost:5000
-SERVER_URL_PROD=https://cookinity.herokuapp.com
+CLIENT_URL_DEV=http://localhost:3000
+CLIENT_URL_PROD=http://cookinity.herokuapp.com
+SERVER_URL_DEV=http://localhost:5000
+SERVER_URL_PROD=http://cookinity.herokuapp.com
 
 #img folder path
 IMAGES_FOLDER_PATH=/public/images/
-```
-
-#### Generate certificates
-
-In order for your server to run on `https` in development as well, you need to generate certificates. Go to `/server/security` folder and run this.
-
-```
-$ cd server/security
-$ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout cert.key -out cert.pem -config req.cnf -sha256
 ```
 
 #### Install dependencies
@@ -54,7 +45,7 @@ $ npm install
 
 #### Run the server
 
-You are good to go, server will be available on `https://localhost:5000`
+You are good to go, server will be available on `http://localhost:5000`
 
 ```
 $ npm run server
@@ -62,7 +53,7 @@ $ npm run server
 
 ### Client
 
-Just install the dependencies and run the dev server. App will load on `https://localhost:3000`.
+Just install the dependencies and run the dev server. App will load on `http://localhost:3000`.
 
 ```
 $ cd client
@@ -94,7 +85,7 @@ We are using Stripe as an Payment Provider. Please follow the following steps to
     `src/constants/StripeKey.js` and enter your own publishable test key into the file.
   - We are now completely setup. **If you want to know test Cookinity with payment enabled, you have to have the
     Stripe CLI running while developing so stripe can communicate with our server. You can start the
-    stripe cli in the listening mode with `stripe listen --forward-to https://localhost:5000/api/payment/webhook --skip-verify`**. This command can also be run on the server side with `npm run stripe`
+    stripe cli in the listening mode with `stripe listen --forward-to http://localhost:5000/api/payment/webhook --skip-verify`**. This command can also be run on the server side with `npm run stripe`
 
 ## Deployment on Heroku
 
