@@ -163,7 +163,7 @@ const TimeManagement = () => {
                           format="MM/DD/YYYY HH:mm"
                           value={newDate}
                           onChange={setNewDate}
-                          plugins={[<TimePicker position="right" />]}
+                          plugins={[<TimePicker hideSeconds position="right" />]}
                         ></DatePicker>
                       </Col>
                       <Col xs={12} className="text-center mt-1">
