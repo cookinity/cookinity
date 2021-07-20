@@ -1,10 +1,17 @@
 import React from 'react';
 import { Form, Col } from 'react-bootstrap';
+import Tooltip from '../Tooltip.js';
 
 const EatingHabitsSection = ({ formik }) => {
   return (
     <>
-      <Form.Label>Eating Habits You Can Accommodate</Form.Label>
+      <Form.Label>Eating Habits You Can Accommodate</Form.Label>{' '}
+      <Tooltip
+        content="Check all dietary preferences that apply to your cooking class"
+        direction="right"
+      >
+        <i className="fa fa-question" data-toggle="tooltip"></i>
+      </Tooltip>
       <Form.Row>
         <Form.Group as={Col} controlId="veganFriendly">
           <Form.Check
@@ -91,9 +98,7 @@ const EatingHabitsSection = ({ formik }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             checked={formik.values.eggFree}
-            className={
-              formik.touched.eggFree && formik.errors.eggFree ? 'form-error' : null
-            }
+            className={formik.touched.eggFree && formik.errors.eggFree ? 'form-error' : null}
           />
           {formik.touched.eggFree && formik.errors.eggFree ? (
             <div className="form-error-message">{formik.errors.eggFree}</div>
@@ -108,11 +113,7 @@ const EatingHabitsSection = ({ formik }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             checked={formik.values.soyFree}
-            className={
-              formik.touched.soyFree && formik.errors.soyFree
-                ? 'form-error'
-                : null
-            }
+            className={formik.touched.soyFree && formik.errors.soyFree ? 'form-error' : null}
           />
           {formik.touched.soyFree && formik.errors.soyFree ? (
             <div className="form-error-message">{formik.errors.soyFree}</div>

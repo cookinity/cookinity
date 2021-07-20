@@ -1,13 +1,19 @@
 import React from 'react';
 import { Form, Col } from 'react-bootstrap';
+import Tooltip from '../Tooltip.js';
 
 const AddressSection = ({ formik }) => {
   return (
     <>
-      <Form.Label>Public Meeting Address</Form.Label>
-
+      <Form.Label>Public Meeting Address</Form.Label>{' '}
+      <Tooltip
+        content="Provide a PUBLIC address where you will meet your guests to then accompany them to your PRIVATE address"
+        direction="right"
+      >
+        <i className="fa fa-question" data-toggle="tooltip"></i>
+      </Tooltip>
       <Form.Group controlId="country">
-        <Form.Label>Country</Form.Label>
+        <Form.Label>Country</Form.Label>{' '}
         <Form.Control
           placeholder="Germany"
           name="country"
@@ -20,7 +26,6 @@ const AddressSection = ({ formik }) => {
           <div className="form-error-message">{formik.errors.country}</div>
         ) : null}
       </Form.Group>
-
       <Form.Row>
         <Form.Group as={Col} controlId="city">
           <Form.Label>City</Form.Label>
@@ -67,7 +72,6 @@ const AddressSection = ({ formik }) => {
           ) : null}
         </Form.Group>
       </Form.Row>
-
       <Form.Group controlId="street">
         <Form.Label>Street</Form.Label>
         <Form.Control

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Col, InputGroup } from 'react-bootstrap';
+import Tooltip from '../Tooltip.js';
 
 const GuestsSection = ({ formik }) => {
   return (
@@ -69,6 +70,12 @@ const GuestsSection = ({ formik }) => {
         </Form.Group>
         <Form.Group as={Col} xs={12} md={3} controlId="minGuestRatingRequired">
           <Form.Label>Minimum Guest Rating</Form.Label>
+          <Tooltip
+            content="Please select the minimum rating (number of stars) you expect your guests to have"
+            direction="right"
+          >
+            <i className="fa fa-question" data-toggle="tooltip"></i>
+          </Tooltip>
           <InputGroup>
             <Form.Control
               type="number"

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Col } from 'react-bootstrap';
 import ImageUpload from './ImageUpload';
+import Tooltip from '../Tooltip.js';
 
 const PhotosSection = ({
   formik,
@@ -19,7 +20,13 @@ const PhotosSection = ({
       <Form.Row>
         <Col sm={12} md={4}>
           <Form.Group>
-            <Form.Label>Choose a Cover Photo For Your Class</Form.Label>
+            <Form.Label>Choose a Cover Photo</Form.Label>{' '}
+            <Tooltip
+              content="Please upload at least one picture of the dish you plan to cook with your guests during the cooking class"
+              direction="right"
+            >
+              <i className="fa fa-question" data-toggle="tooltip"></i>
+            </Tooltip>
             <ImageUpload
               id="coverPhoto"
               onImageChange={onCoverPhotoChange}
