@@ -45,6 +45,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       totalPrice: session.amount_total,
       currency: session.currency,
       bookingDate: dayjs().utc().toJSON(),
+      privacyDetailsOrder: c.privacyDetails,
     };
 
     try {

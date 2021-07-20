@@ -278,6 +278,7 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       pescatarianFriendly: req.body.pescatarianFriendly,
       eggFree: req.body.vegetarianFriendly,
       soyFree: req.body.nutAllergyFriendly,
+      privacyDetails: req.body.privacyDetails,
     };
 
     Object.keys(updatedClass).forEach((key) => (updatedClass[key] === undefined ? delete updatedClass[key] : {}));
@@ -420,44 +421,6 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
   }
 });
 
-router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
-  try {
-    const tempClass = await Class.findById(req.params.id).populate('host');
-    // check that the class exists in the database
-    if (!tempClass) {
-      return res.status(404).json({ message: 'Class not found!' });
-    }
-    const newFeedback = {
-      overallRatingStars: req.body.overallRatingStars,
-      overallRating: req.body.overallRating,
-      hostRatingStars: req.body.hostRatingStars,
-      tasteRatingStars: req.body.tasterankingstars,
-      tasteRatingStars: req.body.tasteRatingStars,
-      locationRatingStars: req.body.locationRatingStars,
-      vtmrRatingStars: req.body.vtmrRatingStars,
-      experienceRatingStars: req.body.experienceRatingStars,
-      reviewer: req.user.id,
-    };
-
-    // ToDo: We need to add verification such that only people who have really booked the class can make a review
-
-    const { error } = validateFeedback(newFeedback);
-    if (error) return res.status(400).json({ message: error.details[0].message });
-    tempClass.feedbacks.push(newFeedback);
-    let updatedClass = {
-      feedbacks: tempClass.feedbacks,
-    };
-    updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
-    res.status(200).json({ updatedClass });
-  } catch (err) {
-    if (err.message) {
-      res.status(500).json({ message: err.message });
-    } else {
-      res.status(500).json({ message: 'Something went wrong during the feedback creation.' });
-    }
-  }
-});
-
 router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
   let coverPhoto = undefined;
   let photoOne = undefined;
@@ -497,6 +460,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     pescatarianFriendly: req.body.pescatarianFriendly,
     eggFree: req.body.eggFree,
     soyFree: req.body.soyFree,
+    privacyDetails: req.body.privacyDetails,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
   };
 

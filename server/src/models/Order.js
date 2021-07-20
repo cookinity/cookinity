@@ -46,6 +46,10 @@ const orderSchema = new Schema(
     bookingDate: {
       type: mongoose.Schema.Types.Date,
       required: true,
+    },
+    privacyDetailsOrder: {
+      type: String,
+      required: true,
     }
   }
 );
@@ -61,7 +65,8 @@ orderSchema.methods.toJSON = function () {
     numberOfGuests: this.numberOfGuests,
     totalPrice: this.totalPrice,
     currency: this.currency,
-    bookingDate: this.bookingDate
+    bookingDate: this.bookingDate,
+    privacyDetailsOrder: this.privacyDetailsOrder,
   };
 };
 

@@ -183,6 +183,10 @@ const classSchema = new Schema(
       required: false,
       default: 0, // 0 means all guests are allowed to book this class
     },
+    privacyDetails: {
+      type: String,
+      default: '',
+    },
   },
   { timestamps: true },
 );
@@ -242,6 +246,7 @@ classSchema.methods.toJSON = function () {
     locationRating: this.locationRating,
     vtmrRating: this.vtmrRating,
     expRating: this.expRating,
+    privacyDetails: this.privacyDetails,
     timeSlots: this.timeSlots.map((timeSlot) => {
       return timeSlot.toJSON();
     }),
@@ -296,6 +301,7 @@ export const validateClass = (c) => {
     soyFree: Joi.boolean(),
     nutAllergyFriendly: Joi.boolean(),
     feedbacks: Joi.array().items(feedbackJoiSchema),
+    privacyDetails: Joi.string(),
   });
 
   return classJoiSchema.validate(c);

@@ -28,7 +28,6 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
         <td>{b.numberOfGuests}</td>
         <td>{priceineuro} Euro</td>
         <td>{b.host.email}</td>
-
         <td>
           <LinkContainer to={`/${b.host.username}`}>
             <Button className="mr-1" variant="info">
@@ -42,6 +41,22 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
               <FontAwesomeIcon icon="info-circle" /> Go to Course
             </Button>
           </LinkContainer>
+          <Accordion>
+            <Card>
+              <Card.Header>
+                <Accordion.Toggle as={Button} variant="primary" eventKey="0">
+                  Privacy Details
+                </Accordion.Toggle>
+              </Card.Header>
+              <Accordion.Collapse eventKey="0">
+                <Card.Body>
+                  <ul>
+                    {b.privacyDetailsOrder}
+                  </ul>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>
         </td>
       </tr>
     );
