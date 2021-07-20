@@ -448,7 +448,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     toBring: req.body.toBring,
     lon: req.body.lon,
     lat: req.body.lat,
-    minGuestRatingRequired: req.body.minGuestRatingRequired,
+    minGuestRatingRequired: req.body.minGuestRatingRequired ? Number(req.body.minGuestRatingRequired) : 0,
     meetingAddress: req.body.meetingAddress,
     pricePerPerson: req.body.pricePerPerson,
     durationInMinutes: req.body.durationInMinutes,

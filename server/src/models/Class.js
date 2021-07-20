@@ -186,6 +186,7 @@ const classSchema = new Schema(
     privacyDetails: {
       type: String,
       default: '',
+      required: false,
     },
   },
   { timestamps: true },
@@ -246,7 +247,6 @@ classSchema.methods.toJSON = function () {
     locationRating: this.locationRating,
     vtmrRating: this.vtmrRating,
     expRating: this.expRating,
-    privacyDetails: this.privacyDetails,
     timeSlots: this.timeSlots.map((timeSlot) => {
       return timeSlot.toJSON();
     }),
@@ -291,7 +291,7 @@ export const validateClass = (c) => {
     minGuests: Joi.number().integer().min(1).max(100).positive().required(),
     maxGuests: Joi.number().integer().min(1).max(100).positive().required(),
     // guest rating can be an integer between 0 and 4 (5 makes no sense)
-    minGuestRatingRequired: Joi.number().integer().min(0).max(4).positive().required(),
+    minGuestRatingRequired: Joi.number().integer().min(0).max(4).required(),
     meetingAddress: addressJoiSchema.required(),
     timeSlots: Joi.array().items(timeSlotJoiSchema),
     veganFriendly: Joi.boolean(),
@@ -301,7 +301,7 @@ export const validateClass = (c) => {
     soyFree: Joi.boolean(),
     nutAllergyFriendly: Joi.boolean(),
     feedbacks: Joi.array().items(feedbackJoiSchema),
-    privacyDetails: Joi.string(),
+    privacyDetails: Joi.string().allow(''),
   });
 
   return classJoiSchema.validate(c);
