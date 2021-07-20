@@ -6,12 +6,15 @@ import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { logOutUser } from '../../../store/features/authentication/authActions';
 import { LinkContainer } from 'react-router-bootstrap';
 import './Navbar.scss';
+import logo from './CookinityLogo.png';
+import name from './Cookinity.png';
+
 
 export const NavigationBar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
-
+  
   const onLogOut = (event) => {
     event.preventDefault();
     dispatch(logOutUser(history));
@@ -51,9 +54,12 @@ export const NavigationBar = () => {
 
   return (
     <Navbar bg="primary" variant="dark" expand="lg" className="shadowNav">
-      <LinkContainer to="/">
-        <Navbar.Brand>Cookinity</Navbar.Brand>
-      </LinkContainer>
+      
+        <Navbar.Brand href="/"><img src={logo} width="30" height="40" />
+        {' '}
+        <img src={name} width="140" height="40" />
+          </Navbar.Brand>
+     
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
