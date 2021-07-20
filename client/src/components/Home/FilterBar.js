@@ -16,7 +16,7 @@ const FilterBar = ({
 }) => {
   return (
     <>
-      <div>
+      <div className="marginSmallScreen">
         <div className="row">
           <div className="col-12">
                 <Form>
@@ -27,7 +27,7 @@ const FilterBar = ({
                       md={{ span: 4, offset: 0 }}
                       className="my-auto filterOrder"
                     >
-                      <InputGroup>
+                      <InputGroup className="marginSmallScreen">
                         <InputGroup.Prepend>
                           <InputGroup.Text>
                             <FontAwesomeIcon icon="map-marker" />
@@ -42,7 +42,7 @@ const FilterBar = ({
                       </InputGroup>
                     </Form.Group>
                     <Form.Group as={Col} xs={12} md="4" className="my-auto">
-                      <InputGroup>
+                      <InputGroup className="marginSmallScreen">
                         <InputGroup.Prepend>
                           <InputGroup.Text>
                             <FontAwesomeIcon icon="hamburger" />
@@ -65,7 +65,7 @@ const FilterBar = ({
                         type="custom"
                         render={(stringDate, openCalendar) => {
                           return (
-                            <InputGroup>
+                            <InputGroup className="marginSmallScreen">
                               <InputGroup.Prepend>
                                 <InputGroup.Text>
                                   <FontAwesomeIcon icon="calendar" />
@@ -91,7 +91,7 @@ const FilterBar = ({
                         ]}
                       />
                     </Form.Group>
-                    <Col xs={12} md={1} className=" filterOrder">
+                    <Col xs={12} md={1} className="filterOrder">
                       <Button onClick={fetchClasses} className="searchButton"> Search</Button>
                     </Col>
                   </Form.Row>
