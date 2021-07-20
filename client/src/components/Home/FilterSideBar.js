@@ -79,9 +79,9 @@ const FilterSideBar = ({
   const fourPersons = generateGuests(4);
   return (
     <div>
-      <h5>Filters</h5>
+      <h5 className="filterOrder">Filters</h5>
 
-      <div className="filterOrder">
+      <div className="filterOrder marginFilterCategory">
         <div>Overall rating</div>
         <div>{fourStarsAndMore}</div>
         <div>{threeStarsAndMore}</div>
@@ -89,7 +89,7 @@ const FilterSideBar = ({
         <div>{oneStarAndMore}</div>
       </div>
 
-      <div className="mt-2 filterOrder">
+      <div className="mt-2 filterOrder marginFilterCategory">
         <div>Price per Person</div>
         <div>{belowTwentyFiveEuros}</div>
         <div>{twentyFiveEurosUntilFiftyEuros}</div>
@@ -97,12 +97,12 @@ const FilterSideBar = ({
         <div>{aboveHundredEuros}</div>
       </div>
 
-      <div className="mt-2 filterOrder">
+      <div className="mt-2 filterOrder marginFilterCategory">
         <div>Number of Guests</div>
         <div>{onePerson}</div>
         <div>{twoPersons}</div>
         <div>{threePersons}</div>
-        <div>{fourPersons}</div>
+        <div className="marginCustomGuest">{fourPersons}</div>
         <input
           className="form-control form-control-sm mt-1 guestInput"
           placeholder="Custom"

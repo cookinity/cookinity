@@ -17,3 +17,9 @@
 .searchButton {
     width: 100%;
 }
+
+@media (max-width: 1200px) {
+  .marginSmallScreen {
+    margin-bottom: 1rem;
+  }
+}
