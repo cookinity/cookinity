@@ -90,7 +90,9 @@ export default function ClassCard({ c, filterDate }) {
   function generateBookableDates() {
     // if a filter date is set we take this as an orientation point otherwise the current date
     const orientationDate = filterDate ? dayjs(filterDate.toDate()) : dayjs();
-    const bookableTimeSlots = c.timeSlots.filter((ts) => !ts.isBooked);
+    const bookableTimeSlots = c.timeSlots.filter(
+      (ts) => !ts.isBooked && dayjs(ts.date).isAfter(dayjs()),
+    );
     // sort bookable time slots by earlierst date first
     bookableTimeSlots.sort((a, b) => {
       const aDate = dayjs(a.date);

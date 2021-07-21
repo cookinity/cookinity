@@ -1,8 +1,10 @@
 import { faEdit, faTrash, faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ClassesTablePastBookedClasses } from 'components/YourBookings/ClassesTablePastBookedClasses';
 import React, { useState } from 'react';
 import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import './ClassesTable.scss'
 
 export const ClassesTable = ({ classes, onDeleteCallback }) => {
   const [show, setShow] = useState(false);
@@ -83,15 +85,15 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
         </td>
         <td>
           <LinkContainer to={`/hostmanagement/edit-class/${c.id}`}>
-            <Button variant="primary" className="mr-2 mt-2 marginSmallScreen">
+            <Button variant="primary" className="mr-1 mt-1">
               <FontAwesomeIcon icon={faEdit} /> Edit
             </Button>
           </LinkContainer>
-          <Button variant="danger" className="mr-2 mt-2 marginSmallScreen" onClick={handleShow(c)}>
+          <Button variant="danger" className="mr-1 mt-1" onClick={handleShow(c)}>
             <FontAwesomeIcon icon={faTrash} /> Delete
           </Button>
           <LinkContainer to={`/hostmanagement/edit-class/${c.id}/times`}>
-            <Button variant="secondary" className="mt-2 marginSmallScreen">
+            <Button variant="secondary" className="mt-1">
               <FontAwesomeIcon icon={faClock} />
               {' '}Manage Bookable Times
             </Button>

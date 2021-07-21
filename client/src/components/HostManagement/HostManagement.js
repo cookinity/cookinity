@@ -127,7 +127,8 @@ export const HostManagement = () => {
         config.headers['x-auth-token'] = token;
       }
       const response = await axios.post('/api/payment/generate-dashboard-link', null, config);
-      window.location = response.data.url;
+      // open in new window
+      window.open(response.data.url, '_blank');
       setIsLoading(false);
     } catch (err) {
       setIsError(true);

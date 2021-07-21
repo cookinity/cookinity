@@ -14,6 +14,7 @@ import hamburg from './hamburg.png';
 import soup from './soup.png';
 import price from './best-price.png';
 import rating from './rating.png';
+import { useHistory } from 'react-router-dom';
 
 dayjs.extend(utc);
 
@@ -22,15 +23,10 @@ export const Landing = () => {
   const [cat, setCat] = useState(undefined);
   const [city, setCity] = useState(undefined);
 
-  useEffect(() => {
-    fetchClasses();
-  }, [cat, city, startDate]);
+  const history = useHistory();
 
-  const fetchClasses = () => {
-    //TODO
-    //if (startDate != null && cat != null && city != null) {
-    //  window.open('./home', '_blank');
-    // }
+  const navigateToHome = () => {
+    history.push('/', { cat, city, startDate });
   };
 
   const handleFilterCategory = (e) => {
@@ -66,11 +62,13 @@ export const Landing = () => {
                 <Row className="mb-4">
                   <Col>
                     <FilterBar
+                      city={city}
+                      category={cat}
                       handleFilterCity={handleFilterCity}
                       handleFilterCategory={handleFilterCategory}
                       handleFilterDate={handleFilterDate}
                       startDate={startDate}
-                      fetchClasses={fetchClasses}
+                      onSearchHandler={navigateToHome}
                     ></FilterBar>
                   </Col>
                 </Row>

@@ -15,6 +15,7 @@ import FilterSideBar from './FilterSideBar';
 import ClassesMap from './ClassesMap';
 import Footer from '../Layout/Footer';
 import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 dayjs.extend(utc);
 
 export const Home = () => {
@@ -24,6 +25,7 @@ export const Home = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // @ts-ignore
   const [limit, setLimit] = useState(5);
   const [skip, setSkip] = useState(0);
 
@@ -41,17 +43,23 @@ export const Home = () => {
   const [eggFree, setEggFree] = useState(false);
   const [soyFree, setSoyFree] = useState(false);
 
+  const location = useLocation();
+  const history = useHistory();
+
   // @ts-ignore
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
+    if (location.state) {
+      setCity(city);
+      setCat(cat);
+      setStartDate(startDate);
+      history.replace('', null);
+    }
     fetchClasses();
   }, [
     skip,
     limit,
-    cat,
-    city,
-    startDate,
     priceLow,
     priceUp,
     guests,
@@ -221,11 +229,13 @@ export const Home = () => {
           <Row className="mb-4">
             <Col>
               <FilterBar
+                category={cat}
+                city={city}
                 handleFilterCity={handleFilterCity}
                 handleFilterCategory={handleFilterCategory}
                 handleFilterDate={handleFilterDate}
                 startDate={startDate}
-                fetchClasses={fetchClasses}
+                onSearchHandler={fetchClasses}
               ></FilterBar>
             </Col>
           </Row>
