@@ -37,6 +37,8 @@ router.post('/webhook', express.json({ type: 'application/json' }), async (req, 
       totalPrice: session.amount_total,
       currency: session.currency,
       bookingDate: dayjs().utc().toJSON(),
+      reviewedByHost: false,
+      reviewedByCustomer: false,
     };
     // 1. Create New Order
     await Order.create(order);

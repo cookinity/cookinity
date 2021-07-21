@@ -26,6 +26,18 @@ const orderSchema = new Schema({
     type: timeSlotSchema,
     required: true,
   },
+  // has this order already been used to review the customer by the host?
+  reviewedByHost: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  // hsa this order already been used to review the class by the customer?
+  reviewedByCustomer: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   stripeSession: {
     type: mongoose.Schema.Types.Mixed,
     required: true,
@@ -60,6 +72,8 @@ orderSchema.methods.toJSON = function () {
     totalPrice: this.totalPrice,
     currency: this.currency,
     bookingDate: this.bookingDate,
+    reviewedByHost: this.reviewedByHost,
+    reviewedByCustomer: this.reviewedByCustomer,
   };
 };
 

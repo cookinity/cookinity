@@ -2,50 +2,47 @@ import Joi from 'joi-oid';
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
-export const feedbackSchema = new Schema(
-  {
-    //Stars
-    overallRatingStars: {
-      type: Number,
-      required: true,
-    },
-    hostRatingStars: {
-      type: Number,
-      required: true,
-    },
-    tasteRatingStars: {
-      type: Number,
-      required: true,
-    },
-    locationRatingStars: {
-      type: Number,
-      required: true,
-    },
-    vtmrRatingStars: {
-      type: Number,
-      required: true,
-    },
-    reviewer: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    experienceRatingStars: {
-      type: Number,
-      required: true,
-    },
-
-    //Description
-    overallRating: {
-      type: String,
-      default: '',
-    },
-    
-    feedbackDate: {
-      type: mongoose.Schema.Types.Date,
-      required: true,
-    }
+export const feedbackSchema = new Schema({
+  overallRatingStars: {
+    type: Number,
+    required: true,
   },
-);
+  hostRatingStars: {
+    type: Number,
+    required: true,
+  },
+  tasteRatingStars: {
+    type: Number,
+    required: true,
+  },
+  locationRatingStars: {
+    type: Number,
+    required: true,
+  },
+  vtmrRatingStars: {
+    type: Number,
+    required: true,
+  },
+  reviewer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  experienceRatingStars: {
+    type: Number,
+    required: true,
+  },
+
+  //Description
+  overallRating: {
+    type: String,
+    default: '',
+  },
+
+  feedbackDate: {
+    type: mongoose.Schema.Types.Date,
+    required: true,
+  },
+});
 
 feedbackSchema.methods.toJSON = function () {
   return {
@@ -58,7 +55,7 @@ feedbackSchema.methods.toJSON = function () {
     vtmrRatingStars: this.vtmrRatingStars,
     experienceRatingStars: this.experienceRatingStars,
     reviewer: this.reviewer.toJSON(),
-    feedbackDate: this.feedbackDate
+    feedbackDate: this.feedbackDate,
   };
 };
 
