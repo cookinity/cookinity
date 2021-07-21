@@ -52,7 +52,8 @@ export const Home = () => {
     cat,
     city,
     startDate,
-    priceLow && priceUp,
+    priceLow,
+    priceUp,
     guests,
     rating,
     vegan,
@@ -198,12 +199,7 @@ export const Home = () => {
 
   return (
     <>
-      <div style={{ display: isLoading ? 'block' : 'none' }}>
-        <Layout>
-          <Loader></Loader>
-        </Layout>
-      </div>
-      <div style={{ display: isLoading ? 'none' : 'block' }}>
+      <div>
         <Layout>
           <Row>
             <Col>
@@ -248,7 +244,10 @@ export const Home = () => {
               ></FilterSideBar>
             </Col>
             <Col xs={12} lg={12} xl={6}>
-              <Container fluid>
+              <div style={{ display: isLoading ? 'block' : 'none' }}>
+                <Loader></Loader>
+              </div>
+              <Container fluid style={{ display: isLoading ? 'none' : 'block' }}>
                 <Row xs={1} md={2} lg={2}>
                   {filteredClasses.length === 0 ? (
                     <div className="alert alert-warning mx-auto text-center" role="alert">

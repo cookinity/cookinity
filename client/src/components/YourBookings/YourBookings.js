@@ -102,7 +102,7 @@ export const HostManagement = () => {
                 </Alert>
               )}
               {isOrderDone && (
-                <Alert variant="success">
+                <Alert variant="success" dismissible>
                   🎉Order confirmed!🎉 Please check if there is a "View Private Information" Button
                   in the table. Then the host has some more information for you!
                 </Alert>
