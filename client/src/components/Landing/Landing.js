@@ -83,16 +83,6 @@ export const Landing = () => {
             <br></br>
             <br></br>
             <img className="img-fluid image-lg mb-4" src={soup} />
-            <div className="small">
-              Icon made by{' '}
-              <a href="https://www.freepik.com" title="Freepik">
-                Freepik
-              </a>{' '}
-              from{' '}
-              <a href="https://www.flaticon.com/" title="Flaticon">
-                www.flaticon.com
-              </a>
-            </div>
             <h2 className="h4">No cooking experience required</h2>
             <p>
               Our hosts are happy to have you as guests even if you do not have any cooking
@@ -104,16 +94,6 @@ export const Landing = () => {
             <br></br>
             <br></br>
             <img className="img-fluid image-lg mb-4" src={rating} />
-            <div className="small">
-              Icon made by{' '}
-              <a href="https://www.freepik.com" title="Freepik">
-                Freepik
-              </a>{' '}
-              from{' '}
-              <a href="https://www.flaticon.com/" title="Flaticon">
-                www.flaticon.com
-              </a>
-            </div>
             <h2 className="h4">Truly transparent</h2>
             <p>
               We have a rating system in both directions: from hosts to guests and from guests to
@@ -125,16 +105,6 @@ export const Landing = () => {
             <br></br>
             <br></br>
             <img className="img-fluid image-lg mb-4" src={price} />
-            <div className="small">
-              Icon made by{' '}
-              <a href="https://www.freepik.com" title="Freepik">
-                Freepik
-              </a>{' '}
-              from{' '}
-              <a href="https://www.flaticon.com/" title="Flaticon">
-                www.flaticon.com
-              </a>
-            </div>
             <h2 className="h4">Best prices</h2>
             <p>We offer you classes at a lower price than in a professional cooking school.</p>
           </div>
