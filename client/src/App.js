@@ -9,6 +9,8 @@ import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
 import YourBookings from './components/YourBookings/YourBookings';
 import NotFound from './components/NotFound/NotFound';
+import ComingSoon from './components/ComingSoon/ComingSoon';
+import HowCookinityWorks from './components/HowCookinityWorks/HowCookinityWorks';
 
 import Loader from './components/Shared/Loader/Loader';
 
@@ -47,6 +49,7 @@ import {
 import TimeManagements from 'components/HostManagement/TimeManagement/TimeManagements';
 import BookedClasses from 'components/HostManagement/BookedClasses/BookedClasses';
 import BookClass from 'components/ClassBooking/BookClass';
+
 
 library.add(
   fab,
@@ -98,6 +101,8 @@ const App = ({ auth, loadMe }) => {
           <Route path="/register" component={Register} />
           <Route path="/your-bookings" component={YourBookings} />
           <Route path="/notfound" component={NotFound} />
+          <Route path="/comingsoon" component={ComingSoon} />
+          <Route path="/howcookinityworks" component={HowCookinityWorks} />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
           <Route path="/hostmanagement/booked-classes" component={BookedClasses} exact />
@@ -106,6 +111,7 @@ const App = ({ auth, loadMe }) => {
           <Route path="/classes/:classId/create-feedback" component={FeedbackUser} exact />
           <Route path="/classes/:userId/create-feedback-host" component={FeedbackHost} exact />
           <Route path="/hostmanagement/edit-class/:classId" component={EditClass} exact />
+
           <Route
             path="/hostmanagement/edit-class/:classId/times"
             component={TimeManagements}

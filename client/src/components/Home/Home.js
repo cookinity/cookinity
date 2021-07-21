@@ -13,6 +13,7 @@ import utc from 'dayjs/plugin/utc';
 import FilterBar from './FilterBar';
 import FilterSideBar from './FilterSideBar';
 import ClassesMap from './ClassesMap';
+import Footer from '../Layout/Footer';
 import { useSelector } from 'react-redux';
 dayjs.extend(utc);
 
@@ -284,9 +285,9 @@ export const Home = () => {
               </div>
             </Col>
           </Row>
-          )
         </Layout>
       </div>
+      <Footer></Footer>
     </>
   );
 };
