@@ -25,10 +25,10 @@ export const NavigationBar = () => {
     navBarContent = (
       <>
         <LinkContainer to="/hostmanagement">
-          <Nav.Link>Host a Class</Nav.Link>
+          <Nav.Link>Host a class</Nav.Link>
         </LinkContainer>
         <LinkContainer to="/your-bookings">
-          <Nav.Link>Your Bookings</Nav.Link>
+          <Nav.Link>Your bookings</Nav.Link>
         </LinkContainer>
         
           <LinkContainer to={`/${auth.me.username}`}>
@@ -36,7 +36,6 @@ export const NavigationBar = () => {
           </LinkContainer>
           
           <Nav.Link onClick={onLogOut}>Log Out</Nav.Link>
-       
       </>
     );
   } else {
@@ -48,7 +47,7 @@ export const NavigationBar = () => {
   }
 
   return (
-    <Navbar bg="primary"  expand="lg" className="shadowNav">
+    <Navbar bg="primary" variant="dark" expand="lg" className="shadowNav">
       <Navbar.Brand href="/">
         <img src={logo} width="30" height="40" /> <img src={name} width="140" height="40" />
       </Navbar.Brand>
@@ -57,7 +56,7 @@ export const NavigationBar = () => {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           <LinkContainer to="/">
-            <Nav.Link><div className="text" style = {{color: "green"}}>Home</div></Nav.Link>
+            <Nav.Link>Home</Nav.Link>
           </LinkContainer>
           {navBarContent}
         </Nav>
