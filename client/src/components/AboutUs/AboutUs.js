@@ -8,7 +8,7 @@ import profile4 from './stefan.png';
 const AboutUs = () => {
   return (
     <LayoutNarrow>
-      <div className="section section-header section-image bg-primary overlay-primary text-white overflow-hidden pb-6">
+      <div className="section section-image bg-primary overlay-primary text-white overflow-hidden pb-6">
         <div className="container z-2">
           <div className="row justify-content-center pt-3">
             <div className="col-12 text-center">
@@ -17,7 +17,7 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-      <div className="section section-lg pt-5">
+      <div className="section pt-5">
         <div className="container">
           <div className="row">
             <p>
@@ -81,23 +81,25 @@ const AboutUs = () => {
           </div>
         </div>
         <br></br>
+        <h5 className="font-weight-normal">Cookinity Creators</h5>
         <div className="card border-light">
-          <h5 className="font-weight-normal">Cookinity Creators</h5>
+       
           <div className="media d-flex align-items-center my-3">
+          
             <div className="card-body text-center px-0 px-md-3">
-              <img className="img-fluid rounded" width="60" height="40" src={profile1} />{' '}
+              <img className="img-fluid rounded" width="80" height="60" src={profile1} />{' '}
               <div>Christina Deutsch</div>
             </div>
             <div className="card-body text-center px-0 px-md-3">
-              <img className="img-fluid rounded" width="60" height="40" src={profile2} />
+              <img className="img-fluid rounded" width="80" height="60" src={profile2} />
               <div>Joe Yu</div>{' '}
             </div>
             <div className="card-body text-center px-0 px-md-3">
-              <img className="img-fluid rounded" width="60" height="40" src={profile3} />
-              <div>Johannes Scmidt</div>{' '}
+              <img className="img-fluid rounded" width="80" height="60" src={profile3} />
+              <div>Johannes Schmidt</div>{' '}
             </div>
             <div className="card-body text-center px-0 px-md-3">
-              <img className="img-fluid rounded" width="60" height="40" src={profile4} />
+              <img className="img-fluid rounded" width="80" height="60" src={profile4} />
               <div>Stefan Waldhauser</div>{' '}
             </div>
           </div>
