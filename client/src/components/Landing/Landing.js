@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import Layout from 'components/Layout/Layout';
 import Footer from 'components/Layout/Footer';
 
-import { Col, Row, Container } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -137,10 +136,13 @@ export const Landing = () => {
               </Link>
             </div>
             <div className="col-12 col-sm-6 col-lg-3 mb-4 mb-lg-0">
-              <a
-                href="TODO"
+              <Link
                 className="card img-card fh-400 border-0 outer-bg"
                 data-background-inner={berlin}
+                to={{
+                  pathname: '/home',
+                  state: { cityFilter: 'Berlin' },
+                }}
               >
                 <div
                   className="inner-bg overlay-dark"
@@ -151,14 +153,17 @@ export const Landing = () => {
                     <h5 className="text-uppercase text-center">Berlin</h5>
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
+
             <div className="col-12 col-sm-6 col-lg-3 mb-4 mb-lg-0">
-              {' '}
-              <a
-                href="TODO"
+              <Link
                 className="card img-card fh-400 border-0 outer-bg"
                 data-background-inner={hamburg}
+                to={{
+                  pathname: '/home',
+                  state: { cityFilter: 'Hamburg' },
+                }}
               >
                 <div
                   className="inner-bg overlay-dark"
@@ -169,14 +174,17 @@ export const Landing = () => {
                     <h5 className="text-uppercase text-center">Hamburg</h5>
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
+
             <div className="col-12 col-sm-6 col-lg-3 mb-4 mb-lg-0">
-              {' '}
-              <a
-                href="TODO"
+              <Link
                 className="card img-card fh-400 border-0 outer-bg"
                 data-background-inner={dresden}
+                to={{
+                  pathname: '/home',
+                  state: { cityFilter: 'Dresden' },
+                }}
               >
                 <div
                   className="inner-bg overlay-dark"
@@ -184,10 +192,10 @@ export const Landing = () => {
                 ></div>
                 <div className="card-img-overlay d-flex align-items-center">
                   <div className="card-body text-white p-3">
-                    <h5 className="font-weight-normal text-uppercase text-center">Dresden</h5>
+                    <h5 className="text-uppercase text-center">Dresden</h5>
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
           </div>
           <br></br>
