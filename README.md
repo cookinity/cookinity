@@ -85,7 +85,7 @@ We are using Stripe as an Payment Provider. Please follow the following steps to
     `src/constants/StripeKey.js` and enter your own publishable test key into the file.
   - We need need to setup stripe webhooks so stripe can communicate with our locally running server.
     - Please register and install ultrahook https://www.ultrahook.com/. This tool allows us to receive webhooks on localhost. In the process of registering you will setup a URL like `https://namespace-stripe.ultrahook.com`
-    - Setup Stripe test webhooks (https://dashboard.stripe.com/test/webhooks) for your account and from connect applications and enter the url that you got from ultrahook. Please select all events in both cases (application and connect)!
+    - Setup Stripe test webhooks (https://dashboard.stripe.com/test/webhooks) from your account and from connect applications and enter the url that you got from ultrahook. Please select all events in both cases (application and connect)!
     - You are all setup! To run ultrahook you need to execute `npm run ultrahook` in the server root. This requires the ULTRAHOOK_API_KEY environment variable to be set as described in the ultrahook documentation. If this is not the case you manually have to run ultrahook via the command `ultrahook -k <YOUR_API_KEY> stripe http://localhost:5000/api/payment/webhook`
 
 ## Deployment on Heroku
