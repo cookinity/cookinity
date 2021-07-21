@@ -47,7 +47,7 @@ export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
         </td>
         <td>
           <LinkContainer to={`/classes/${b.class.id}`}>
-            <Button className="mr-1 mt-1" variant="info">
+            <Button className="mr-1 mt-1 mb-1" variant="info">
               <FontAwesomeIcon icon="info-circle" /> Go to Course
             </Button>
           </LinkContainer>
@@ -57,9 +57,13 @@ export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
             </Button>
           ) : null}
 
-          <LinkContainer to={`/classes/${b.class.id}/create-feedback`}>
-            <Button className="mt-1" variant="success">
-              <FontAwesomeIcon icon={faPlus} /> Give Feedback
+          <LinkContainer to={`/classes/${b.class.id}/bookings/create-feedback/${b.id}`}>
+            <Button
+              className="mr-1 mt-1"
+              variant="success"
+              disabled={b.reviewedByCustomer ? true : false}
+            >
+              <FontAwesomeIcon icon={faPlus} /> Rate Class
             </Button>
           </LinkContainer>
         </td>

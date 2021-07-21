@@ -51,7 +51,6 @@ import TimeManagements from 'components/HostManagement/TimeManagement/TimeManage
 import BookedClasses from 'components/HostManagement/BookedClasses/BookedClasses';
 import BookClass from 'components/ClassBooking/BookClass';
 
-
 library.add(
   fab,
   faCalendarAlt,
@@ -110,8 +109,16 @@ const App = ({ auth, loadMe }) => {
           <Route path="/hostmanagement/booked-classes" component={BookedClasses} exact />
           <Route path="/classes/:classId" component={ClassDetail} exact />
           <Route path="/classes/:classId/booking" component={BookClass} exact />
-          <Route path="/classes/:classId/create-feedback" component={FeedbackUser} exact />
-          <Route path="/classes/:userId/create-feedback-host" component={FeedbackHost} exact />
+          <Route
+            path="/classes/:classId/booking/create-feedback/:orderId"
+            component={FeedbackUser}
+            exact
+          />
+          <Route
+            path="/hostmanagement/booked-classes/:orderId/create-feedback"
+            component={FeedbackHost}
+            exact
+          />
           <Route path="/hostmanagement/edit-class/:classId" component={EditClass} exact />
 
           <Route

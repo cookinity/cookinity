@@ -10,6 +10,7 @@ dayjs.extend(utc);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 import Class, { validateClass, validateTimeSlot } from '../../models/Class';
+import Order from '../../models/Order';
 import upload from '../../middleware/multer';
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -341,32 +342,49 @@ router.delete('/:classId/timeslots/:tsId', [requireJwtAuth], async (req, res, ne
   }
 });
 
-router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
+router.post('/:classId/feedbacks/:orderId', [requireJwtAuth], async (req, res, next) => {
   try {
-    const tempClass = await Class.findById(req.params.id).populate('host');
-    // check that the class exists in the database
+    // check that class exists in database
+    const tempClass = await Class.findById(req.params.classId).populate('host');
     if (!tempClass) {
       return res.status(404).json({ message: 'Class not found!' });
     }
+    // check that order exists in database
+    const order = await Order.findById(req.params.orderId).populate('customer').populate('class');
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found!' });
+    }
+    // check that classId and orderId
+    if (order.class.id !== tempClass.id) {
+      return res.status(500).json({ message: 'OrderId does not match Class ID!' });
+    }
+    // now we check that the class has already happened, thus is in the past
+    if (dayjs(order.bookedTimeSlot.date).isAfter(dayjs())) {
+      return res
+        .status(500)
+        .json({ message: 'The class is upcoming, you can only review classes that already happened!' });
+    }
+    // now we check that the logged in user is the customer who booked the class
+    const idOfLoggedInUser = req.user.id;
+    if (order.customer.id !== idOfLoggedInUser) {
+      return res.status(401).json({ message: 'You can only review your own classes!' });
+    }
+    // now we check that the order is not already reviewed
+    if (order.reviewedByCustomer) {
+      return res.status(500).json({ message: 'You already reviewed this order' });
+    }
 
     const newFeedback = {
-      overallRatingStars: req.body.overallRatingStars,
       overallRating: req.body.overallRating,
+      overallRatingStars: req.body.overallRatingStars,
       hostRatingStars: req.body.hostRatingStars,
-      hostRating: req.body.hostRating,
       tasteRatingStars: req.body.tasteRatingStars,
-      tasteRating: req.body.tasteRating,
       locationRatingStars: req.body.locationRatingStars,
-      locationRating: req.body.locationRating,
       vtmrRatingStars: req.body.vtmrRatingStars,
-      vtmrRating: req.body.vtmrRating,
       experienceRatingStars: req.body.experienceRatingStars,
-      experienceRating: req.body.experienceRating,
       reviewer: req.user.id,
       feedbackDate: dayjs().utc().toJSON(),
     };
-
-    // ToDo: We need to add verification such that only people who have really booked the class can make a review
 
     const { error } = validateFeedback(newFeedback);
     if (error) return res.status(400).json({ message: error.details[0].message });
@@ -388,6 +406,7 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
     updatedClass.expRating =
       tempClass.feedbacks.map((f) => f.experienceRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
     updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
+    await Order.findByIdAndUpdate(req.params.orderId, { $set: { reviewedByCustomer: true } }, { new: true });
 
     res.status(200).json({ updatedClass });
   } catch (err) {
