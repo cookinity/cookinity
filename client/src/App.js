@@ -11,6 +11,7 @@ import YourBookings from './components/YourBookings/YourBookings';
 import NotFound from './components/NotFound/NotFound';
 import ComingSoon from './components/ComingSoon/ComingSoon';
 import HowCookinityWorks from './components/HowCookinityWorks/HowCookinityWorks';
+import AboutUs from './components/AboutUs/AboutUs';
 
 import Loader from './components/Shared/Loader/Loader';
 
@@ -101,6 +102,7 @@ const App = ({ auth, loadMe }) => {
           <Route path="/your-bookings" component={YourBookings} />
           <Route path="/notfound" component={NotFound} />
           <Route path="/comingsoon" component={ComingSoon} />
+          <Route path="/aboutus" component={AboutUs} />
           <Route path="/howcookinityworks" component={HowCookinityWorks} />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
