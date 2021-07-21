@@ -169,7 +169,7 @@ export const HostManagement = () => {
             <FontAwesomeIcon icon={faPlus} /> Create a new class
           </Button>
         </LinkContainer>
-        <Button variant="secondary" className="mr-2 mt-2" onClick={toStripeDashboard}>
+        <Button variant="secondary" className="mr-2 mt-2 paymentButton" onClick={toStripeDashboard}>
           <FontAwesomeIcon icon={faMoneyBill} /> Payments
         </Button>
         <LinkContainer to={`/hostmanagement/booked-classes`}>
