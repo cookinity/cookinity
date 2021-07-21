@@ -41,7 +41,7 @@ export const loginUserWithEmail = (formData, history) => async (dispatch, getSta
     });
 
     dispatch(loadMe());
-    history.push('/');
+    history.push('/home');
   } catch (err) {
     dispatch({
       type: LOGIN_WITH_EMAIL_FAIL,
@@ -60,7 +60,7 @@ export const logOutUser = (history) => async (dispatch) => {
     dispatch({
       type: LOGOUT_SUCCESS,
     });
-    if (history) history.push('/');
+    if (history) history.push('/home');
   } catch (err) {}
 };
 

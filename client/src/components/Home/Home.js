@@ -55,7 +55,7 @@ export const Home = () => {
       setCity(cityFilter);
       setCat(categoryFilter);
       setStartDate(dateFilter);
-      history.replace('', null);
+      history.replace('/home', null);
       // call with filters from location
       fetchClasses(categoryFilter, dateFilter, cityFilter)();
     } else {

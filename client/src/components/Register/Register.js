@@ -24,7 +24,7 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
     },
   });
 
-  if (auth.isAuthenticated) return <Redirect to="/" />;
+  if (auth.isAuthenticated) return <Redirect to="/home" />;
 
   return (
     <main>
@@ -47,9 +47,9 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
               <div className="col-12 d-flex align-items-center justify-content-center">
                 <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
                   <p>
-                    Back to <a href="/">Home page</a>
+                    Back to <a href="/home">Home page</a>
                   </p>
-                      
+
                   <div>
                     <div className="form-group">
                       <label htmlFor="name">Your name</label>
@@ -151,14 +151,13 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
                       </div>
 
                       {formik.touched.password && formik.errors.password ? (
-                      <p className="error">{formik.errors.password}</p>
-                    ) : null}
-                    
+                        <p className="error">{formik.errors.password}</p>
+                      ) : null}
+
                       <small id="passwortHelp" className="form-text text-muted">
                         Password must be at least 6 characters!
                       </small>
                     </div>
-                    
                   </div>
 
                   {error && <p className="error">{error}</p>}

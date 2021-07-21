@@ -26,7 +26,7 @@ export const Landing = () => {
   const history = useHistory();
 
   const navigateToHome = () => {
-    history.push('/', { categoryFilter: cat, cityFilter: city, dateFilter: startDate });
+    history.push('/home', { categoryFilter: cat, cityFilter: city, dateFilter: startDate });
   };
 
   const handleFilterCategory = (e) => {
@@ -119,7 +119,7 @@ export const Landing = () => {
               className="card img-card fh-400 border-0 outer-bg"
               data-background-inner={munich}
               to={{
-                pathname: '/',
+                pathname: '/home',
                 state: { cityFilter: 'Munich' },
               }}
             >

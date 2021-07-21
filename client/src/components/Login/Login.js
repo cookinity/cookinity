@@ -24,7 +24,7 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
     },
   });
 
-  if (auth.isAuthenticated) return <Redirect to="/" />;
+  if (auth.isAuthenticated) return <Redirect to="/home" />;
 
   return (
     <main>
@@ -47,7 +47,7 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
               <div className="col-12 d-flex align-items-center justify-content-center">
                 <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
                   <p>
-                    Back to <a href="/">Home page</a>
+                    Back to <a href="/home">Home page</a>
                   </p>
 
                   <div>
@@ -103,7 +103,6 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
                       {formik.touched.password && formik.errors.password ? (
                         <p className="error">{formik.errors.password}</p>
                       ) : null}
-
                     </div>
                   </div>
 

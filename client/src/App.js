@@ -98,14 +98,15 @@ const App = ({ auth, loadMe }) => {
     <>
       {auth.appLoaded ? (
         <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route path="/your-bookings" component={YourBookings} />
-          <Route path="/notfound" component={NotFound} />
-          <Route path="/comingsoon" component={ComingSoon} />
-          <Route path="/landing" component={Landing} />
-          <Route path="/aboutus" component={AboutUs} />
-          <Route path="/howcookinityworks" component={HowCookinityWorks} />
+          <Route path="/home" component={Home} exact />
+          <Route path="/login" component={Login} exact />
+          <Route path="/register" component={Register} exact />
+          <Route path="/your-bookings" component={YourBookings} exact />
+          <Route path="/notfound" component={NotFound} exact />
+          <Route path="/comingsoon" component={ComingSoon} exact />
+          <Route path="/landing" component={Landing} exact />
+          <Route path="/aboutus" component={AboutUs} exact />
+          <Route path="/howcookinityworks" component={HowCookinityWorks} exact />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
           <Route path="/hostmanagement/booked-classes" component={BookedClasses} exact />
@@ -129,7 +130,7 @@ const App = ({ auth, loadMe }) => {
             exact
           />
           <Route exact path="/:username" component={Profile} />
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={Landing} />
           <Route component={NotFound} />
         </Switch>
       ) : (
