@@ -52,13 +52,13 @@ export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
             </Button>
           </LinkContainer>
           {b.privateInformation ? (
-            <Button variant="warning" onClick={() => handleShow(b)}>
+            <Button variant="warning" className="mr-1 mt-1" onClick={() => handleShow(b)}>
               View Private Information
             </Button>
           ) : null}
 
           <LinkContainer to={`/classes/${b.class.id}/create-feedback`}>
-            <Button className="mr-1 mt-1" variant="success">
+            <Button className="mt-1" variant="success">
               <FontAwesomeIcon icon={faPlus} /> Give Feedback
             </Button>
           </LinkContainer>

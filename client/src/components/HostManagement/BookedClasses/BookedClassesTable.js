@@ -36,7 +36,7 @@ export const BookedClassesTable = ({ bookings, isPastTable }) => {
             <LinkContainer to={`/classes/${b.customer.id}/create-feedback-host`}>
               <Button variant="info">
                 <FontAwesomeIcon icon={faClock} />
-                Feedback of the Customer
+                {' '}Feedback of the Customer
               </Button>
             </LinkContainer> : null}
         </td>
