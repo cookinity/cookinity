@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { Alert, Col, Row } from 'react-bootstrap';
 import { BookedClassesTable } from './BookedClassesTable';
 import LayoutNarrow from 'components/Layout/LayoutNarrow';
+import './BookedClasses.scss';
 
 const BookedClasses = () => {
   const [moneyEarned, setMoneyEarned] = useState(0);
@@ -75,7 +76,7 @@ const BookedClasses = () => {
   if (futureBookings.length > 0 || pastBookings.length > 0) {
     content = (
       <div>
-        <h1 className="display-4">
+        <h1 className="display-4 mb-6 text-center primaryTextCol"> 
           💶 Congratulation! You already earned {moneyEarned} € with Cookinity!💶
         </h1>
         <h1 className="text-center">Future Bookings</h1>

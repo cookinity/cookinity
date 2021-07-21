@@ -49,7 +49,7 @@ export const TimeSlotTable = ({ c, onDeleteCallback }) => {
 
   return (
     <>
-      <Table bordered responsive>
+      <Table responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>

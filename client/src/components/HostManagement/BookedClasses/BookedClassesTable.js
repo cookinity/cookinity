@@ -47,7 +47,7 @@ export const BookedClassesTable = ({ bookings, isPastTable }) => {
 
   return (
     <>
-      <Table bordered responsive>
+      <Table responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>

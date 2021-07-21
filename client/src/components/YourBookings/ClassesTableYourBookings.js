@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
 
 export const ClassesTableYourBookings = ({ yourbookings }) => {
   const [show, setShow] = useState(false);
@@ -17,12 +18,11 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
   const columns = (
     <tr>
       <th>Title</th>
-      <th>Class Date</th>
+      <th>Class Starting Time</th>
       <th>Duration</th>
-      <th>Persones Booked</th>
+      <th>Number of Guests</th>
       <th>Total Price</th>
       <th>Host contact</th>
-      <th>Host</th>
       <th>Actions</th>
     </tr>
   );
@@ -31,25 +31,21 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
     const priceineuro = b.totalPrice / 100;
     return (
       <tr key={b.id}>
-        <td>{b.class.title}</td>
+        <td>
+          <Link to={`/classes/${b.class.id}`} className="hoverLink">
+            {b.class.title}
+          </Link>
+        </td>
         <td>{dayjs(b.bookedTimeSlot.date).format('llll')}</td>
-        <td>{b.class.durationInMinutes}</td>
+        <td>{b.class.durationInMinutes} Minutes</td>
         <td>{b.numberOfGuests}</td>
         <td>{priceineuro} Euro</td>
-        <td>{b.host.email}</td>
         <td>
-          <LinkContainer to={`/${b.host.username}`}>
-            <Button className="mr-1 mt-1" variant="info">
-              <FontAwesomeIcon icon="info-circle" /> {b.host.name}
-            </Button>
-          </LinkContainer>
+          <Link to={`/${b.host.username}`} className="hoverLink">
+            {b.host.email}
+          </Link>
         </td>
         <td>
-          <LinkContainer to={`/classes/${b.class.id}`}>
-            <Button className="mr-1 mt-1" variant="info">
-              <FontAwesomeIcon icon="info-circle" /> Go to Course
-            </Button>
-          </LinkContainer>
           {b.privateInformation ? (
             <>
               <Button variant="warning" className="mr-1 mt-1" onClick={() => handleShow(b)}>
@@ -64,7 +60,7 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
 
   return (
     <>
-      <Table bordered responsive>
+      <Table responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>
