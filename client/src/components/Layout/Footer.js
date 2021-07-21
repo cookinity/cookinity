@@ -20,7 +20,7 @@ const Footer = () => (
               </a>
             </li>
             <li>
-              <a target="_blank" href="TODO">
+              <a target="_blank" href="http://localhost:3000/aboutus">
                 About Us
               </a>
             </li>
