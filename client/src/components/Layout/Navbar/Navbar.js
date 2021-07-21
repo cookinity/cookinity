@@ -30,12 +30,13 @@ export const NavigationBar = () => {
         <LinkContainer to="/your-bookings">
           <Nav.Link>Your Bookings</Nav.Link>
         </LinkContainer>
-        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+        
           <LinkContainer to={`/${auth.me.username}`}>
-            <NavDropdown.Item>Your Profile</NavDropdown.Item>
+            <Nav.Link>Your Profile</Nav.Link>
           </LinkContainer>
-          <NavDropdown.Item onClick={onLogOut}>Log Out</NavDropdown.Item>
-        </NavDropdown>
+          
+          <Nav.Link onClick={onLogOut}>Log Out</Nav.Link>
+       
       </>
     );
   } else {
