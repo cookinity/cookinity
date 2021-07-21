@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./Tooltip.scss";
+import React, { useState } from 'react';
+import './Tooltip.scss';
 
 const Tooltip = (props) => {
   let timeout;
@@ -8,7 +8,7 @@ const Tooltip = (props) => {
   const showTip = () => {
     timeout = setTimeout(() => {
       setActive(true);
-    }, props.delay || 400);
+    }, props.delay || 200);
   };
 
   const hideTip = () => {
@@ -17,15 +17,11 @@ const Tooltip = (props) => {
   };
 
   return (
-    <div
-      className="Tooltip-Wrapper"
-      onMouseEnter={showTip}
-      onMouseLeave={hideTip}
-    >
+    <div className="Tooltip-Wrapper" onMouseEnter={showTip} onMouseLeave={hideTip}>
       {props.children}
       {active && (
-        <div className={`Tooltip-Tip ${props.direction || "top"}`}>
-          {props.content}
+        <div className={`Tooltip-Tip ${props.direction || 'top'}`}>
+          <span>{props.content}</span>
         </div>
       )}
     </div>

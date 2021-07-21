@@ -20,7 +20,7 @@ router.post('/webhook', express.json({ type: 'application/json' }), async (req, 
 
   // ToDo: For Production we have to check the signature of the request to verify it really comes from stripe
 
-  // Handle the checkout.session.completed event --> customer payment for the coçoking class
+  // Handle the checkout.session.completed event --> customer payment for the cooking class completed
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const { userId, classId, timeSlotId, guestNumber } = session.metadata;
@@ -37,7 +37,6 @@ router.post('/webhook', express.json({ type: 'application/json' }), async (req, 
       totalPrice: session.amount_total,
       currency: session.currency,
       bookingDate: dayjs().utc().toJSON(),
-      privacyDetailsOrder: c.privacyDetails ? c.privacyDetails : '',
     };
     // 1. Create New Order
     await Order.create(order);
@@ -80,9 +79,11 @@ router.post('/generate-dashboard-link', [requireJwtAuth], async (req, res) => {
     const link = await stripe.accounts.createLoginLink(user.stripeAccountId);
     res.send({ url: link.url });
   } catch (err) {
-    res.status(500).send({
-      error: err.message,
-    });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -106,9 +107,11 @@ router.post('/onboard-user', [requireJwtAuth], async (req, res) => {
     const accountLinkURL = await generateAccountLink(account.id, origin);
     res.send({ url: accountLinkURL });
   } catch (err) {
-    res.status(500).send({
-      error: err.message,
-    });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -189,10 +192,9 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
         },
       },
       mode: 'payment',
-      success_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?success=true`,
-      cancel_url: `${process.env.CLIENT_URL_DEV}/classes/${c.id}/booking?canceled=true`,
+      success_url: `${process.env.CLIENT_URL_DEV}/your-bookings?success=true`,
+      cancel_url: `${process.env.CLIENT_URL_DEV}/your-bookings?canceled=true`,
     });
-    debugger;
     res.json({ session });
   } catch (err) {
     if (err.message) {

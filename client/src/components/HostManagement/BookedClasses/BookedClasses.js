@@ -38,7 +38,7 @@ const BookedClasses = () => {
         config.headers['x-auth-token'] = token;
       }
       // load all bookings for which the currently logged in user is host
-      const result = await axios.get('/api/bookings', config);
+      const result = await axios.get('/api/bookings/ashost', config);
       const unformattedBookings = result.data.bookings;
       const classesBookedFuture = [];
       const classesBookedPast = [];
@@ -88,7 +88,10 @@ const BookedClasses = () => {
                 </Alert>
               )}
               <h1 className="text-center">Future Bookings</h1>
-              <BookedClassesTable bookings={futureBookings} isPastTable={false}></BookedClassesTable>
+              <BookedClassesTable
+                bookings={futureBookings}
+                isPastTable={false}
+              ></BookedClassesTable>
               <hr></hr>
               <h1 className="text-center">Past Bookings</h1>
               <BookedClassesTable bookings={pastBookings} isPastTable={true}></BookedClassesTable>

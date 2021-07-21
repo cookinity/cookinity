@@ -1,11 +1,16 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
-import { Accordion, Button, Card, Table } from 'react-bootstrap';
+import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import dayjs from 'dayjs';
 
 export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const columns = (
     <tr>
       <th>Title</th>
@@ -42,6 +47,26 @@ export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
               <FontAwesomeIcon icon="info-circle" /> Go to Course
             </Button>
           </LinkContainer>
+          {b.privateInformation ? (
+            <>
+              <Button variant="warning" onClick={handleShow}>
+                View Private Information
+              </Button>
+
+              <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Private Information From The Host</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{b.privateInformation}</Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleClose}>
+                    Close
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </>
+          ) : null}
+
           <LinkContainer to={`/classes/${b.class.id}/create-feedback`}>
             <Button className="mr-1 mt-1" variant="success">
               <FontAwesomeIcon icon={faPlus} /> Give Feedback

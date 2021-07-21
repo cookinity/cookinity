@@ -1,10 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import { Accordion, Button, Card, Table } from 'react-bootstrap';
+import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import dayjs from 'dayjs';
 
 export const ClassesTableYourBookings = ({ yourbookings }) => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const columns = (
     <tr>
       <th>Title</th>
@@ -37,26 +42,29 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
         </td>
         <td>
           <LinkContainer to={`/classes/${b.class.id}`}>
-            <Button className="mr-1" variant="info">
+            <Button className="mr-1 mb-1" variant="info">
               <FontAwesomeIcon icon="info-circle" /> Go to Course
             </Button>
           </LinkContainer>
-          <Accordion>
-            <Card>
-              <Card.Header>
-                <Accordion.Toggle as={Button} variant="primary" eventKey="0">
-                  Privacy Details
-                </Accordion.Toggle>
-              </Card.Header>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  <ul>
-                    {b.privacyDetailsOrder}
-                  </ul>
-                </Card.Body>
-              </Accordion.Collapse>
-            </Card>
-          </Accordion>
+          {b.privateInformation ? (
+            <>
+              <Button variant="warning" onClick={handleShow}>
+                View Private Information
+              </Button>
+
+              <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Private Information From The Host</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{b.privateInformation}</Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleClose}>
+                    Close
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </>
+          ) : null}
         </td>
       </tr>
     );

@@ -7,7 +7,14 @@ const AddressSection = ({ formik }) => {
     <>
       <Form.Label>Public Meeting Address</Form.Label>{' '}
       <Tooltip
-        content="Provide a PUBLIC address where you will meet your guests to then accompany them to your PRIVATE address"
+        content={
+          <span>
+            <em>This address can be seen by anyone on cookinity </em>
+            <br />
+            It should be a public address, not a private address. <br />
+            You will meet your guests here and together you will go to the actual location.
+          </span>
+        }
         direction="right"
       >
         <i className="fa fa-question" data-toggle="tooltip"></i>
@@ -73,9 +80,9 @@ const AddressSection = ({ formik }) => {
         </Form.Group>
       </Form.Row>
       <Form.Group controlId="street">
-        <Form.Label>Street</Form.Label>
+        <Form.Label>Street and House Number</Form.Label>
         <Form.Control
-          placeholder="TastyStreet 11"
+          placeholder="Street"
           name="street"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}

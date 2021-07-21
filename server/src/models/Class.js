@@ -183,7 +183,8 @@ const classSchema = new Schema(
       required: false,
       default: 0, // 0 means all guests are allowed to book this class
     },
-    privacyDetails: {
+    // this information should only be copied into an order object and never sent to the client directly!
+    privateInformation: {
       type: String,
       default: '',
       required: false,
@@ -247,6 +248,7 @@ classSchema.methods.toJSON = function () {
     locationRating: this.locationRating,
     vtmrRating: this.vtmrRating,
     expRating: this.expRating,
+    // do not send private information to the client --> DO NOT ADD HERE IN JSON
     timeSlots: this.timeSlots.map((timeSlot) => {
       return timeSlot.toJSON();
     }),
@@ -301,7 +303,7 @@ export const validateClass = (c) => {
     soyFree: Joi.boolean(),
     nutAllergyFriendly: Joi.boolean(),
     feedbacks: Joi.array().items(feedbackJoiSchema),
-    privacyDetails: Joi.string().allow(''),
+    privateInformation: Joi.string().allow(''),
   });
 
   return classJoiSchema.validate(c);

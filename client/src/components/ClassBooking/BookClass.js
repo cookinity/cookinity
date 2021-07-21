@@ -19,7 +19,6 @@ const BookClass = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isOrderDone, setIsOrderDone] = useState(false);
   const auth = useSelector((state) => state.auth);
   // id of the class in the route
   let { classId } = useParams();
@@ -53,9 +52,6 @@ const BookClass = () => {
 
       if (result.error) {
         setErrorMessage(result.error.message);
-        // If `redirectToCheckout` fails due to a browser or network
-        // error, display the localized error message to your customer
-        // using `result.error.message`.
       }
     };
   };
@@ -76,33 +72,10 @@ const BookClass = () => {
     fetchClass();
   }, []);
 
-  useEffect(() => {
-    // Check to see if this is a redirect back from Checkout
-    const query = new URLSearchParams(window.location.search);
-    if (query.get('success')) {
-      setIsOrderDone(true);
-    }
-    if (query.get('canceled')) {
-      setIsError(true);
-      setErrorMessage('Order canceled');
-    }
-  }, []);
-
   if (isLoading) {
     return (
       <LayoutNarrow>
         <Loader></Loader>
-      </LayoutNarrow>
-    );
-  } else if (isOrderDone) {
-    return (
-      <LayoutNarrow>
-        <Row>
-          <Col>
-            {' '}
-            <Alert variant="success">Order confirmed!</Alert>
-          </Col>
-        </Row>
       </LayoutNarrow>
     );
   } else {

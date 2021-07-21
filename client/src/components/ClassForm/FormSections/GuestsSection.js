@@ -71,8 +71,14 @@ const GuestsSection = ({ formik }) => {
         <Form.Group as={Col} xs={12} md={3} controlId="minGuestRatingRequired">
           <Form.Label>Minimum Guest Rating</Form.Label>
           <Tooltip
-            content="Please select the minimum rating (number of stars) you expect your guests to have"
-            direction="right"
+            content={
+              <span>
+                Please select the minimum stars you expect your guests to have
+                <br />
+                Select 0 if you do not care!
+              </span>
+            }
+            direction="top"
           >
             <i className="fa fa-question" data-toggle="tooltip"></i>
           </Tooltip>

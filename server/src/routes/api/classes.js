@@ -193,6 +193,29 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// need this for the edit form --> the host can see all the fields of the class including private information
+router.get('/:id/ashost', [requireJwtAuth], async (req, res) => {
+  try {
+    const c = await Class.findById(req.params.id).populate('host').populate({ path: 'feedbacks.reviewer' });
+
+    // check that the user making the request is the host of the class or an admin
+    if (!(c.host.id === req.user.id || req.user.role === 'ADMIN')) {
+      return res.status(400).json({ message: 'Only the host of a class can see all information of the class!' });
+    }
+
+    if (!c) return res.status(404).json({ message: 'No class found.' });
+    const returnedClass = c.toJSON();
+    returnedClass.privateInformation = c.privateInformation;
+    res.json({ class: returnedClass });
+  } catch (err) {
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
+  }
+});
+
 // A host can not delete a class once a date is booked for it
 router.delete('/:id', [requireJwtAuth], async (req, res, next) => {
   try {
@@ -278,7 +301,7 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       pescatarianFriendly: req.body.pescatarianFriendly,
       eggFree: req.body.vegetarianFriendly,
       soyFree: req.body.nutAllergyFriendly,
-      privacyDetails: req.body.privacyDetails,
+      privateInformation: req.body.privateInformation,
     };
 
     Object.keys(updatedClass).forEach((key) => (updatedClass[key] === undefined ? delete updatedClass[key] : {}));
@@ -310,7 +333,11 @@ router.delete('/:classId/timeslots/:tsId', [requireJwtAuth], async (req, res, ne
     await tempClass.save();
     res.status(200).json({ tempClass });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
@@ -460,7 +487,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     pescatarianFriendly: req.body.pescatarianFriendly,
     eggFree: req.body.eggFree,
     soyFree: req.body.soyFree,
-    privacyDetails: req.body.privacyDetails,
+    privateInformation: req.body.privateInformation,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
   };
 
