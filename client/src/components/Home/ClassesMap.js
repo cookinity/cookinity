@@ -48,7 +48,7 @@ const ClassesMap = ({ classes }) => {
         map.fitBounds(bounds);
         map.invalidateSize();
       }
-    }, 500);
+    }, 1000);
     return null;
   }
 

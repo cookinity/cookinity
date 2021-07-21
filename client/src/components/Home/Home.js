@@ -51,12 +51,17 @@ export const Home = () => {
 
   useEffect(() => {
     if (location.state) {
-      setCity(city);
-      setCat(cat);
-      setStartDate(startDate);
+      const { cityFilter, categoryFilter, dateFilter } = location.state;
+      setCity(cityFilter);
+      setCat(categoryFilter);
+      setStartDate(dateFilter);
       history.replace('', null);
+      // call with filters from location
+      fetchClasses(categoryFilter, dateFilter, cityFilter)();
+    } else {
+      // call with state
+      fetchClasses(cat, startDate, city)();
     }
-    fetchClasses();
   }, [
     skip,
     limit,
@@ -72,20 +77,20 @@ export const Home = () => {
     soyFree,
   ]);
 
-  const fetchClasses = async () => {
+  const fetchClasses = (categoryFilter, dateFilter, cityFilter) => async () => {
     setIsError(false);
     setIsLoading(true);
     try {
       let date = undefined;
-      if (startDate) {
-        date = dayjs.utc(startDate.toDate()).format();
+      if (dateFilter) {
+        date = dayjs.utc(dateFilter.toDate()).format();
       }
       const queryObject = {
         skip,
         limit,
-        city,
-        category: cat,
-        date,
+        city: cityFilter,
+        category: categoryFilter,
+        date: date,
         guests,
         priceLow,
         priceUp,
@@ -235,7 +240,7 @@ export const Home = () => {
                 handleFilterCategory={handleFilterCategory}
                 handleFilterDate={handleFilterDate}
                 startDate={startDate}
-                onSearchHandler={fetchClasses}
+                onSearchHandler={fetchClasses(cat, startDate, city)}
               ></FilterBar>
             </Col>
           </Row>

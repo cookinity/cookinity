@@ -14,7 +14,7 @@ import hamburg from './hamburg.png';
 import soup from './soup.png';
 import price from './best-price.png';
 import rating from './rating.png';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 dayjs.extend(utc);
 
@@ -26,7 +26,7 @@ export const Landing = () => {
   const history = useHistory();
 
   const navigateToHome = () => {
-    history.push('/', { cat, city, startDate });
+    history.push('/', { categoryFilter: cat, cityFilter: city, dateFilter: startDate });
   };
 
   const handleFilterCategory = (e) => {
@@ -145,10 +145,13 @@ export const Landing = () => {
             <h3 className="h4 mb-5">Top Cities</h3>
           </div>
           <div className="col-12 col-sm-6 col-lg-3 mb-4 mb-lg-0">
-            <a
-              href="TODO"
+            <Link
               className="card img-card fh-400 border-0 outer-bg"
               data-background-inner={munich}
+              to={{
+                pathname: '/',
+                state: { cityFilter: 'Munich' },
+              }}
             >
               <div
                 className="inner-bg overlay-dark"
@@ -159,7 +162,7 @@ export const Landing = () => {
                   <h5 className="text-uppercase text-center">Munich</h5>
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
           <div className="col-12 col-sm-6 col-lg-3 mb-4 mb-lg-0">
             <a
