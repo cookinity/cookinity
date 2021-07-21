@@ -6,9 +6,13 @@ import dayjs from 'dayjs';
 
 export const ClassesTableYourBookings = ({ yourbookings }) => {
   const [show, setShow] = useState(false);
+  const [modalContent, setModalContent] = useState('');
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = (b) => {
+    setShow(true);
+    setModalContent(b.privateInformation);
+  };
 
   const columns = (
     <tr>
@@ -48,21 +52,9 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
           </LinkContainer>
           {b.privateInformation ? (
             <>
-              <Button variant="warning" onClick={handleShow}>
+              <Button variant="warning" onClick={() => handleShow(b)}>
                 View Private Information
               </Button>
-
-              <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Private Information From The Host</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>{b.privateInformation}</Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleClose}>
-                    Close
-                  </Button>
-                </Modal.Footer>
-              </Modal>
             </>
           ) : null}
         </td>
@@ -76,6 +68,17 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Private Information From The Host</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalContent}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
