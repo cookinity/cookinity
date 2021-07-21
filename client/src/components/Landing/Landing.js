@@ -53,7 +53,7 @@ export const Landing = () => {
 
   return (
     <Layout>
-      <section className="section section-header pb-0">
+      <section className="pb-0">
         <div className="container section-image overlay-soft text-dark rounded px-lg-5 py-6 position-relative border border-light shadow-sm">
           <div className="row no-gutters justify-content-between align-items-center">
             <div className="col-12 order-lg-2">
