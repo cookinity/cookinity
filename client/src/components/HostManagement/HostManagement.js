@@ -165,15 +165,15 @@ export const HostManagement = () => {
     auth && auth.me && auth.me.hasStripeAccount ? (
       <>
         <LinkContainer to={`/hostmanagement/create-class`}>
-          <Button variant="success" className="mt-2">
+          <Button variant="success" className="mt-2 mr-2">
             <FontAwesomeIcon icon={faPlus} /> Create a new class
           </Button>
         </LinkContainer>
-        <Button variant="success" className="ml-2 mt-2 stripe-connect" onClick={toStripeDashboard}>
+        <Button variant="secondary" className="mr-2 mt-2" onClick={toStripeDashboard}>
           <FontAwesomeIcon icon={faMoneyBill} /> Payments
         </Button>
         <LinkContainer to={`/hostmanagement/booked-classes`}>
-          <Button variant="info" className="ml-2 mt-2">
+          <Button variant="info" className="mt-2">
             <FontAwesomeIcon icon="info-circle" /> Booked classes
           </Button>
         </LinkContainer>

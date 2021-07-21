@@ -83,15 +83,15 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
         </td>
         <td>
           <LinkContainer to={`/hostmanagement/edit-class/${c.id}`}>
-            <Button variant="primary">
+            <Button variant="primary" className="mr-2 mt-2 marginSmallScreen">
               <FontAwesomeIcon icon={faEdit} /> Edit
             </Button>
           </LinkContainer>
-          <Button variant="danger" className="ml-2" onClick={handleShow(c)}>
+          <Button variant="danger" className="mr-2 mt-2 marginSmallScreen" onClick={handleShow(c)}>
             <FontAwesomeIcon icon={faTrash} /> Delete
-          </Button>{' '}
+          </Button>
           <LinkContainer to={`/hostmanagement/edit-class/${c.id}/times`}>
-            <Button variant="secondary">
+            <Button variant="secondary" className="mt-2 marginSmallScreen">
               <FontAwesomeIcon icon={faClock} />
               Manage Bookable Times
             </Button>
