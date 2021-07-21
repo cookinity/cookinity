@@ -25,17 +25,17 @@ export const NavigationBar = () => {
     navBarContent = (
       <>
         <LinkContainer to="/hostmanagement">
-          <Nav.Link>Host a class</Nav.Link>
+          <Nav.Link>Host Your Own Class</Nav.Link>
         </LinkContainer>
         <LinkContainer to="/your-bookings">
-          <Nav.Link>Your bookings</Nav.Link>
+          <Nav.Link>Your Booked Classes</Nav.Link>
         </LinkContainer>
-        
-          <LinkContainer to={`/${auth.me.username}`}>
-            <Nav.Link>Your Profile</Nav.Link>
-          </LinkContainer>
-          
-          <Nav.Link onClick={onLogOut}>Log Out</Nav.Link>
+
+        <LinkContainer to={`/${auth.me.username}`}>
+          <Nav.Link>Your Profile</Nav.Link>
+        </LinkContainer>
+
+        <Nav.Link onClick={onLogOut}>Log Out</Nav.Link>
       </>
     );
   } else {
