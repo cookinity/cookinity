@@ -9,7 +9,6 @@ import './Navbar.scss';
 import logo from './CookinityLogo.png';
 import name from './Cookinity.png';
 
-
 export const NavigationBar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -48,18 +47,16 @@ export const NavigationBar = () => {
   }
 
   return (
-    <Navbar bg="primary" variant="dark" expand="lg" className="shadowNav">
-
-      <Navbar.Brand href="/"><img src={logo} width="30" height="40" />
-        {' '}
-        <img src={name} width="140" height="40" />
+    <Navbar bg="primary"  expand="lg" className="shadowNav">
+      <Navbar.Brand href="/">
+        <img src={logo} width="30" height="40" /> <img src={name} width="140" height="40" />
       </Navbar.Brand>
 
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           <LinkContainer to="/">
-            <Nav.Link>Home</Nav.Link>
+            <Nav.Link><div className="text" style = {{color: "green"}}>Home</div></Nav.Link>
           </LinkContainer>
           {navBarContent}
         </Nav>
