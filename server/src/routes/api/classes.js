@@ -330,6 +330,13 @@ router.delete('/:classId/timeslots/:tsId', [requireJwtAuth], async (req, res, ne
     if (!(tempClass.host.id === req.user.id || req.user.role === 'ADMIN')) {
       return res.status(400).json({ message: 'Only the host of a class can edit a class!' });
     }
+    const ts = tempClass.timeSlots.id(req.params.tsId);
+    if (!ts) {
+      return res.status(404).json({ message: 'Time Slot Not Found!' });
+    }
+    if (ts.isBooked) {
+      return res.status(400).json({ message: 'You can not delete a booked time slots!' });
+    }
     tempClass.timeSlots.id(req.params.tsId).remove();
     await tempClass.save();
     res.status(200).json({ tempClass });
