@@ -1,3 +1,4 @@
+// this allows us to use es6 features in the server like import/export
 {
   "presets": [
     [

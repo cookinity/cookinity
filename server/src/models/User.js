@@ -11,6 +11,7 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
+    // for now only e-mail, could be also facebook or google auth
     provider: {
       type: String,
       required: true,
@@ -61,8 +62,6 @@ const userSchema = new Schema(
   },
   { timestamps: true },
 );
-
-console.log(join(__dirname, '../..', process.env.IMAGES_FOLDER_PATH));
 
 userSchema.methods.toJSON = function () {
   // if not exists avatar1 default
@@ -125,8 +124,6 @@ userSchema.methods.comparePassword = function (candidatePassword, callback) {
     callback(null, isMatch);
   });
 };
-
-// const delay = (t, ...vs) => new Promise(r => setTimeout(r, t, ...vs)) or util.promisify(setTimeout)
 
 export async function hashPassword(password) {
   const saltRounds = 10;
