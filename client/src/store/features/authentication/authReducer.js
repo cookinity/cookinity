@@ -33,6 +33,7 @@ export default function (state = initialState, { type, payload }) {
         error: null,
       };
     case LOGIN_WITH_EMAIL_SUCCESS:
+      // set the jwt token to local storage (survives browser restart) and modify the redux state accordingly
       localStorage.setItem('token', payload.token);
       return {
         ...state,
@@ -42,6 +43,7 @@ export default function (state = initialState, { type, payload }) {
         me: payload.me,
         error: null,
       };
+    // will be executed when jwt token login is successful
     case ME_SUCCESS:
       return {
         ...state,

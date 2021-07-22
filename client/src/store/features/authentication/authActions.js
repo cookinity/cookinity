@@ -11,11 +11,13 @@ import {
 } from '../../actionTypes';
 
 // ==== THUNKS ====
+// when the user opens the app we try to login by jwt token
 export const loadMe = () => async (dispatch, getState) => {
   dispatch({ type: ME_LOADING });
 
   try {
     const options = attachTokenToHeaders(getState);
+    // endpoint requires jwt auth so if no token or token is expired it will fail
     const response = await axios.get('/api/users/me', options);
 
     dispatch({
@@ -30,11 +32,13 @@ export const loadMe = () => async (dispatch, getState) => {
   }
 };
 
+// formdata is combination of email and password
 export const loginUserWithEmail = (formData, history) => async (dispatch, getState) => {
   dispatch({ type: LOGIN_WITH_EMAIL_LOADING });
   try {
     const response = await axios.post('/auth/login', formData);
 
+    // we now switch to jwt token authentication
     dispatch({
       type: LOGIN_WITH_EMAIL_SUCCESS,
       payload: { token: response.data.token, me: response.data.me },
