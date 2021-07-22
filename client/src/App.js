@@ -12,7 +12,6 @@ import NotFound from './components/NotFound/NotFound';
 import ComingSoon from './components/ComingSoon/ComingSoon';
 import HowCookinityWorks from './components/HowCookinityWorks/HowCookinityWorks';
 import AboutUs from './components/AboutUs/AboutUs';
-import ContactUs from './components/ContactUs/ContactUs';
 import Landing from './components/Landing/Landing';
 
 import Loader from './components/Shared/Loader/Loader';
@@ -107,7 +106,6 @@ const App = ({ auth, loadMe }) => {
           <Route path="/comingsoon" component={ComingSoon} exact />
           <Route path="/landing" component={Landing} exact />
           <Route path="/aboutus" component={AboutUs} exact />
-          <Route path="/contactus" component={ContactUs} exact />
           <Route path="/howcookinityworks" component={HowCookinityWorks} exact />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
