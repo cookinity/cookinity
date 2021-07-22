@@ -4,13 +4,16 @@ import profile1 from './christina.png';
 import profile2 from './joe.png';
 import profile3 from './johannes.png';
 import profile4 from './stefan.png';
-import cookingclass from './Cooking-Class.jpg';
-
+import food from './food.png';
+import './AboutUs.scss'
 
 const AboutUs = () => {
   return (
     <LayoutNarrow>
-      <div className="section section-image bg-primary overlay-primary text-white overflow-hidden pb-6" style={{ backgroundImage: `url(${cookingclass})` }}>
+      <div
+        className="section section-image bg-primary overlay-primary text-white overflow-hidden pb-6 bRadius"
+        style={{ backgroundImage: `url(${food})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+      >
         <div className="container z-2">
           <div className="row justify-content-center pt-3" >
             <div className="col-12 text-center">

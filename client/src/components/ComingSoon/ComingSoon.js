@@ -5,15 +5,10 @@ import picture from './maintenance.png';
 const ComingSoon = () => {
   return (
     <LayoutNarrow>
-      <main>
-        <div
-          className="preloader bg-dark flex-column justify-content-center align-items-center"
-          style={{ display: 'none' }}
-        ></div>
-        <section className="section p-0 min-vh-100 d-flex align-items-center justify-content-center">
+        <section className=" d-flex align-items-center justify-content-center">
           <div className="container">
             <div className="row d-flex align-items-center justify-content-between">
-              <div className="col col-12 col-lg-6 text-dark order-2 order-lg-1">
+              <div className="col text-dark order-2 order-lg-1">
                 <div>
                   <h1 className="display-2 mb-2">We're coming soon</h1>
                   <p className="lead mb-4">
@@ -28,7 +23,7 @@ const ComingSoon = () => {
             </div>
           </div>
         </section>
-      </main>
+    
     </LayoutNarrow>
   );
 };

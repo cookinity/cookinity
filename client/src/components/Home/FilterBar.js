@@ -71,6 +71,7 @@ const FilterBar = ({
                 >
                   <DatePicker
                     // make no date in the past selectable
+                    className="green"
                     minDate={new Date()}
                     defaultValue={startDate}
                     onChange={handleFilterDate}

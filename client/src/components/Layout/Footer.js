@@ -15,17 +15,17 @@ const Footer = () => (
           <span className="h5">About</span>
           <ul className="footer-links mt-2">
             <li>
-              <a target="_blank" href="http://localhost:3000/howcookinityworks">
+              <a target="_blank" href="./howcookinityworks">
                 How Cookinity works
               </a>
             </li>
             <li>
-              <a target="_blank" href="http://localhost:3000/aboutus">
+              <a target="_blank" href="./aboutus">
                 About Us
               </a>
             </li>
             <li>
-              <a target="_blank" href="TODO">
+              <a target="_blank" href="./contactus">
                 Contact Us
               </a>
             </li>
@@ -35,10 +35,10 @@ const Footer = () => (
           <span className="h5">Legal</span>
           <ul className="footer-links mt-2">
             <li>
-              <a href="TODO">Privacy</a>
+              <a href="./comingsoon">Privacy</a>
             </li>
             <li>
-              <a target="_blank" href="TODO">
+              <a target="_blank" href="./comingsoon">
                 Terms
               </a>
             </li>
@@ -47,7 +47,7 @@ const Footer = () => (
         <div className="col-12 col-xl-4 mb-5 mb-xl-0">
           <span className="h5">Get the app</span>
           <p></p>
-          <form action="http://localhost:3000/comingsoon">
+          <form action="./comingsoon">
             <button className="btn btn-sm btn-white mb-xl-0 mr-2 mr-lg-2">
               <span className="d-flex align-items-center">
                 <span className="icon icon-brand mr-2">

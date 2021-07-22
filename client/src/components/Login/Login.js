@@ -12,7 +12,7 @@ import _ from 'lodash';
 import { loginUserWithEmail } from '../../store/features/authentication/authActions';
 import { loginSchema } from './validation';
 
-import cooking1 from './cooking1.jpg';
+import food from './food.png';
 
 const Login = ({ auth, history, loginUserWithEmail }) => {
   const formik = useFormik({
