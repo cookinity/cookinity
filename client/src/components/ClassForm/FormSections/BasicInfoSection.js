@@ -11,7 +11,7 @@ const BasicInfoSection = ({ formik }) => {
     <>
       <Form.Group controlId="title">
         <Form.Label>Title</Form.Label>{' '}
-        <Tooltip content="Give your cooking class a clear and meaningful title" direction="right">
+        <Tooltip content="Give your cooking class a clear and meaningful title." direction="right">
           <i className="fa fa-question" data-toggle="tooltip"></i>
         </Tooltip>
         <Form.Control
@@ -29,7 +29,7 @@ const BasicInfoSection = ({ formik }) => {
       <Form.Group controlId="category">
         <Form.Label>Category</Form.Label>{' '}
         <Tooltip
-          content="Choose one category in which you think your potential guest would expect to find your class"
+          content="Choose one category in which you think your potential guest would expect to find your class."
           direction="right"
         >
           <i className="fa fa-question" data-toggle="tooltip"></i>
@@ -72,7 +72,7 @@ const BasicInfoSection = ({ formik }) => {
       <Form.Group controlId="toBring">
         <Form.Label>Things Guests Need To Bring</Form.Label>{' '}
         <Tooltip
-          content="What do you expect your guests to bring with them? Any special product or just a big appetite"
+          content="What do you expect your guests to bring with them? Any special product or just a big appetite?"
           direction="right"
         >
           <i className="fa fa-question" data-toggle="tooltip"></i>

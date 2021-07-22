@@ -7,7 +7,7 @@ const EatingHabitsSection = ({ formik }) => {
     <>
       <Form.Label>Eating Habits You Can Accommodate</Form.Label>{' '}
       <Tooltip
-        content="Check all dietary preferences that apply to your cooking class"
+        content="Select all dietary preferences that apply to your cooking class."
         direction="right"
       >
         <i className="fa fa-question" data-toggle="tooltip"></i>
