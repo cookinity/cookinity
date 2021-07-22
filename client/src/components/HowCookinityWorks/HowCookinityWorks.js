@@ -1,13 +1,13 @@
 import React from 'react';
 import LayoutNarrow from 'components/Layout/LayoutNarrow';
-
+import './HowCookinityWorks.scss'
 
 const HowCookinityWorks = () => {
   return (
     <LayoutNarrow>
       <main>
         <section
-          className="section section-header bg-primary overlay-primary text-white pb-8 pb-lg-10"
+          className="section section-header bg-primary overlay-primary text-white pb-8 pb-lg-10 bRadius"
           data-background="../assets/img/team-hero.jpg"
         >
           <div className="container">
