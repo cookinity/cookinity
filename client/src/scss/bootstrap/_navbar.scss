@@ -286,7 +286,7 @@
       color: $navbar-dark-color;
 
       @include hover-focus() {
-        color: $navbar-dark-hover-color;
+        color: yellowgreen;
       }
 
       &.disabled {
@@ -298,7 +298,7 @@
     .active > .nav-link,
     .nav-link.show,
     .nav-link.active {
-      color: $navbar-dark-active-color;
+      color: yellowgreen;
     }
   }
 

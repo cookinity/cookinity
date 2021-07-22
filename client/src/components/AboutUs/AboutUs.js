@@ -5,12 +5,12 @@ import profile2 from './joe.png';
 import profile3 from './johannes.png';
 import profile4 from './stefan.png';
 import cookingclass from './Cooking-Class.jpg';
-
+import './AboutUs.scss'
 
 const AboutUs = () => {
   return (
     <LayoutNarrow>
-      <div className="section section-image bg-primary overlay-primary text-white overflow-hidden pb-6" style={{ backgroundImage: `url(${cookingclass})` }}>
+      <div className="section section-image bg-primary overlay-primary text-white overflow-hidden pb-6 bRadius" style={{ backgroundImage: `url(${cookingclass})` }}>
         <div className="container z-2">
           <div className="row justify-content-center pt-3" >
             <div className="col-12 text-center">
