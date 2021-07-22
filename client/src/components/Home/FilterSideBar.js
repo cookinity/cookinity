@@ -200,7 +200,7 @@ const FilterSideBar = ({
 
     return (
       <div
-        style={{ color: selectedRating === numberOfFullStars ? 'dodgerblue' : 'black' }}
+        style={{ color: selectedRating === numberOfFullStars ? 'yellowgreen' : 'black' }}
         className="pointer"
         onClick={handleRatingSelect(numberOfFullStars)}
       >
@@ -234,7 +234,7 @@ const FilterSideBar = ({
       <div
         style={{
           color:
-            min === selectedPriceRange[0] && max === selectedPriceRange[1] ? 'dodgerblue' : 'black',
+            min === selectedPriceRange[0] && max === selectedPriceRange[1] ? 'yellowgreen' : 'black',
         }}
         className="pointer"
         onClick={handlePriceSelect([min, max])}
@@ -261,7 +261,7 @@ const FilterSideBar = ({
     return (
       <div
         style={{
-          color: numberOfPersons === selectedNumberOfGuests ? 'dodgerblue' : 'black',
+          color: numberOfPersons === selectedNumberOfGuests ? 'yellowgreen' : 'black',
         }}
         className="pointer"
         onClick={handleNumberOfGuestsSelect(numberOfPersons)}
