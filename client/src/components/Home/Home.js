@@ -51,6 +51,7 @@ export const Home = () => {
 
   useEffect(() => {
     if (location.state) {
+      // @ts-ignore
       const { cityFilter, categoryFilter, dateFilter } = location.state;
       setCity(cityFilter);
       setCat(categoryFilter);
