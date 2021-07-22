@@ -12,6 +12,8 @@ import _ from 'lodash';
 import { loginUserWithEmail } from '../../store/features/authentication/authActions';
 import { loginSchema } from './validation';
 
+import cookingclass from './Cooking-Class.jpg';
+
 const Login = ({ auth, history, loginUserWithEmail }) => {
   const formik = useFormik({
     initialValues: {
@@ -35,17 +37,18 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
       <Form onSubmit={formik.handleSubmit} noValidate>
         <section
           className="min-vh-100 d-flex align-items-center section-image overlay-soft-dark py-5 py-lg-0"
-          // data-background=""
+        // data-background=""
         >
           <div className="container">
-            <div className="row justify-content-center">
+            <div className="row justify-content-center" >
               <div className="col-12">
                 <div className="text-center text-md-center mb-5 mt-md-0 text-white">
                   <h1 className="mb-0 h3">Sign in to Cookinity</h1>
                 </div>
               </div>
-              <div className="col-12 d-flex align-items-center justify-content-center">
-                <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
+              <div className="col-12 d-flex align-items-center justify-content-center" >
+                <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500"
+                  style={{ backgroundImage: `url(${cookingclass})` }}>
                   <p>
                     Back to <a href="/home">Home page</a>
                   </p>

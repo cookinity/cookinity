@@ -4,13 +4,15 @@ import profile1 from './christina.png';
 import profile2 from './joe.png';
 import profile3 from './johannes.png';
 import profile4 from './stefan.png';
+import cookingclass from './Cooking-Class.jpg';
+
 
 const AboutUs = () => {
   return (
     <LayoutNarrow>
-      <div className="section section-image bg-primary overlay-primary text-white overflow-hidden pb-6">
+      <div className="section section-image bg-primary overlay-primary text-white overflow-hidden pb-6" style={{ backgroundImage: `url(${cookingclass})` }}>
         <div className="container z-2">
-          <div className="row justify-content-center pt-3">
+          <div className="row justify-content-center pt-3" >
             <div className="col-12 text-center">
               <h1 className="mb-4">Cookinity</h1>
             </div>
@@ -83,9 +85,9 @@ const AboutUs = () => {
         <br></br>
         <h5 className="font-weight-normal">Cookinity Creators</h5>
         <div className="card border-light">
-       
+
           <div className="media d-flex align-items-center my-3">
-          
+
             <div className="card-body text-center px-0 px-md-3">
               <img className="img-fluid rounded" width="80" height="60" src={profile1} />{' '}
               <div>Christina Deutsch</div>

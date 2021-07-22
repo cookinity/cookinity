@@ -12,6 +12,7 @@ import berlin from './berlin.png';
 import dresden from './dresden.png';
 import hamburg from './hamburg.png';
 import soup from './soup.png';
+import cookingclass from './Cooking-Class.jpg';
 import price from './best-price.png';
 import rating from './rating.png';
 import { Link, useHistory } from 'react-router-dom';
@@ -53,11 +54,11 @@ export const Landing = () => {
 
   return (
     <div>
-      <Layout>
-        <section className="pb-0">
-          <div className="container section-image overlay-soft text-dark rounded px-lg-5 py-6 position-relative border border-light shadow-sm">
-            <div className="row no-gutters justify-content-between align-items-center">
-              <div className="col-12 order-lg-2">
+      <Layout >
+        <section className="pb-0" >
+          <div className="container section-image overlay-soft text-dark rounded px-lg-5 py-6 position-relative border border-light shadow-sm" style={{ backgroundImage: `url(${cookingclass})` }}>
+            <div className="row no-gutters justify-content-between align-items-center" >
+              <div className="col-12 order-lg-2" >
                 <h1 className="h2 mb-4">Find authentic cooking classes nearby</h1>
                 <div>
                   <Row className="mb-4">

@@ -10,6 +10,8 @@ import { useFormik } from 'formik';
 import { registerUserWithEmail } from '../../store/features/registration/registerActions';
 import { registerSchema } from './validation';
 
+import cookingclass from './Cooking-Class.jpg';
+
 const Register = ({ auth, register: { isLoading, error }, history, registerUserWithEmail }) => {
   const formik = useFormik({
     initialValues: {
@@ -35,7 +37,7 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
       <Form onSubmit={formik.handleSubmit} noValidate>
         <section
           className="min-vh-100 d-flex align-items-center section-image overlay-soft-dark py-5 py-lg-0"
-          // data-background=""
+        // data-background=""
         >
           <div className="container">
             <div className="row justify-content-center">
@@ -45,7 +47,8 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
                 </div>
               </div>
               <div className="col-12 d-flex align-items-center justify-content-center">
-                <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
+                <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500"
+                  style={{ backgroundImage: `url(${cookingclass})` }}>
                   <p>
                     Back to <a href="/home">Home page</a>
                   </p>
