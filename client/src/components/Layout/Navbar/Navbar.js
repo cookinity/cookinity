@@ -15,6 +15,11 @@ export const NavigationBar = () => {
   const auth = useSelector((state) => state.auth);
   //ToDo : const idOfLoggedInUser = req.user.id;
 
+  let isHost = false;
+  if (auth && auth.me) {
+    isHost = auth.me.hasStripeAccount;
+  }
+
   const onLogOut = (event) => {
     event.preventDefault();
     dispatch(logOutUser(history));
@@ -27,7 +32,7 @@ export const NavigationBar = () => {
     navBarContentLeft = (
       <>
         <LinkContainer to="/hostmanagement">
-          <Nav.Link>Host Your Own Class</Nav.Link>
+          <Nav.Link>{isHost ? 'Manage Your Classes' : 'Become A Host'}</Nav.Link>
         </LinkContainer>
         <LinkContainer to="/your-bookings">
           <Nav.Link>Your Booked Classes</Nav.Link>
@@ -64,9 +69,7 @@ export const NavigationBar = () => {
           </LinkContainer>
           {navBarContentLeft}
         </Nav>
-        <Nav>
-          {navBarContentRight}
-        </Nav>
+        <Nav>{navBarContentRight}</Nav>
       </Navbar.Collapse>
     </Navbar>
   );

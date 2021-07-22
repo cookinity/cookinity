@@ -84,14 +84,14 @@ const Profile = ({
   });
 
   function getRole(p) {
-    if (p.role == "ADMIN") {
-      return "Admin";
+    if (p.role == 'ADMIN') {
+      return 'Admin';
     } else if (p.hasStripeAccount == true) {
-      return "Host";
+      return 'Host';
     } else {
-      return "User";
+      return 'Guest';
     }
-  };
+  }
 
   return (
     <LayoutNarrow>
