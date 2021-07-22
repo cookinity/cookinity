@@ -12,7 +12,6 @@ export const ME_LOADING = 'ME_LOADING';
 export const ME_SUCCESS = 'ME_SUCCESS';
 export const ME_FAIL = 'ME_FAIL';
 
-export const GET_FEATURE = 'GET_FEATURE';
 export const GET_PROFILE = 'GET_PROFILE';
 
 export const GET_USERS_LOADING = 'GET_USERS_LOADING';

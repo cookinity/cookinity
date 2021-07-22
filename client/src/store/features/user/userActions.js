@@ -72,7 +72,7 @@ export const deleteUser = (id, history) => async (dispatch, getState) => {
 
     //logout only if he deleted himself
     if (getState().auth.me.id === response.data.user.id) {
-      dispatch(logOutUser(id, history));
+      dispatch(logOutUser(id));
     }
     history.push('/users');
     dispatch({
