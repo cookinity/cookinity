@@ -9,7 +9,7 @@ const AddressSection = ({ formik }) => {
       <Tooltip
         content={
           <span>
-            <em>This address can be seen by anyone on cookinity </em>
+            <em>This address can be seen by anyone on Cookinity.</em>
             <br />
             It should be a public address, not a private address. <br />
             You will meet your guests here and together you will go to the actual location.

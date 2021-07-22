@@ -22,7 +22,7 @@ const PhotosSection = ({
           <Form.Group>
             <Form.Label>Choose a Cover Photo</Form.Label>{' '}
             <Tooltip
-              content="Please upload at least one picture of the dish you plan to cook with your guests during the cooking class"
+              content="Please upload at least one picture of the dish you plan to cook with your guests during the cooking class."
               direction="right"
             >
               <i className="fa fa-question" data-toggle="tooltip"></i>
