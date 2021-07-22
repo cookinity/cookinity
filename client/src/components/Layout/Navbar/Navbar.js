@@ -48,7 +48,7 @@ export const NavigationBar = () => {
       </>
     );
   } else {
-    navBarContentRight = (
+    navBarContentLeft = (
       <LinkContainer to="/login">
         <Nav.Link>Login</Nav.Link>
       </LinkContainer>
