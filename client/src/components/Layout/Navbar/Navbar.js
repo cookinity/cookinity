@@ -19,10 +19,11 @@ export const NavigationBar = () => {
     dispatch(logOutUser(history));
   };
 
-  let navBarContent;
+  let navBarContentRight;
+  let navBarContentLeft;
 
   if (auth.isAuthenticated) {
-    navBarContent = (
+    navBarContentLeft = (
       <>
         <LinkContainer to="/hostmanagement">
           <Nav.Link>Host Your Own Class</Nav.Link>
@@ -30,16 +31,18 @@ export const NavigationBar = () => {
         <LinkContainer to="/your-bookings">
           <Nav.Link>Your Booked Classes</Nav.Link>
         </LinkContainer>
-
+      </>
+    );
+    navBarContentRight = (
+      <>
         <LinkContainer to={`/${auth.me.username}`}>
           <Nav.Link>Your Profile</Nav.Link>
         </LinkContainer>
-
         <Nav.Link onClick={onLogOut}>Log Out</Nav.Link>
       </>
     );
   } else {
-    navBarContent = (
+    navBarContentRight = (
       <LinkContainer to="/login">
         <Nav.Link>Login</Nav.Link>
       </LinkContainer>
@@ -58,7 +61,10 @@ export const NavigationBar = () => {
           <LinkContainer to="/home">
             <Nav.Link>Home</Nav.Link>
           </LinkContainer>
-          {navBarContent}
+          {navBarContentLeft}
+        </Nav>
+        <Nav>
+          {navBarContentRight}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
