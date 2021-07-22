@@ -277,26 +277,26 @@ export const Home = () => {
 
                   {classCards}
                 </Row>
-                <Row>
-                  <Col xs={12} className="text-center mt-2 mb-4">
-                    <div className="btn-group" role="group">
-                      <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
-                        Previous
-                      </Button>
-                      <Button
-                        onClick={nextPage}
-                        disabled={skip + filteredClasses.length >= numberOfEntries ? true : false}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </Col>
-                </Row>
               </Container>
             </Col>
             <Col xs={12} lg={12} xl={4}>
               <div style={{ display: filteredClasses.length > 0 ? 'block' : 'none' }}>
                 <ClassesMap classes={filteredClasses}></ClassesMap>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} className="text-center mt-2 mb-4">
+              <div className="btn-group" role="group">
+                <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
+                  Previous
+                </Button>
+                <Button
+                  onClick={nextPage}
+                  disabled={skip + filteredClasses.length >= numberOfEntries ? true : false}
+                >
+                  Next
+                </Button>
               </div>
             </Col>
           </Row>
