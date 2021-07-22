@@ -83,6 +83,16 @@ const Profile = ({
     },
   });
 
+  function getRole(p) {
+    if (p.role == "ADMIN") {
+      return "Admin";
+    } else if (p.hasStripeAccount == true) {
+      return "Host";
+    } else {
+      return "User";
+    }
+  };
+
   return (
     <LayoutNarrow>
       <div className="profile">
@@ -94,12 +104,8 @@ const Profile = ({
             <Image src={image ? image : profile.avatar} className="avatar" rounded />
             <div className="info-container">
               <div>
-                <span className="label">Provider: </span>
-                <span className="info">{profile.provider}</span>
-              </div>
-              <div>
                 <span className="label">Role: </span>
-                <span className="info">{profile.role}</span>
+                <span className="info">{getRole(profile)}</span>
               </div>
               <div>
                 <span className="label">Name: </span>
