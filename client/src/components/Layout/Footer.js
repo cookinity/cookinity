@@ -15,17 +15,17 @@ const Footer = () => (
           <span className="h5">About</span>
           <ul className="footer-links mt-2">
             <li>
-              <a target="_blank" href="http://localhost:3000/howcookinityworks">
+              <a target="_blank" href="./howcookinityworks">
                 How Cookinity works
               </a>
             </li>
             <li>
-              <a target="_blank" href="http://localhost:3000/aboutus">
+              <a target="_blank" href="./aboutus">
                 About Us
               </a>
             </li>
             <li>
-              <a target="_blank" href="TODO">
+              <a target="_blank" href="./contactus">
                 Contact Us
               </a>
             </li>
