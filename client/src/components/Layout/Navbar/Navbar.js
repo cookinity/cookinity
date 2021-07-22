@@ -13,7 +13,6 @@ export const NavigationBar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
-  //ToDo : const idOfLoggedInUser = req.user.id;
 
   let isHost = false;
   if (auth && auth.me) {
