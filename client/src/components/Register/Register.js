@@ -10,7 +10,7 @@ import { useFormik } from 'formik';
 import { registerUserWithEmail } from '../../store/features/registration/registerActions';
 import { registerSchema } from './validation';
 
-import cookingclass from './Cooking-Class.jpg';
+import food from './food.png';
 
 const Register = ({ auth, register: { isLoading, error }, history, registerUserWithEmail }) => {
   const formik = useFormik({
@@ -29,7 +29,7 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
   if (auth.isAuthenticated) return <Redirect to="/home" />;
 
   return (
-    <main>
+    <main style={{ backgroundImage: `url(${food})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
       <div
         className="preloader bg-dark flex-column justify-content-center align-items-center"
         style={{ display: 'none' }}
@@ -47,8 +47,7 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
                 </div>
               </div>
               <div className="col-12 d-flex align-items-center justify-content-center">
-                <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500"
-                  style={{ backgroundImage: `url(${cookingclass})` }}>
+                <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
                   <p>
                     Back to <a href="/home">Home page</a>
                   </p>
