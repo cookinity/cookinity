@@ -178,7 +178,7 @@ export const HostManagement = () => {
             <FontAwesomeIcon icon="info-circle" /> Booked classes
           </Button>
         </LinkContainer>
-        <div className="tableBackground mt-6">
+        <div className="tableBackground">
           <h1 className="text-center">Upcoming Classes</h1>
           <ClassesTable
             classes={upcomingClasses}

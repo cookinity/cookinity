@@ -105,7 +105,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
 
   return (
     <>
-      <Table hover responsive>
+      <Table bordered hover responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>
