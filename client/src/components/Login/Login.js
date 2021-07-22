@@ -12,7 +12,7 @@ import _ from 'lodash';
 import { loginUserWithEmail } from '../../store/features/authentication/authActions';
 import { loginSchema } from './validation';
 
-import cooking1 from './cooking1.jpg';
+import food from './food.png';
 
 const Login = ({ auth, history, loginUserWithEmail }) => {
   const formik = useFormik({
@@ -29,7 +29,7 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
   if (auth.isAuthenticated) return <Redirect to="/home" />;
 
   return (
-    <main style={{ backgroundImage: `url(${cooking1})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+    <main style={{ backgroundImage: `url(${food})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
       <div
         className="preloader bg-dark flex-column justify-content-center align-items-center"
         style={{ display: 'none' }}
