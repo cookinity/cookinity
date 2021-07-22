@@ -32,7 +32,7 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
   return (
     <main
       style={{
-        backgroundImage: `url(${cooking1})`,
+        backgroundImage: `url(${food})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
