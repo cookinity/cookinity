@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { withRouter } from 'react-router-dom';
 
 import { getProfile, editUser, deleteUser } from '../../store/features/user/userActions';
@@ -122,7 +122,7 @@ const Profile = ({
               <div>
                 <span className="label">Joined: </span>
                 <span className="info">
-                  {moment(profile.createdAt).format('dddd, MMMM Do YYYY, H:mm:ss')}
+                  {dayjs(profile.createdAt).format('dddd, MMMM Do YYYY, H:mm:ss')}
                 </span>
               </div>
               <div>

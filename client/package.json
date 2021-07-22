@@ -1,7 +1,6 @@
 {
   "name": "cookinity",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
@@ -23,7 +22,6 @@
     "leaflet": "^1.7.1",
     "leaflet.markercluster": "^1.5.0",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
     "node-sass": "^6.0.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
