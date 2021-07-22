@@ -54,7 +54,7 @@ const FilterBar = ({
                       as="select"
                       custom
                       onChange={handleFilterCategory}
-                      value={category}
+                      defaultValue={category}
                     >
                       <option>All Categories</option>
                       {CLASS_CATEGORIES.map((c) => (
@@ -72,7 +72,7 @@ const FilterBar = ({
                   <DatePicker
                     // make no date in the past selectable
                     minDate={new Date()}
-                    value={startDate}
+                    defaultValue={startDate}
                     onChange={handleFilterDate}
                     type="custom"
                     render={(stringDate, openCalendar) => {
@@ -86,7 +86,7 @@ const FilterBar = ({
                           <Form.Control
                             placeholder="All Dates"
                             onClick={openCalendar}
-                            value={stringDate}
+                            defaultValue={stringDate}
                           ></Form.Control>
                         </InputGroup>
                       );
