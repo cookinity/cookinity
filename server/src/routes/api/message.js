@@ -20,7 +20,6 @@ transporter.verify((err, success) => {
 });
 
 router.post('/', (req, res, next) => {
-  debugger;
   const mail = {
     to: 'cookinity@gmail.com',
     subject: 'Cookinity Question Form Submission',

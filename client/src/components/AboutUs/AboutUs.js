@@ -22,7 +22,7 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-      <div className="section pt-5">
+      <div className=" pt-5">
         <div className="container">
           <div className="row">
             <p>
