@@ -206,7 +206,6 @@ export const Landing = () => {
           <br></br>
         </section>
       </Layout>
-      <Footer></Footer>
     </div>
   );
 };
