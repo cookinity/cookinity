@@ -17,18 +17,15 @@ const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
     },
     onSubmit: (values, { setSubmitting, resetForm }) => {
       const submit = async () => {
-
         try {
-          const {
-
-          } = values;
+          const {} = values;
           const newFeedbackGuest = {
             numberOfStars: numberOfStars,
           };
           //Error
           if (numberOfStars === 0) {
             setIsError(true);
-            setErrorMessage("You must give a rating");
+            setErrorMessage('You must give a rating');
             return;
           }
           // calling submit callback from parent component
@@ -45,10 +42,12 @@ const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
 
   return (
     <>
-      {<h1 className="text-center">Feedback for the Customer</h1>}
+      {<h1 className="text-center">Please Rate The Guest of Your Class</h1>}
       <Form className="mx-auto" onSubmit={formik.handleSubmit} noValidate>
-        <BasicInfoSection formik={formik}
-          setRatingNumberOfStars={setRatingNumberOfStars} numberOfStars={numberOfStars}
+        <BasicInfoSection
+          formik={formik}
+          setRatingNumberOfStars={setRatingNumberOfStars}
+          numberOfStars={numberOfStars}
         ></BasicInfoSection>
         <hr></hr>
         <Button variant="primary" type="submit">
