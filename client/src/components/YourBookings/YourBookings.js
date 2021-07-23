@@ -17,8 +17,21 @@ export const HostManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isOrderDone, setIsOrderDone] = useState(false);
   // @ts-ignore
   const auth = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+    if (query.get('success')) {
+      setIsOrderDone(true);
+    }
+    if (query.get('canceled')) {
+      setIsError(true);
+      setErrorMessage('Order canceled');
+    }
+  }, []);
 
   useEffect(() => {
     fetchClasses();
@@ -39,8 +52,7 @@ export const HostManagement = () => {
         config.headers['x-auth-token'] = token;
       }
       // load all bookings for which the currently logged in user is the customer
-      //TODO
-      const result = await axios.get('/api/bookings/ofuser', config);
+      const result = await axios.get('/api/bookings/ascustomer', config);
       const unformattedBookings = result.data.bookings;
       const classesBookedFuture = [];
       const classesBookedPast = [];
@@ -88,11 +100,17 @@ export const HostManagement = () => {
                   {errorMessage}
                 </Alert>
               )}
+              {isOrderDone && (
+                <Alert variant="success" dismissible>
+                  🎉Order confirmed!🎉 Please check if there is a "View Private Information" Button
+                  in the table. Then the host has some more information for you!
+                </Alert>
+              )}
               <p></p>
-              <h1 className="text-center">Booked Classes</h1>
+              <h1 className="text-center">Upcoming</h1>
               <ClassesTableYourBookings yourbookings={upcomingClasses}></ClassesTableYourBookings>
               <hr></hr>
-              <h1 className="text-center">Past Classes</h1>
+              <h1 className="text-center">Previous</h1>
               <ClassesTablePastBookedClasses
                 yourbookings={pastClasses}
               ></ClassesTablePastBookedClasses>

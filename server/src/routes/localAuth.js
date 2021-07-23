@@ -8,6 +8,7 @@ import { registerSchema } from '../services/validators';
 
 const router = Router();
 
+// the original login will be via e-mail and password, then we switch to jwt token authentication
 router.post('/login', requireLocalAuth, (req, res) => {
   const token = req.user.generateJWT();
   const me = req.user.toJSON();
@@ -52,7 +53,9 @@ router.post('/register', async (req, res, next) => {
   }
 });
 
-// logout
+// Passport exposes a logout() function on req (also aliased as logOut())
+// that can be called from any route handler which needs to terminate a login session.
+// Invoking logout() will remove the req.user property and clear the login session (if any). (jwt token invalid)
 router.get('/logout', (req, res) => {
   req.logout();
   res.send(false);

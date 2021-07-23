@@ -6,43 +6,48 @@ import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { logOutUser } from '../../../store/features/authentication/authActions';
 import { LinkContainer } from 'react-router-bootstrap';
 import './Navbar.scss';
+import logo from './CookinityLogo.png';
+import name from './Cookinity.png';
 
 export const NavigationBar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const auth = useSelector((state) => state.auth);
 
+  let isHost = false;
+  if (auth && auth.me) {
+    isHost = auth.me.hasStripeAccount;
+  }
+
   const onLogOut = (event) => {
     event.preventDefault();
     dispatch(logOutUser(history));
   };
 
-  let navBarContent;
+  let navBarContentRight;
+  let navBarContentLeft;
 
   if (auth.isAuthenticated) {
-    navBarContent = (
+    navBarContentLeft = (
       <>
         <LinkContainer to="/hostmanagement">
-          <Nav.Link>Host a Class</Nav.Link>
+          <Nav.Link>{isHost ? 'Manage Your Classes' : 'Become A Host'}</Nav.Link>
         </LinkContainer>
         <LinkContainer to="/your-bookings">
-          <Nav.Link>Your Bookings</Nav.Link>
+          <Nav.Link>Your Booked Classes</Nav.Link>
         </LinkContainer>
-        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-          <LinkContainer to={`/${auth.me.username}`}>
-            <NavDropdown.Item>Your Profile</NavDropdown.Item>
-          </LinkContainer>
-          {auth.me?.role === 'ADMIN' && (
-            <LinkContainer to="/admin">
-              <NavDropdown.Item>Admin</NavDropdown.Item>
-            </LinkContainer>
-          )}
-          <NavDropdown.Item onClick={onLogOut}>Log Out</NavDropdown.Item>
-        </NavDropdown>
+      </>
+    );
+    navBarContentRight = (
+      <>
+        <LinkContainer to={`/${auth.me.username}`}>
+          <Nav.Link>Your Profile</Nav.Link>
+        </LinkContainer>
+        <Nav.Link onClick={onLogOut}>Log Out</Nav.Link>
       </>
     );
   } else {
-    navBarContent = (
+    navBarContentLeft = (
       <LinkContainer to="/login">
         <Nav.Link>Login</Nav.Link>
       </LinkContainer>
@@ -51,17 +56,19 @@ export const NavigationBar = () => {
 
   return (
     <Navbar bg="primary" variant="dark" expand="lg" className="shadowNav">
-      <LinkContainer to="/">
-        <Navbar.Brand>Cookinity</Navbar.Brand>
-      </LinkContainer>
+      <Navbar.Brand href="/">
+        <img src={logo} width="30" height="40" /> <img src={name} width="140" height="40" />
+      </Navbar.Brand>
+
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <LinkContainer to="/">
+          <LinkContainer to="/home">
             <Nav.Link>Home</Nav.Link>
           </LinkContainer>
-          {navBarContent}
+          {navBarContentLeft}
         </Nav>
+        <Nav>{navBarContentRight}</Nav>
       </Navbar.Collapse>
     </Navbar>
   );

@@ -1,8 +1,5 @@
 import React from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
-import { Calendar } from 'react-multi-date-picker';
-import DatePanel from 'react-multi-date-picker/plugins/date_panel';
-import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
 const DatesSection = ({ formik }) => {
   return (

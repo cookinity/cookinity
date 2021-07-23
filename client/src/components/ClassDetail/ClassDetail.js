@@ -43,9 +43,9 @@ const ClassDetail = () => {
   const nextIcon = <i className="fa fa-arrow-right" />;
 
   const carouselImages = photos.map((src) => (
-    <Carousel.Item interval={3000} key={src}>
+    <Carousel.Item interval={3000} key={src} >
       <div className="photoFrame">
-        <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration" rounded/>
+        <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration"/>
       </div>
     </Carousel.Item>
   ));
@@ -155,7 +155,7 @@ const ClassDetail = () => {
           )}
           <Container fluid>
             <Carousel
-              className="carousel slide"
+              className="carousel slide photoAttribute"
               data-ride="carousel"
               nextIcon={nextIcon}
               prevIcon={prevIcon}
@@ -211,33 +211,33 @@ const ClassDetail = () => {
             <Container>
               <Row className="dietaryRows">
                 <Col>
-                  <FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" color="#ff9900"/>
                   {c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" color="#339933"/>
                   {c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" color="#dea95d" />
                   {c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'}{' '}
                 </Col>
               </Row>
               <Row className="dietaryRows">
                 <Col>
-                  <FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" color="#99ccff" />
                   {c.pescatarianFriendly ? 'pescatarian ✔' : 'pescatarian ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" color="#ffdab3"/>
                   {c.eggFree ? 'egg-free ✔ ' : 'egg-free ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" />
+                  <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" color="#267326"/>
                   {c.soyFree ? 'soy-free  ✔' : 'soy-free ❌'}{' '}
                 </Col>
               </Row>

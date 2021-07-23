@@ -9,8 +9,10 @@ import { useSelector } from 'react-redux';
 import { Alert, Col, Row } from 'react-bootstrap';
 import { BookedClassesTable } from './BookedClassesTable';
 import LayoutNarrow from 'components/Layout/LayoutNarrow';
+import './BookedClasses.scss';
 
 const BookedClasses = () => {
+  const [moneyEarned, setMoneyEarned] = useState(0);
   const [futureBookings, setFutureBookings] = useState([]);
   const [pastBookings, setPastBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,8 +40,16 @@ const BookedClasses = () => {
         config.headers['x-auth-token'] = token;
       }
       // load all bookings for which the currently logged in user is host
-      const result = await axios.get('/api/bookings', config);
+      const result = await axios.get('/api/bookings/ashost', config);
       const unformattedBookings = result.data.bookings;
+
+      // sum up orders.totalPrice
+      let totalMoneyEarned = unformattedBookings.reduce((acc, curr) => {
+        return acc + curr.totalPrice;
+      }, 0);
+      totalMoneyEarned = (totalMoneyEarned / 100).toFixed(2);
+      setMoneyEarned(totalMoneyEarned);
+
       const classesBookedFuture = [];
       const classesBookedPast = [];
       const today = dayjs(new Date());
@@ -61,6 +71,25 @@ const BookedClasses = () => {
     setIsLoading(false);
   };
 
+  let content;
+
+  if (futureBookings.length > 0 || pastBookings.length > 0) {
+    content = (
+      <div>
+        <h1 className="display-4 mb-6 text-center primaryTextCol"> 
+          💶 Congratulation! You already earned {moneyEarned} € with Cookinity!💶
+        </h1>
+        <h1 className="text-center">Future Bookings</h1>
+        <BookedClassesTable bookings={futureBookings} isPastTable={false}></BookedClassesTable>
+        <hr></hr>
+        <h1 className="text-center">Past Bookings</h1>
+        <BookedClassesTable bookings={pastBookings} isPastTable={true}></BookedClassesTable>
+      </div>
+    );
+  } else {
+    content = <Alert variant="warning">😢 Nobody has booked a class from you yet😢</Alert>;
+  }
+
   if (isLoading) {
     // @ts-ignore
     return (
@@ -71,30 +100,20 @@ const BookedClasses = () => {
   } else {
     return (
       <LayoutNarrow>
-        <Row>
-          <Col>
-            <div>
-              {isError && (
-                <Alert
-                  variant="danger"
-                  onClose={() => {
-                    setIsError(false);
-                    setErrorMessage('');
-                  }}
-                  dismissible
-                >
-                  {' '}
-                  {errorMessage}
-                </Alert>
-              )}
-              <h1 className="text-center">Future Bookings</h1>
-              <BookedClassesTable bookings={futureBookings} isPastTable={false}></BookedClassesTable>
-              <hr></hr>
-              <h1 className="text-center">Past Bookings</h1>
-              <BookedClassesTable bookings={pastBookings} isPastTable={true}></BookedClassesTable>
-            </div>
-          </Col>
-        </Row>
+        {isError && (
+          <Alert
+            variant="danger"
+            onClose={() => {
+              setIsError(false);
+              setErrorMessage('');
+            }}
+            dismissible
+          >
+            {' '}
+            {errorMessage}
+          </Alert>
+        )}
+        {content}
       </LayoutNarrow>
     );
   }

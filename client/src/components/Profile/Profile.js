@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { useFormik } from 'formik';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { withRouter } from 'react-router-dom';
 
 import { getProfile, editUser, deleteUser } from '../../store/features/user/userActions';
@@ -83,6 +83,16 @@ const Profile = ({
     },
   });
 
+  function getRole(p) {
+    if (p.role == 'ADMIN') {
+      return 'Admin';
+    } else if (p.hasStripeAccount == true) {
+      return 'Host';
+    } else {
+      return 'Guest';
+    }
+  }
+
   return (
     <LayoutNarrow>
       <div className="profile">
@@ -94,12 +104,8 @@ const Profile = ({
             <Image src={image ? image : profile.avatar} className="avatar" rounded />
             <div className="info-container">
               <div>
-                <span className="label">Provider: </span>
-                <span className="info">{profile.provider}</span>
-              </div>
-              <div>
                 <span className="label">Role: </span>
-                <span className="info">{profile.role}</span>
+                <span className="info">{getRole(profile)}</span>
               </div>
               <div>
                 <span className="label">Name: </span>
@@ -116,7 +122,7 @@ const Profile = ({
               <div>
                 <span className="label">Joined: </span>
                 <span className="info">
-                  {moment(profile.createdAt).format('dddd, MMMM Do YYYY, H:mm:ss')}
+                  {dayjs(profile.createdAt).format('dddd, MMMM Do YYYY, H:mm:ss')}
                 </span>
               </div>
               <div>

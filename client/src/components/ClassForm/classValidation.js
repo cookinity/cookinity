@@ -20,6 +20,7 @@ export const validationSchema = Yup.object().shape({
   pescatarianFriendly: Yup.boolean(),
   eggFree: Yup.boolean(),
   soyFree: Yup.boolean(),
+  privateInformation: Yup.string(),
   minGuestRatingRequired: Yup.number()
     .min(0, 'Minimum Guest Rating must be at least 0')
     .max(4, 'Maximum Guest Rating must be at most 4'),

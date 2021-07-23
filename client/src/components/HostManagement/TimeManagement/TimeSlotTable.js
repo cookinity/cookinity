@@ -39,7 +39,7 @@ export const TimeSlotTable = ({ c, onDeleteCallback }) => {
         <td>{c.durationInMinutes} Minutes</td>
         <td>{ts.isBooked ? 'Yes' : 'No'}</td>
         <td>
-          <Button variant="danger" className="ml-2" onClick={handleShow(ts)}>
+          <Button variant="danger" className="ml-2" onClick={handleShow(ts)} disabled={ts.isBooked}>
             <FontAwesomeIcon icon={faTrash} /> Delete
           </Button>
         </td>
@@ -49,7 +49,7 @@ export const TimeSlotTable = ({ c, onDeleteCallback }) => {
 
   return (
     <>
-      <Table bordered responsive>
+      <Table responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>

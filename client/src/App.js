@@ -8,8 +8,11 @@ import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Profile from './components/Profile/Profile';
 import YourBookings from './components/YourBookings/YourBookings';
-import Admin from './components/Admin/Admin';
 import NotFound from './components/NotFound/NotFound';
+import ComingSoon from './components/ComingSoon/ComingSoon';
+import HowCookinityWorks from './components/HowCookinityWorks/HowCookinityWorks';
+import AboutUs from './components/AboutUs/AboutUs';
+import Landing from './components/Landing/Landing';
 
 import Loader from './components/Shared/Loader/Loader';
 
@@ -95,26 +98,39 @@ const App = ({ auth, loadMe }) => {
     <>
       {auth.appLoaded ? (
         <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route path="/your-bookings" component={YourBookings} />
-          <Route path="/notfound" component={NotFound} />
-          <Route path="/admin" component={Admin} />
+          <Route path="/home" component={Home} exact />
+          <Route path="/login" component={Login} exact />
+          <Route path="/register" component={Register} exact />
+          <Route path="/your-bookings" component={YourBookings} exact />
+          <Route path="/notfound" component={NotFound} exact />
+          <Route path="/comingsoon" component={ComingSoon} exact />
+          <Route path="/landing" component={Landing} exact />
+          <Route path="/aboutus" component={AboutUs} exact />
+          <Route path="/howcookinityworks" component={HowCookinityWorks} exact />
           <Route path="/hostmanagement" component={HostManagement} exact />
           <Route path="/hostmanagement/create-class" component={CreateClass} exact />
           <Route path="/hostmanagement/booked-classes" component={BookedClasses} exact />
           <Route path="/classes/:classId" component={ClassDetail} exact />
           <Route path="/classes/:classId/booking" component={BookClass} exact />
-          <Route path="/classes/:classId/create-feedback" component={FeedbackUser} exact />
-          <Route path="/classes/:userId/create-feedback-host" component={FeedbackHost} exact />
+          <Route
+            path="/classes/:classId/booking/create-feedback/:orderId"
+            component={FeedbackUser}
+            exact
+          />
+          <Route
+            path="/hostmanagement/booked-classes/:orderId/create-feedback"
+            component={FeedbackHost}
+            exact
+          />
           <Route path="/hostmanagement/edit-class/:classId" component={EditClass} exact />
+
           <Route
             path="/hostmanagement/edit-class/:classId/times"
             component={TimeManagements}
             exact
           />
           <Route exact path="/:username" component={Profile} />
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={Landing} />
           <Route component={NotFound} />
         </Switch>
       ) : (

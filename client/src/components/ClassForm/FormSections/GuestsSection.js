@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Col, InputGroup } from 'react-bootstrap';
+import Tooltip from '../Tooltip.js';
 
 const GuestsSection = ({ formik }) => {
   return (
@@ -7,6 +8,18 @@ const GuestsSection = ({ formik }) => {
       <Form.Row>
         <Form.Group as={Col} xs={12} md={3} controlId="pricePerPerson">
           <Form.Label>Price Per Person</Form.Label>
+          <Tooltip
+            content={
+              <span>
+                <em>Cookinity collects a commission of 10%.</em>
+                <br />
+                If you set a price of 50€, the price displayd to guests would be 55€.
+              </span>
+            }
+            direction="right"
+          >
+            <i className="fa fa-question" data-toggle="tooltip"></i>
+          </Tooltip>
           <InputGroup>
             <Form.Control
               type="number"
@@ -69,6 +82,18 @@ const GuestsSection = ({ formik }) => {
         </Form.Group>
         <Form.Group as={Col} xs={12} md={3} controlId="minGuestRatingRequired">
           <Form.Label>Minimum Guest Rating</Form.Label>
+          <Tooltip
+            content={
+              <span>
+                Please select the minimum stars you expect your guests to have.
+                <br />
+                Select 0 if you do not care!
+              </span>
+            }
+            direction="top"
+          >
+            <i className="fa fa-question" data-toggle="tooltip"></i>
+          </Tooltip>
           <InputGroup>
             <Form.Control
               type="number"

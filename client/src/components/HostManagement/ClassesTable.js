@@ -1,8 +1,10 @@
 import { faEdit, faTrash, faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ClassesTablePastBookedClasses } from 'components/YourBookings/ClassesTablePastBookedClasses';
 import React, { useState } from 'react';
 import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import './ClassesTable.scss'
 
 export const ClassesTable = ({ classes, onDeleteCallback }) => {
   const [show, setShow] = useState(false);
@@ -42,8 +44,8 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
           <Accordion>
             {c.pastDates.length !== 0 ? (
               <Card>
-                <Card.Header>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                <Card.Header className="dateButton">
+                  <Accordion.Toggle as={Button} variant="secondary" className="dateButton" eventKey="0">
                     Past Dates
                   </Accordion.Toggle>
                 </Card.Header>
@@ -62,7 +64,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
             )}
             {c.futureDates.length !== 0 ? (
               <Card>
-                <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                <Accordion.Toggle as={Button} variant="secondary" className="dateButton" eventKey="1">
                   Upcoming Dates
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="1">
@@ -83,17 +85,17 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
         </td>
         <td>
           <LinkContainer to={`/hostmanagement/edit-class/${c.id}`}>
-            <Button variant="primary">
+            <Button variant="primary" className="mr-1 mt-1">
               <FontAwesomeIcon icon={faEdit} /> Edit
             </Button>
           </LinkContainer>
-          <Button variant="danger" className="ml-2" onClick={handleShow(c)}>
+          <Button variant="danger" className="mr-1 mt-1" onClick={handleShow(c)}>
             <FontAwesomeIcon icon={faTrash} /> Delete
-          </Button>{' '}
+          </Button>
           <LinkContainer to={`/hostmanagement/edit-class/${c.id}/times`}>
-            <Button variant="secondary">
+            <Button variant="secondary" className="mt-1">
               <FontAwesomeIcon icon={faClock} />
-              Manage Bookable Times
+              {' '}Manage Bookable Times
             </Button>
           </LinkContainer>
         </td>
@@ -103,7 +105,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
 
   return (
     <>
-      <Table bordered hover responsive>
+      <Table hover responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>

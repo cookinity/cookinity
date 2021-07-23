@@ -1,13 +1,26 @@
 import React from 'react';
 import { Form, Col } from 'react-bootstrap';
+import Tooltip from '../Tooltip.js';
 
 const AddressSection = ({ formik }) => {
   return (
     <>
-      <Form.Label>Public Meeting Address</Form.Label>
-
+      <Form.Label>Public Meeting Address</Form.Label>{' '}
+      <Tooltip
+        content={
+          <span>
+            <em>This address can be seen by anyone on Cookinity.</em>
+            <br />
+            It should be a public address, not a private address. <br />
+            You will meet your guests here and together you will go to the actual location.
+          </span>
+        }
+        direction="right"
+      >
+        <i className="fa fa-question" data-toggle="tooltip"></i>
+      </Tooltip>
       <Form.Group controlId="country">
-        <Form.Label>Country</Form.Label>
+        <Form.Label>Country</Form.Label>{' '}
         <Form.Control
           placeholder="Germany"
           name="country"
@@ -20,7 +33,6 @@ const AddressSection = ({ formik }) => {
           <div className="form-error-message">{formik.errors.country}</div>
         ) : null}
       </Form.Group>
-
       <Form.Row>
         <Form.Group as={Col} controlId="city">
           <Form.Label>City</Form.Label>
@@ -67,11 +79,10 @@ const AddressSection = ({ formik }) => {
           ) : null}
         </Form.Group>
       </Form.Row>
-
       <Form.Group controlId="street">
-        <Form.Label>Street</Form.Label>
+        <Form.Label>Street and House Number</Form.Label>
         <Form.Control
-          placeholder="TastyStreet 11"
+          placeholder="Street"
           name="street"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}

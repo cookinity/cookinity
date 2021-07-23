@@ -10,6 +10,7 @@ dayjs.extend(utc);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 import Class, { validateClass, validateTimeSlot } from '../../models/Class';
+import Order from '../../models/Order';
 import upload from '../../middleware/multer';
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -193,6 +194,29 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// need this for the edit form --> the host can see all the fields of the class including private information
+router.get('/:id/ashost', [requireJwtAuth], async (req, res) => {
+  try {
+    const c = await Class.findById(req.params.id).populate('host').populate({ path: 'feedbacks.reviewer' });
+
+    // check that the user making the request is the host of the class or an admin
+    if (!(c.host.id === req.user.id || req.user.role === 'ADMIN')) {
+      return res.status(400).json({ message: 'Only the host of a class can see all information of the class!' });
+    }
+
+    if (!c) return res.status(404).json({ message: 'No class found.' });
+    const returnedClass = c.toJSON();
+    returnedClass.privateInformation = c.privateInformation;
+    res.json({ class: returnedClass });
+  } catch (err) {
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
+  }
+});
+
 // A host can not delete a class once a date is booked for it
 router.delete('/:id', [requireJwtAuth], async (req, res, next) => {
   try {
@@ -278,6 +302,7 @@ router.put('/:id', [requireJwtAuth, photosUpload], async (req, res, next) => {
       pescatarianFriendly: req.body.pescatarianFriendly,
       eggFree: req.body.vegetarianFriendly,
       soyFree: req.body.nutAllergyFriendly,
+      privateInformation: req.body.privateInformation,
     };
 
     Object.keys(updatedClass).forEach((key) => (updatedClass[key] === undefined ? delete updatedClass[key] : {}));
@@ -305,40 +330,68 @@ router.delete('/:classId/timeslots/:tsId', [requireJwtAuth], async (req, res, ne
     if (!(tempClass.host.id === req.user.id || req.user.role === 'ADMIN')) {
       return res.status(400).json({ message: 'Only the host of a class can edit a class!' });
     }
+    const ts = tempClass.timeSlots.id(req.params.tsId);
+    if (!ts) {
+      return res.status(404).json({ message: 'Time Slot Not Found!' });
+    }
+    if (ts.isBooked) {
+      return res.status(400).json({ message: 'You can not delete a booked time slots!' });
+    }
     tempClass.timeSlots.id(req.params.tsId).remove();
     await tempClass.save();
     res.status(200).json({ tempClass });
   } catch (err) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    if (err.message) {
+      res.status(500).json({ message: err.message });
+    } else {
+      res.status(500).json({ message: 'Something went wrong during the class creation.' });
+    }
   }
 });
 
-router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
+router.post('/:classId/feedbacks/:orderId', [requireJwtAuth], async (req, res, next) => {
   try {
-    const tempClass = await Class.findById(req.params.id).populate('host');
-    // check that the class exists in the database
+    // check that class exists in database
+    const tempClass = await Class.findById(req.params.classId).populate('host');
     if (!tempClass) {
       return res.status(404).json({ message: 'Class not found!' });
     }
+    // check that order exists in database
+    const order = await Order.findById(req.params.orderId).populate('customer').populate('class');
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found!' });
+    }
+    // check that classId and orderId
+    if (order.class.id !== tempClass.id) {
+      return res.status(500).json({ message: 'OrderId does not match Class ID!' });
+    }
+    // now we check that the class has already happened, thus is in the past
+    if (dayjs(order.bookedTimeSlot.date).isAfter(dayjs())) {
+      return res
+        .status(500)
+        .json({ message: 'The class is upcoming, you can only review classes that already happened!' });
+    }
+    // now we check that the logged in user is the customer who booked the class
+    const idOfLoggedInUser = req.user.id;
+    if (order.customer.id !== idOfLoggedInUser) {
+      return res.status(401).json({ message: 'You can only review your own classes!' });
+    }
+    // now we check that the order is not already reviewed
+    if (order.reviewedByCustomer) {
+      return res.status(500).json({ message: 'You already reviewed this order' });
+    }
 
     const newFeedback = {
-      overallRatingStars: req.body.overallRatingStars,
       overallRating: req.body.overallRating,
+      overallRatingStars: req.body.overallRatingStars,
       hostRatingStars: req.body.hostRatingStars,
-      hostRating: req.body.hostRating,
       tasteRatingStars: req.body.tasteRatingStars,
-      tasteRating: req.body.tasteRating,
       locationRatingStars: req.body.locationRatingStars,
-      locationRating: req.body.locationRating,
       vtmrRatingStars: req.body.vtmrRatingStars,
-      vtmrRating: req.body.vtmrRating,
       experienceRatingStars: req.body.experienceRatingStars,
-      experienceRating: req.body.experienceRating,
       reviewer: req.user.id,
       feedbackDate: dayjs().utc().toJSON(),
     };
-
-    // ToDo: We need to add verification such that only people who have really booked the class can make a review
 
     const { error } = validateFeedback(newFeedback);
     if (error) return res.status(400).json({ message: error.details[0].message });
@@ -360,6 +413,7 @@ router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
     updatedClass.expRating =
       tempClass.feedbacks.map((f) => f.experienceRatingStars).reduce((a, b) => a + b) / tempClass.feedbacks.length;
     updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
+    await Order.findByIdAndUpdate(req.params.orderId, { $set: { reviewedByCustomer: true } }, { new: true });
 
     res.status(200).json({ updatedClass });
   } catch (err) {
@@ -420,44 +474,6 @@ router.post('/:id/timeslots', [requireJwtAuth], async (req, res, next) => {
   }
 });
 
-router.post('/:id/feedbacks', [requireJwtAuth], async (req, res, next) => {
-  try {
-    const tempClass = await Class.findById(req.params.id).populate('host');
-    // check that the class exists in the database
-    if (!tempClass) {
-      return res.status(404).json({ message: 'Class not found!' });
-    }
-    const newFeedback = {
-      overallRatingStars: req.body.overallRatingStars,
-      overallRating: req.body.overallRating,
-      hostRatingStars: req.body.hostRatingStars,
-      tasteRatingStars: req.body.tasterankingstars,
-      tasteRatingStars: req.body.tasteRatingStars,
-      locationRatingStars: req.body.locationRatingStars,
-      vtmrRatingStars: req.body.vtmrRatingStars,
-      experienceRatingStars: req.body.experienceRatingStars,
-      reviewer: req.user.id,
-    };
-
-    // ToDo: We need to add verification such that only people who have really booked the class can make a review
-
-    const { error } = validateFeedback(newFeedback);
-    if (error) return res.status(400).json({ message: error.details[0].message });
-    tempClass.feedbacks.push(newFeedback);
-    let updatedClass = {
-      feedbacks: tempClass.feedbacks,
-    };
-    updatedClass = await Class.findByIdAndUpdate(tempClass._id, { $set: updatedClass }, { new: true });
-    res.status(200).json({ updatedClass });
-  } catch (err) {
-    if (err.message) {
-      res.status(500).json({ message: err.message });
-    } else {
-      res.status(500).json({ message: 'Something went wrong during the feedback creation.' });
-    }
-  }
-});
-
 router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
   let coverPhoto = undefined;
   let photoOne = undefined;
@@ -485,7 +501,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     toBring: req.body.toBring,
     lon: req.body.lon,
     lat: req.body.lat,
-    minGuestRatingRequired: req.body.minGuestRatingRequired,
+    minGuestRatingRequired: req.body.minGuestRatingRequired ? Number(req.body.minGuestRatingRequired) : 0,
     meetingAddress: req.body.meetingAddress,
     pricePerPerson: req.body.pricePerPerson,
     durationInMinutes: req.body.durationInMinutes,
@@ -497,6 +513,7 @@ router.post('/', [requireJwtAuth, photosUpload], async (req, res, next) => {
     pescatarianFriendly: req.body.pescatarianFriendly,
     eggFree: req.body.eggFree,
     soyFree: req.body.soyFree,
+    privateInformation: req.body.privateInformation,
     host: req.user.id, // added by authentication middleware to request --> frontend does not need to send it
   };
 

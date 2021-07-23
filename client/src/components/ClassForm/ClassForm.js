@@ -10,6 +10,7 @@ import PhotosSection from './FormSections/PhotosSection';
 import DatesSection from './FormSections/DatesSection';
 import GuestsSection from './FormSections/GuestsSection';
 import BasicInfoSection from './FormSections/BasicInfoSection';
+import PrivateInformationSection from './FormSections/PrivateInformationSection';
 
 const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
   const history = useHistory();
@@ -72,6 +73,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       formik.setFieldValue('pescatarianFriendly', _.get(originalClass, 'pescatarianFriendly'));
       formik.setFieldValue('eggFree', _.get(originalClass, 'eggFree'));
       formik.setFieldValue('soyFree', _.get(originalClass, 'soyFree'));
+      formik.setFieldValue('privateInformation', _.get(originalClass, 'privateInformation'));
 
       if (_.get(originalClass, 'coverPhoto')) {
         const coverPhotoURL = _.get(originalClass, 'coverPhoto');
@@ -115,6 +117,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
       pescatarianFriendly: false,
       eggFree: false,
       soyFree: false,
+      privateInformation: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
@@ -144,6 +147,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             pescatarianFriendly,
             eggFree,
             soyFree,
+            privateInformation,
           } = values;
           const data = {
             title,
@@ -161,6 +165,7 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
             pescatarianFriendly,
             eggFree,
             soyFree,
+            privateInformation,
             meetingAddress: {
               country,
               city,
@@ -223,6 +228,8 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
         <GuestsSection formik={formik}></GuestsSection>
         <hr></hr>
         <AddressSection formik={formik}></AddressSection>
+        <hr></hr>
+        <PrivateInformationSection formik={formik}></PrivateInformationSection>
         <hr></hr>
         <DatesSection formik={formik}></DatesSection>
         <hr></hr>

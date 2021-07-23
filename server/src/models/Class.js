@@ -10,7 +10,6 @@ import { CLASS_CATEGORIES } from '../constants/ClassCategories';
 import { CITY_CATEGORIES } from '../constants/CityCategories';
 import { feedbackJoiSchema, feedbackSchema } from './Feedback';
 
-const mongoosePaginate = require('mongoose-paginate-v2');
 
 const addressSchema = new Schema({
   country: {
@@ -183,6 +182,12 @@ const classSchema = new Schema(
       required: false,
       default: 0, // 0 means all guests are allowed to book this class
     },
+    // this information should only be copied into an order object and never sent to the client directly!
+    privateInformation: {
+      type: String,
+      default: '',
+      required: false,
+    },
   },
   { timestamps: true },
 );
@@ -242,6 +247,7 @@ classSchema.methods.toJSON = function () {
     locationRating: this.locationRating,
     vtmrRating: this.vtmrRating,
     expRating: this.expRating,
+    // do not send private information to the client --> DO NOT ADD HERE IN JSON
     timeSlots: this.timeSlots.map((timeSlot) => {
       return timeSlot.toJSON();
     }),
@@ -286,7 +292,7 @@ export const validateClass = (c) => {
     minGuests: Joi.number().integer().min(1).max(100).positive().required(),
     maxGuests: Joi.number().integer().min(1).max(100).positive().required(),
     // guest rating can be an integer between 0 and 4 (5 makes no sense)
-    minGuestRatingRequired: Joi.number().integer().min(0).max(4).positive().required(),
+    minGuestRatingRequired: Joi.number().integer().min(0).max(4).required(),
     meetingAddress: addressJoiSchema.required(),
     timeSlots: Joi.array().items(timeSlotJoiSchema),
     veganFriendly: Joi.boolean(),
@@ -296,12 +302,11 @@ export const validateClass = (c) => {
     soyFree: Joi.boolean(),
     nutAllergyFriendly: Joi.boolean(),
     feedbacks: Joi.array().items(feedbackJoiSchema),
+    privateInformation: Joi.string().allow(''),
   });
 
   return classJoiSchema.validate(c);
 };
-
-classSchema.plugin(mongoosePaginate);
 
 const Class = mongoose.model('Class', classSchema);
 

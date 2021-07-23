@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { CLASS_CATEGORIES } from '../../../constants/ClassCategories';
+import Tooltip from '../Tooltip.js';
 
 const BasicInfoSection = ({ formik }) => {
   const classCategories = CLASS_CATEGORIES.map((category) => {
@@ -9,7 +10,10 @@ const BasicInfoSection = ({ formik }) => {
   return (
     <>
       <Form.Group controlId="title">
-        <Form.Label>Title</Form.Label>
+        <Form.Label>Title</Form.Label>{' '}
+        <Tooltip content="Give your cooking class a clear and meaningful title." direction="right">
+          <i className="fa fa-question" data-toggle="tooltip"></i>
+        </Tooltip>
         <Form.Control
           placeholder="Title"
           name="title"
@@ -23,7 +27,13 @@ const BasicInfoSection = ({ formik }) => {
         ) : null}
       </Form.Group>
       <Form.Group controlId="category">
-        <Form.Label>Category</Form.Label>
+        <Form.Label>Category</Form.Label>{' '}
+        <Tooltip
+          content="Choose one category in which you think your potential guest would expect to find your class."
+          direction="right"
+        >
+          <i className="fa fa-question" data-toggle="tooltip"></i>
+        </Tooltip>
         <Form.Control
           as="select"
           name="category"
@@ -39,7 +49,13 @@ const BasicInfoSection = ({ formik }) => {
         ) : null}
       </Form.Group>
       <Form.Group controlId="description">
-        <Form.Label>Class Description</Form.Label>
+        <Form.Label>Class Description</Form.Label>{' '}
+        <Tooltip
+          content="Briefly describe your cooking class: What makes it special? What will your guest learn?"
+          direction="right"
+        >
+          <i className="fa fa-question" data-toggle="tooltip"></i>
+        </Tooltip>
         <Form.Control
           as="textarea"
           rows={3}
@@ -54,7 +70,13 @@ const BasicInfoSection = ({ formik }) => {
         ) : null}
       </Form.Group>
       <Form.Group controlId="toBring">
-        <Form.Label>Things Guests Need To Bring</Form.Label>
+        <Form.Label>Things Guests Need To Bring</Form.Label>{' '}
+        <Tooltip
+          content="What do you expect your guests to bring with them? Any special product or just a big appetite?"
+          direction="right"
+        >
+          <i className="fa fa-question" data-toggle="tooltip"></i>
+        </Tooltip>
         <Form.Control
           as="textarea"
           rows={3}

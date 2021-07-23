@@ -19,9 +19,8 @@ const FeedbackUser = () => {
   // @ts-ignore
   const auth = useSelector((state) => state.auth);
 
-  // id of the class in the route
-  // @ts-ignore
-  let { classId } = useParams();
+  // extracting class id and order id from the route
+  let { classId, orderId } = useParams();
 
   const onSubmit = async (newFeedback) => {
     setIsLoading(true);
@@ -38,7 +37,7 @@ const FeedbackUser = () => {
         config.headers['x-auth-token'] = token;
       }
 
-      await axios.post(`/api/classes/${classId}/feedbacks`, newFeedback, config);
+      await axios.post(`/api/classes/${classId}/feedbacks/${orderId}`, newFeedback, config);
       setIsLoading(false);
       setFeedbackCreated(true);
       return Promise.resolve(); // tell the form that there was not an error during submitting --> reset form

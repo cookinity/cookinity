@@ -29,7 +29,18 @@ const EditClass = () => {
       setIsError(false);
       setIsLoading(true);
       try {
-        const result = await axios(`/api/classes/${classId}`);
+        // adding the necessary security header
+        const token = auth.token;
+        const config = {
+          headers: {
+            'Content-type': 'application/json',
+          },
+        };
+        if (token) {
+          config.headers['x-auth-token'] = token;
+        }
+
+        const result = await axios(`/api/classes/${classId}/ashost`, config);
         setClass(result.data.class);
       } catch (err) {
         setIsError(true);

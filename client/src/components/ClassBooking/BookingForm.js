@@ -97,7 +97,7 @@ const BookingForm = ({ c, submitCallback }) => {
         <h1>{c.title}</h1>
         <p>{c.durationInMinutes} Minutes</p>
         <div className="centerImg">
-            <Image className="classCoverPhoto" src={c.coverPhoto} rounded />
+          <Image className="classCoverPhoto" src={c.coverPhoto} rounded />
         </div>
         <h6>Description</h6>
         <p className="supporting-text">{c.description}</p>
@@ -119,7 +119,12 @@ const BookingForm = ({ c, submitCallback }) => {
           <li>
             Cooking Class Price
             <span className="ml-2">
-              <NumberFormat value={c.pricePerPerson.toFixed(2)} displayType={'text'} thousandSeparator={true} />€ x {numberOfGuests}
+              <NumberFormat
+                value={c.pricePerPerson.toFixed(2)}
+                displayType={'text'}
+                thousandSeparator={true}
+              />
+              € x {numberOfGuests}
             </span>
           </li>
           <li>
@@ -132,7 +137,12 @@ const BookingForm = ({ c, submitCallback }) => {
         <hr />
         <div className="totalPrice">
           Total Price{' '}
-          <NumberFormat value={totalPrice?.toFixed(2)} displayType={'text'} thousandSeparator={true} />€
+          <NumberFormat
+            value={totalPrice?.toFixed(2)}
+            displayType={'text'}
+            thousandSeparator={true}
+          />
+          €
         </div>
         <hr></hr>
         <div className="text-center">

@@ -13,7 +13,9 @@ import utc from 'dayjs/plugin/utc';
 import FilterBar from './FilterBar';
 import FilterSideBar from './FilterSideBar';
 import ClassesMap from './ClassesMap';
+import Footer from '../Layout/Footer';
 import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 dayjs.extend(utc);
 
 export const Home = () => {
@@ -23,6 +25,7 @@ export const Home = () => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // @ts-ignore
   const [limit, setLimit] = useState(5);
   const [skip, setSkip] = useState(0);
 
@@ -40,18 +43,31 @@ export const Home = () => {
   const [eggFree, setEggFree] = useState(false);
   const [soyFree, setSoyFree] = useState(false);
 
+  const location = useLocation();
+  const history = useHistory();
+
   // @ts-ignore
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
-    fetchClasses();
+    if (location.state) {
+      // @ts-ignore
+      const { cityFilter, categoryFilter, dateFilter } = location.state;
+      setCity(cityFilter);
+      setCat(categoryFilter);
+      setStartDate(dateFilter);
+      history.replace('/home', null);
+      // call with filters from location
+      fetchClasses(categoryFilter, dateFilter, cityFilter)();
+    } else {
+      // call with state
+      fetchClasses(cat, startDate, city)();
+    }
   }, [
     skip,
     limit,
-    cat,
-    city,
-    startDate,
-    priceLow && priceUp,
+    priceLow,
+    priceUp,
     guests,
     rating,
     vegan,
@@ -62,20 +78,20 @@ export const Home = () => {
     soyFree,
   ]);
 
-  const fetchClasses = async () => {
+  const fetchClasses = (categoryFilter, dateFilter, cityFilter) => async () => {
     setIsError(false);
     setIsLoading(true);
     try {
       let date = undefined;
-      if (startDate) {
-        date = dayjs.utc(startDate.toDate()).format();
+      if (dateFilter) {
+        date = dayjs.utc(dateFilter.toDate()).format();
       }
       const queryObject = {
         skip,
         limit,
-        city,
-        category: cat,
-        date,
+        city: cityFilter,
+        category: categoryFilter,
+        date: date,
         guests,
         priceLow,
         priceUp,
@@ -197,12 +213,7 @@ export const Home = () => {
 
   return (
     <>
-      <div style={{ display: isLoading ? 'block' : 'none' }}>
-        <Layout>
-          <Loader></Loader>
-        </Layout>
-      </div>
-      <div style={{ display: isLoading ? 'none' : 'block' }}>
+      <div>
         <Layout>
           <Row>
             <Col>
@@ -224,11 +235,13 @@ export const Home = () => {
           <Row className="mb-4">
             <Col>
               <FilterBar
+                category={cat}
+                city={city}
                 handleFilterCity={handleFilterCity}
                 handleFilterCategory={handleFilterCategory}
                 handleFilterDate={handleFilterDate}
                 startDate={startDate}
-                fetchClasses={fetchClasses}
+                onSearchHandler={fetchClasses(cat, startDate, city)}
               ></FilterBar>
             </Col>
           </Row>
@@ -247,11 +260,14 @@ export const Home = () => {
               ></FilterSideBar>
             </Col>
             <Col xs={12} lg={12} xl={6}>
-              <Container fluid>
+              <div style={{ display: isLoading ? 'block' : 'none' }}>
+                <Loader></Loader>
+              </div>
+              <Container fluid style={{ display: isLoading ? 'none' : 'block' }}>
                 <Row xs={1} md={2} lg={2}>
                   {filteredClasses.length === 0 ? (
                     <div className="alert alert-warning mx-auto text-center" role="alert">
-                      <span>🥺 We are sry! We found no classes for your selected filters! 🥺</span>
+                      <span>🥺 We are sorry! We found no classes for your selected filters! 🥺</span>
                       <br />
                       <span>💡 Try a different combination of filters 💡</span>
                       <br />
@@ -261,21 +277,6 @@ export const Home = () => {
 
                   {classCards}
                 </Row>
-                <Row>
-                  <Col xs={12} className="text-center mt-2 mb-4">
-                    <div className="btn-group" role="group">
-                      <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
-                        Previous
-                      </Button>
-                      <Button
-                        onClick={nextPage}
-                        disabled={skip + filteredClasses.length >= numberOfEntries ? true : false}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </Col>
-                </Row>
               </Container>
             </Col>
             <Col xs={12} lg={12} xl={4}>
@@ -284,9 +285,24 @@ export const Home = () => {
               </div>
             </Col>
           </Row>
-          )
+          <Row>
+            <Col xs={12} className="text-center mt-2 mb-4">
+              <div className="btn-group" role="group">
+                <Button onClick={previousPage} disabled={skip === 0 ? true : false}>
+                  Previous
+                </Button>
+                <Button
+                  onClick={nextPage}
+                  disabled={skip + filteredClasses.length >= numberOfEntries ? true : false}
+                >
+                  Next
+                </Button>
+              </div>
+            </Col>
+          </Row>
         </Layout>
       </div>
+     
     </>
   );
 };

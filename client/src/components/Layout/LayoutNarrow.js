@@ -11,7 +11,7 @@ const LayoutNarrow = ({ children }) => {
           <Col
             className="mt-4 mb-4 card border-light shadow p-4"
             xs={12}
-            lg={{ span: 8, offset: 2 }}
+            lg={{ span: 10, offset: 1 }}
           >
             {children}
           </Col>

@@ -3,11 +3,9 @@ import { Button, Table } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import { LinkContainer } from 'react-router-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export const BookedClassesTable = ({ bookings, isPastTable }) => {
-
-
   const columns = (
     <tr>
       <th>Title</th>
@@ -25,20 +23,23 @@ export const BookedClassesTable = ({ bookings, isPastTable }) => {
     return (
       <tr key={b.id}>
         <td>{b.class.title}</td>
-        <td>{(b.totalPrice) / 100} {b.currency}</td>
+        <td>
+          {b.totalPrice / 100} {b.currency}
+        </td>
         <td>{b.numberOfGuests}</td>
         <td>{b.customer.username}</td>
         <td>{b.customer.email}</td>
         <td>{dayjs(b.bookedTimeSlot.date).format('llll')}</td>
         <td>{dayjs(b.bookingDate).format('llll')}</td>
         <td>
-          {isPastTable ?
-            <LinkContainer to={`/classes/${b.customer.id}/create-feedback-host`}>
-              <Button variant="info">
-                <FontAwesomeIcon icon={faClock} />
-                Feedback of the Customer
+          {isPastTable ? (
+            <LinkContainer to={`/hostmanagement/booked-classes/${b.id}/create-feedback`}>
+              <Button variant="success" disabled={b.reviewedByHost ? true : false}>
+                <FontAwesomeIcon icon={faPlus} className="mr-1" />
+                Rate Guest
               </Button>
-            </LinkContainer> : null}
+            </LinkContainer>
+          ) : null}
         </td>
       </tr>
     );
@@ -46,7 +47,7 @@ export const BookedClassesTable = ({ bookings, isPastTable }) => {
 
   return (
     <>
-      <Table bordered responsive>
+      <Table responsive>
         <thead>{columns}</thead>
         <tbody>{rows}</tbody>
       </Table>

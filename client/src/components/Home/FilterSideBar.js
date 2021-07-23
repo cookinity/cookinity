@@ -79,17 +79,17 @@ const FilterSideBar = ({
   const fourPersons = generateGuests(4);
   return (
     <div>
-      <h5>Filters</h5>
+      <h5 className="filterOrder">Filters</h5>
 
-      <div className="filterOrder">
-        <div>Overall rating</div>
+      <div className="filterOrder marginFilterCategory">
+        <div>Overall Rating</div>
         <div>{fourStarsAndMore}</div>
         <div>{threeStarsAndMore}</div>
         <div>{twoStarsAndMore}</div>
         <div>{oneStarAndMore}</div>
       </div>
 
-      <div className="mt-2 filterOrder">
+      <div className="mt-2 filterOrder marginFilterCategory">
         <div>Price per Person</div>
         <div>{belowTwentyFiveEuros}</div>
         <div>{twentyFiveEurosUntilFiftyEuros}</div>
@@ -97,17 +97,17 @@ const FilterSideBar = ({
         <div>{aboveHundredEuros}</div>
       </div>
 
-      <div className="mt-2 filterOrder">
+      <div className="mt-2 filterOrder marginFilterCategory">
         <div>Number of Guests</div>
         <div>{onePerson}</div>
         <div>{twoPersons}</div>
         <div>{threePersons}</div>
-        <div>{fourPersons}</div>
+        <div className="marginCustomGuest">{fourPersons}</div>
         <input
           className="form-control form-control-sm mt-1 guestInput"
           placeholder="Custom"
           type="number"
-          value={selectedNumberOfGuests}
+          defaultValue={selectedNumberOfGuests}
           onChange={handleGuestCustomChange}
           min={1}
         ></input>
@@ -200,7 +200,7 @@ const FilterSideBar = ({
 
     return (
       <div
-        style={{ color: selectedRating === numberOfFullStars ? 'dodgerblue' : 'black' }}
+        style={{ color: selectedRating === numberOfFullStars ? 'yellowgreen' : 'black' }}
         className="pointer"
         onClick={handleRatingSelect(numberOfFullStars)}
       >
@@ -234,7 +234,7 @@ const FilterSideBar = ({
       <div
         style={{
           color:
-            min === selectedPriceRange[0] && max === selectedPriceRange[1] ? 'dodgerblue' : 'black',
+            min === selectedPriceRange[0] && max === selectedPriceRange[1] ? 'yellowgreen' : 'black',
         }}
         className="pointer"
         onClick={handlePriceSelect([min, max])}
@@ -261,7 +261,7 @@ const FilterSideBar = ({
     return (
       <div
         style={{
-          color: numberOfPersons === selectedNumberOfGuests ? 'dodgerblue' : 'black',
+          color: numberOfPersons === selectedNumberOfGuests ? 'yellowgreen' : 'black',
         }}
         className="pointer"
         onClick={handleNumberOfGuestsSelect(numberOfPersons)}

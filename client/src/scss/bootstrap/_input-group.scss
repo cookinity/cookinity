@@ -18,6 +18,7 @@
     position: relative; // For focus state's z-index
     flex: 1 1 auto;
     width: 1%;
+    color: #5a6b5b;
     min-width: 0; // https://stackoverflow.com/questions/36247140/why-dont-flex-items-shrink-past-content-size
     margin-bottom: 0;
 
@@ -106,7 +107,7 @@
   @include font-size($input-font-size); // Match inputs
   font-weight: $font-weight-normal;
   line-height: $input-line-height;
-  color: $input-group-addon-color;
+  color: #004d1a;
   text-align: center;
   white-space: nowrap;
   background-color: $input-group-addon-bg;

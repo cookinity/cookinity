@@ -10,6 +10,8 @@ import { useFormik } from 'formik';
 import { registerUserWithEmail } from '../../store/features/registration/registerActions';
 import { registerSchema } from './validation';
 
+import food from './food.png';
+
 const Register = ({ auth, register: { isLoading, error }, history, registerUserWithEmail }) => {
   const formik = useFormik({
     initialValues: {
@@ -24,10 +26,10 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
     },
   });
 
-  if (auth.isAuthenticated) return <Redirect to="/" />;
+  if (auth.isAuthenticated) return <Redirect to="/home" />;
 
   return (
-    <main>
+    <main style={{ backgroundImage: `url(${food})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
       <div
         className="preloader bg-dark flex-column justify-content-center align-items-center"
         style={{ display: 'none' }}
@@ -35,7 +37,7 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
       <Form onSubmit={formik.handleSubmit} noValidate>
         <section
           className="min-vh-100 d-flex align-items-center section-image overlay-soft-dark py-5 py-lg-0"
-          // data-background=""
+        // data-background=""
         >
           <div className="container">
             <div className="row justify-content-center">
@@ -47,9 +49,9 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
               <div className="col-12 d-flex align-items-center justify-content-center">
                 <div className="signin-inner mt-3 mt-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
                   <p>
-                    Back to <a href="/">Home page</a>
+                    Back to <a href="/home">Home page</a>
                   </p>
-                      
+
                   <div>
                     <div className="form-group">
                       <label htmlFor="name">Your name</label>
@@ -151,14 +153,13 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
                       </div>
 
                       {formik.touched.password && formik.errors.password ? (
-                      <p className="error">{formik.errors.password}</p>
-                    ) : null}
-                    
+                        <p className="error">{formik.errors.password}</p>
+                      ) : null}
+
                       <small id="passwortHelp" className="form-text text-muted">
                         Password must be at least 6 characters!
                       </small>
                     </div>
-                    
                   </div>
 
                   {error && <p className="error">{error}</p>}
