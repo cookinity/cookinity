@@ -130,7 +130,7 @@ textarea[resize='horizontal'] {
   line-height: 16px;
   margin-bottom: 0;
   @include transition($transition-base);
-  color: $gray;
+  color: #5a6b5b;
 
   &:hover {
     cursor: pointer;
