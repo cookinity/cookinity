@@ -28,7 +28,6 @@ router.get('/ashost', [requireJwtAuth], async (req, res) => {
 router.get('/ascustomer', [requireJwtAuth], async (req, res) => {
   try {
     const idOfLoggedInUser = req.user.id;
-
     let bookings = [];
     // find all bookings where the user is the customer
     bookings = await Order.find({ customer: idOfLoggedInUser }).populate('host').populate('class');
