@@ -82,7 +82,7 @@ const FilterSideBar = ({
       <h5 className="filterOrder">Filters</h5>
 
       <div className="filterOrder marginFilterCategory">
-        <div>Overall rating</div>
+        <div>Overall Rating</div>
         <div>{fourStarsAndMore}</div>
         <div>{threeStarsAndMore}</div>
         <div>{twoStarsAndMore}</div>

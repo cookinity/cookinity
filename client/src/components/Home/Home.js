@@ -302,7 +302,7 @@ export const Home = () => {
           </Row>
         </Layout>
       </div>
-      <Footer></Footer>
+     
     </>
   );
 };
