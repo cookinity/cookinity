@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Carousel, Container, Row, Col, Image, Button, ProgressBar } from 'react-bootstrap';
 import './classDetail.scss';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import Loader from 'components/Shared/Loader/Loader';
@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LinkContainer } from 'react-router-bootstrap';
 import ClassDetailMap from './ClassDetailMap';
 import LayoutNarrow from 'components/Layout/LayoutNarrow';
+import { useSelector } from 'react-redux';
 const Spacer = require('react-spacer');
 const { render } = require('react-dom');
 
@@ -39,13 +40,17 @@ const ClassDetail = () => {
   const [futureDates, setFutureDates] = useState([]);
   const [numFeedback, setNumFeedback] = useState(0);
 
+  const history = useHistory();
+  const auth = useSelector((state) => state.auth);
+  const isLoggedIn = auth && auth.isAuthenticated;
+
   const prevIcon = <i className="fa fa-arrow-left" />;
   const nextIcon = <i className="fa fa-arrow-right" />;
 
   const carouselImages = photos.map((src) => (
-    <Carousel.Item interval={3000} key={src} >
+    <Carousel.Item interval={3000} key={src}>
       <div className="photoFrame">
-        <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration"/>
+        <img className="carouselImageSetting" src={src} alt="Cooking Class Inspiration" />
       </div>
     </Carousel.Item>
   ));
@@ -211,33 +216,58 @@ const ClassDetail = () => {
             <Container>
               <Row className="dietaryRows">
                 <Col>
-                  <FontAwesomeIcon icon="carrot" size="2x" className="iconPos fa-fw" color="#ff9900"/>
+                  <FontAwesomeIcon
+                    icon="carrot"
+                    size="2x"
+                    className="iconPos fa-fw"
+                    color="#ff9900"
+                  />
                   {c.vegetarianFriendly ? 'vegetarian ✔' : 'vegetarian ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="seedling" size="2x" className="iconPos fa-fw" color="#339933"/>
+                  <FontAwesomeIcon
+                    icon="seedling"
+                    size="2x"
+                    className="iconPos fa-fw"
+                    color="#339933"
+                  />
                   {c.veganFriendly ? 'vegan ✔ ' : 'vegan ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="cookie" size="2x" className="iconPos fa-fw" color="#dea95d" />
+                  <FontAwesomeIcon
+                    icon="cookie"
+                    size="2x"
+                    className="iconPos fa-fw"
+                    color="#dea95d"
+                  />
                   {c.nutAllergyFriendly ? 'nut free  ✔' : 'nut free ❌'}{' '}
                 </Col>
               </Row>
               <Row className="dietaryRows">
                 <Col>
-                  <FontAwesomeIcon icon="fish" size="2x" className="iconPos fa-fw" color="#99ccff" />
+                  <FontAwesomeIcon
+                    icon="fish"
+                    size="2x"
+                    className="iconPos fa-fw"
+                    color="#99ccff"
+                  />
                   {c.pescatarianFriendly ? 'pescatarian ✔' : 'pescatarian ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" color="#ffdab3"/>
+                  <FontAwesomeIcon icon="egg" size="2x" className="iconPos fa-fw" color="#ffdab3" />
                   {c.eggFree ? 'egg-free ✔ ' : 'egg-free ❌'}{' '}
                 </Col>
                 <Col>
                   {' '}
-                  <FontAwesomeIcon icon="leaf" size="2x" className="iconPos fa-fw" color="#267326"/>
+                  <FontAwesomeIcon
+                    icon="leaf"
+                    size="2x"
+                    className="iconPos fa-fw"
+                    color="#267326"
+                  />
                   {c.soyFree ? 'soy-free  ✔' : 'soy-free ❌'}{' '}
                 </Col>
               </Row>
@@ -311,9 +341,15 @@ const ClassDetail = () => {
               </Row>
             </Container>
             <div className="text-center">
-              <LinkContainer to={`/classes/${c.id}/booking`}>
-                <Button variant="primary">Book Now</Button>
-              </LinkContainer>
+              {isLoggedIn ? (
+                <LinkContainer to={`/classes/${c.id}/booking`}>
+                  <Button variant="primary">Book Now</Button>
+                </LinkContainer>
+              ) : (
+                <LinkContainer to={`/login`}>
+                  <Button variant="primary">Login To Book A Class</Button>
+                </LinkContainer>
+              )}
             </div>
           </Container>
         </div>
