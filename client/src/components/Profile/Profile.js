@@ -19,6 +19,7 @@ const Profile = ({
   getProfile,
   user: { profile, isLoading, error },
   auth: { me },
+  loadMe,
   editUser,
   deleteUser,
   history,
