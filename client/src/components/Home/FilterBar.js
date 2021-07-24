@@ -88,6 +88,7 @@ const FilterBar = ({
                             placeholder="All Dates"
                             onClick={openCalendar}
                             value={stringDate}
+                            onChange={(e) => {}}
                           ></Form.Control>
                         </InputGroup>
                       );
