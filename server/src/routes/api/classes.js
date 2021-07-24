@@ -48,6 +48,9 @@ router.post('/query', passport.authenticate(['jwt', 'anonymous'], { session: fal
   try {
     let classes = await Class.find();
 
+    // Remove Classes Without Any Time Slots
+    classes = classes.filter((c) => c.timeSlots && c.timeSlots.length > 0);
+
     // Apply City Filter
     if (city) {
       classes = classes.filter((c) => c.meetingAddress.city === city);
