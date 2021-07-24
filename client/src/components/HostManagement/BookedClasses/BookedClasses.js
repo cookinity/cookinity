@@ -45,7 +45,7 @@ const BookedClasses = () => {
 
       // sum up orders.totalPrice
       let totalMoneyEarned = unformattedBookings.reduce((acc, curr) => {
-        return acc + curr.totalPrice;
+        return acc + curr.totalPrice * 0.9;
       }, 0);
       totalMoneyEarned = (totalMoneyEarned / 100).toFixed(2);
       setMoneyEarned(totalMoneyEarned);
@@ -76,10 +76,10 @@ const BookedClasses = () => {
   if (futureBookings.length > 0 || pastBookings.length > 0) {
     content = (
       <div>
-        <h1 className="display-4 mb-6 text-center primaryTextCol"> 
+        <h1 className="display-4 mb-6 text-center primaryTextCol">
           💶 Congratulation! You already earned {moneyEarned} € with Cookinity!💶
         </h1>
-        <h1 className="text-center">Future Bookings</h1>
+        <h1 className="text-center">Upcoming Bookings</h1>
         <BookedClassesTable bookings={futureBookings} isPastTable={false}></BookedClassesTable>
         <hr></hr>
         <h1 className="text-center">Past Bookings</h1>

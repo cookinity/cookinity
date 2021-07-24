@@ -7,13 +7,13 @@ const GuestsSection = ({ formik }) => {
     <>
       <Form.Row>
         <Form.Group as={Col} xs={12} md={3} controlId="pricePerPerson">
-          <Form.Label>Price Per Person</Form.Label>
+          <Form.Label>Price Per Person</Form.Label>{' '}
           <Tooltip
             content={
               <span>
                 <em>Cookinity collects a commission of 10%.</em>
                 <br />
-                If you set a price of 50€, the price displayd to guests would be 55€.
+                If you set a price of 50€, you will earn 45€.
               </span>
             }
             direction="right"

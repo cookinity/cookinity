@@ -7,7 +7,6 @@ import { withRouter } from 'react-router-dom';
 
 import { getProfile, editUser, deleteUser } from '../../store/features/user/userActions';
 import { loadMe } from '../../store/features/authentication/authActions';
-import Layout from '../Layout/Layout';
 import Loader from '../Shared/Loader/Loader';
 import requireAuth from '../../higherOrderComponents/requireAuth';
 import { profileSchema } from './validation';
@@ -20,9 +19,9 @@ const Profile = ({
   getProfile,
   user: { profile, isLoading, error },
   auth: { me },
+  loadMe,
   editUser,
   deleteUser,
-  loadMe,
   history,
   match,
 }) => {
@@ -43,6 +42,8 @@ const Profile = ({
     setImage(URL.createObjectURL(event.target.files[0]));
     setAvatar(event.target.files[0]);
   };
+
+  const hasRightToChange = me?.username === profile.username || me?.role === 'ADMIN';
 
   const handleClickEdit = () => {
     retryCount.current = 0;
@@ -79,7 +80,6 @@ const Profile = ({
       }
       formData.append('description', values.description);
       editUser(values.id, formData, history);
-      //setIsEdit(false);
     },
   });
 
@@ -96,7 +96,7 @@ const Profile = ({
   return (
     <LayoutNarrow>
       <div className="profile">
-        <h1>Your Profile</h1>
+        <h1>Profile</h1>
         {isLoading ? (
           <Loader />
         ) : (
@@ -129,16 +129,18 @@ const Profile = ({
                 <span className="label">Description: </span>
                 <span className="info">{profile.description}</span>
               </div>
-              <div>
-                <Button
-                  variant="primary"
-                  type="button"
-                  onClick={handleClickEdit}
-                  disabled={!(me?.username === profile.username || me?.role === 'ADMIN')}
-                >
-                  {isEdit ? 'Cancel' : 'Edit'}
-                </Button>
-              </div>
+              {hasRightToChange ? (
+                <div>
+                  <Button
+                    variant="primary"
+                    type="button"
+                    onClick={handleClickEdit}
+                    disabled={!hasRightToChange}
+                  >
+                    {isEdit ? 'Cancel' : 'Edit'}
+                  </Button>
+                </div>
+              ) : null}
             </div>
           </div>
         )}

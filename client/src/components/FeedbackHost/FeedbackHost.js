@@ -9,6 +9,7 @@ import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
 import { useParams } from 'react-router-dom';
 import FeedbackFormHost from 'components/FeedbackFormHost/FeedbackFormHost';
+import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
 const FeedbackHost = () => {
   const [isError, setIsError] = useState(false);
@@ -50,7 +51,7 @@ const FeedbackHost = () => {
   };
 
   return (
-    <Layout>
+    <LayoutNarrow>
       <Row>
         <Col>
           {' '}
@@ -93,7 +94,7 @@ const FeedbackHost = () => {
           </div>
         </Col>
       </Row>
-    </Layout>
+    </LayoutNarrow>
   );
 };
 
