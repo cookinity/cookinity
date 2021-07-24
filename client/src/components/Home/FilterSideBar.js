@@ -107,7 +107,7 @@ const FilterSideBar = ({
           className="form-control form-control-sm mt-1 guestInput"
           placeholder="Custom"
           type="number"
-          defaultValue={selectedNumberOfGuests}
+          value={selectedNumberOfGuests}
           onChange={handleGuestCustomChange}
           min={1}
         ></input>
