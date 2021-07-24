@@ -17,9 +17,9 @@ const BookingForm = ({ c, submitCallback }) => {
   const [numberOfGuestsPossible, setSelectedNumberOfGuestsPossible] = useState([]);
   const [numberOfGuests, setNumberOfGuests] = useState(undefined);
 
-  const [totalPrice, setTotalPrice] = useState(undefined);
-  const [marketPlaceFee, setMarketPlaceFee] = useState(undefined);
-  const [classPrice, setClassPrice] = useState(undefined);
+  const [total, setTotal] = useState(undefined);
+  const [fee, setFee] = useState(undefined);
+  const [host, setHost] = useState(undefined);
 
   useEffect(() => {
     // time slot calculation
@@ -55,12 +55,12 @@ const BookingForm = ({ c, submitCallback }) => {
     setNumberOfGuests(guestPossibilities[0]);
 
     // calculate prices
-    const cP = (c.pricePerPerson * guestPossibilities[0]).toFixed(2);
-    setClassPrice(cP);
-    const mP = (Number(cP) * 0.1).toFixed(2);
-    setMarketPlaceFee(mP);
-    const tP = Number(cP) + Number(mP);
-    setTotalPrice(tP);
+    const total = (c.pricePerPerson * guestPossibilities[0]).toFixed(2);
+    setTotal(total);
+    const fee = (Number(total) * 0.1).toFixed(2);
+    setFee(fee);
+    const host = (Number(total) - Number(fee)).toFixed(2);
+    setHost(host);
   }, [c]);
 
   //guest options
@@ -83,12 +83,12 @@ const BookingForm = ({ c, submitCallback }) => {
     setNumberOfGuests(event.target.value);
 
     // calculate prices when the number guests is updated
-    const cP = (c.pricePerPerson * event.target.value).toFixed(2);
-    setClassPrice(cP);
-    const mP = (Number(cP) * 0.1).toFixed(2);
-    setMarketPlaceFee(mP);
-    const tP = Number(cP) + Number(mP);
-    setTotalPrice(tP);
+    const total = (c.pricePerPerson * event.target.value).toFixed(2);
+    setTotal(total);
+    const fee = (Number(total) * 0.1).toFixed(2);
+    setFee(fee);
+    const host = (Number(total) - Number(fee)).toFixed(2);
+    setHost(host);
   };
 
   return (
@@ -115,34 +115,31 @@ const BookingForm = ({ c, submitCallback }) => {
           </Form.Control>
         </Form.Group>
         <hr />
+        Split:
         <ul>
           <li>
-            Cooking Class Price
+            To The Host Goes (90%):
             <span className="ml-2">
-              <NumberFormat
-                value={c.pricePerPerson.toFixed(2)}
-                displayType={'text'}
-                thousandSeparator={true}
-              />
-              € x {numberOfGuests}
+              <NumberFormat value={host} displayType={'text'} thousandSeparator={true} />€
             </span>
           </li>
           <li>
-            Market Place Fee
+            To Cookinity Goes (10%):
             <span className="ml-2">
-              <NumberFormat value={marketPlaceFee} displayType={'text'} thousandSeparator={true} />€
+              <NumberFormat value={fee} displayType={'text'} thousandSeparator={true} />€
             </span>
           </li>
         </ul>
         <hr />
         <div className="totalPrice">
-          Total Price{' '}
+          Total Price <NumberFormat value={total} displayType={'text'} thousandSeparator={true} />€
+          (Per Person:{' '}
           <NumberFormat
-            value={totalPrice?.toFixed(2)}
+            value={c.pricePerPerson.toFixed(2)}
             displayType={'text'}
             thousandSeparator={true}
           />
-          €
+          €)
         </div>
         <hr></hr>
         <div className="text-center">
