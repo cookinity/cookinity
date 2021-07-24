@@ -11,7 +11,7 @@ export const BookedClassesTable = ({ bookings, isPastTable }) => {
     <tr>
       <th>Class</th>
       <th>Price</th>
-      <th>No. of Guests</th>
+      <th>Number of Guests</th>
       <th>Customer</th>
       <th>Class On</th>
       <th>Booked On</th>
