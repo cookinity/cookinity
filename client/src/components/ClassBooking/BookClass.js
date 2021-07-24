@@ -72,6 +72,19 @@ const BookClass = () => {
     fetchClass();
   }, []);
 
+  const loggedInUserIsHost = c && auth && auth.me && auth.me.id === c.host.id;
+
+  let content;
+  if (loggedInUserIsHost) {
+    content = (
+      <div className="alert alert-warning mx-auto text-center" role="alert">
+        <span>💡 You can not book your own class! 💡</span>
+      </div>
+    );
+  } else {
+    content = <BookingForm c={c} submitCallback={submitCallback}></BookingForm>;
+  }
+
   if (isLoading) {
     return (
       <LayoutNarrow>
@@ -97,13 +110,7 @@ const BookClass = () => {
                   {errorMessage}
                 </Alert>
               )}
-              <div>
-                {c ? (
-                  <BookingForm c={c} submitCallback={submitCallback}></BookingForm>
-                ) : (
-                  <div>No class found!</div>
-                )}
-              </div>
+              <div>{c ? content : <div>No class found!</div>}</div>
             </div>
           </Col>
         </Row>

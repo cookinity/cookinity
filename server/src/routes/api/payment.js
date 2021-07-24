@@ -154,6 +154,11 @@ router.post('/create-checkout-session', [requireJwtAuth], async (req, res) => {
     ) {
       return res.status(400).json({ message: 'User rating too low!' });
     }
+    // check that the user is not the host of the class
+    if (req.user.id === c.host.id) {
+      return res.status(400).json({ message: 'User cannot book their own class!' });
+    }
+
     const ts = c.timeSlots.id(timeSlotId);
     if (!ts) {
       return res.status(404).json({ message: 'Time slot not found!' });
