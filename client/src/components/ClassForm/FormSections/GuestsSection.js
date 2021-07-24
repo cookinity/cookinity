@@ -7,7 +7,9 @@ const GuestsSection = ({ formik }) => {
     <>
       <Form.Row>
         <Form.Group as={Col} xs={12} md={3} controlId="pricePerPerson">
-          <Form.Label>Price Per Person</Form.Label>{' '}
+          <Form.Label>
+            Price Per Person <em>(Cookinity Fee: 10%)</em>
+          </Form.Label>{' '}
           <Tooltip
             content={
               <span>
