@@ -93,61 +93,71 @@ const BookingForm = ({ c, submitCallback }) => {
 
   return (
     <>
-      <Form className="mx-auto">
-        <h1>{c.title}</h1>
-        <p>{c.durationInMinutes} Minutes</p>
-        <div className="centerImg">
-          <Image className="classCoverPhoto" src={c.coverPhoto} rounded />
+      {timeSlots && timeSlots.length > 0 ? (
+        <Form className="mx-auto">
+          <h1>{c.title}</h1>
+          <p>{c.durationInMinutes} Minutes</p>
+          <div className="centerImg">
+            <Image className="classCoverPhoto" src={c.coverPhoto} rounded />
+          </div>
+          <h6>Description</h6>
+          <p className="supporting-text">{c.description}</p>
+          <hr></hr>
+          <Form.Group controlId="numberOfGuests">
+            <Form.Label>Select the Number of Guests</Form.Label>
+            <Form.Control as="select" onChange={handleGuestChange}>
+              {guestOptions}
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="bookableDates">
+            <Form.Label>Select A Date</Form.Label>
+            <Form.Control as="select" onChange={handleTimeSlotChange}>
+              {bookingOptions}
+            </Form.Control>
+          </Form.Group>
+          <hr />
+          Split:
+          <ul>
+            <li>
+              To The Host Goes (90%):
+              <span className="ml-2">
+                <NumberFormat value={host} displayType={'text'} thousandSeparator={true} />€
+              </span>
+            </li>
+            <li>
+              To Cookinity Goes (10%):
+              <span className="ml-2">
+                <NumberFormat value={fee} displayType={'text'} thousandSeparator={true} />€
+              </span>
+            </li>
+          </ul>
+          <hr />
+          <div className="totalPrice">
+            Total Price <NumberFormat value={total} displayType={'text'} thousandSeparator={true} />
+            € (Per Person:{' '}
+            <NumberFormat
+              value={c.pricePerPerson.toFixed(2)}
+              displayType={'text'}
+              thousandSeparator={true}
+            />
+            €)
+          </div>
+          <hr></hr>
+          <div className="text-center">
+            <Button variant="primary" onClick={submitCallback(timeSlot, numberOfGuests)}>
+              Confirm and Pay
+            </Button>
+          </div>
+        </Form>
+      ) : (
+        <div className="alert alert-warning mx-auto text-center" role="alert">
+          <span>🥺 We are sorry! There are currently no time slots free for this class! 🥺</span>
+          <br />
+          <span>💡 Try a different class! 💡</span>
+          <br />
+          <span>🍽️ Maybe even try hosting your own cooking class 🍽️ </span>
         </div>
-        <h6>Description</h6>
-        <p className="supporting-text">{c.description}</p>
-        <hr></hr>
-        <Form.Group controlId="numberOfGuests">
-          <Form.Label>Select the Number of Guests</Form.Label>
-          <Form.Control as="select" onChange={handleGuestChange}>
-            {guestOptions}
-          </Form.Control>
-        </Form.Group>
-        <Form.Group controlId="bookableDates">
-          <Form.Label>Select A Date</Form.Label>
-          <Form.Control as="select" onChange={handleTimeSlotChange}>
-            {bookingOptions}
-          </Form.Control>
-        </Form.Group>
-        <hr />
-        Split:
-        <ul>
-          <li>
-            To The Host Goes (90%):
-            <span className="ml-2">
-              <NumberFormat value={host} displayType={'text'} thousandSeparator={true} />€
-            </span>
-          </li>
-          <li>
-            To Cookinity Goes (10%):
-            <span className="ml-2">
-              <NumberFormat value={fee} displayType={'text'} thousandSeparator={true} />€
-            </span>
-          </li>
-        </ul>
-        <hr />
-        <div className="totalPrice">
-          Total Price <NumberFormat value={total} displayType={'text'} thousandSeparator={true} />€
-          (Per Person:{' '}
-          <NumberFormat
-            value={c.pricePerPerson.toFixed(2)}
-            displayType={'text'}
-            thousandSeparator={true}
-          />
-          €)
-        </div>
-        <hr></hr>
-        <div className="text-center">
-          <Button variant="primary" onClick={submitCallback(timeSlot, numberOfGuests)}>
-            Confirm and Pay
-          </Button>
-        </div>
-      </Form>
+      )}
     </>
   );
 };
