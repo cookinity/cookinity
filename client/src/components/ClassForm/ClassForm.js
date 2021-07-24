@@ -248,6 +248,10 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
           onPhotoTwoChange={onPhotoTwoChange}
         ></PhotosSection>
         <hr></hr>
+        <p>
+          Note: Your class will only show up for guests in the search if you add at least one time
+          slot in the host management!
+        </p>
         <Button variant="primary" type="submit">
           {isEditMode ? 'Edit Class' : 'Create Class'}
         </Button>
