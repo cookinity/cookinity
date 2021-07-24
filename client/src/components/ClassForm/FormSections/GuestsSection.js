@@ -81,7 +81,7 @@ const GuestsSection = ({ formik }) => {
           ) : null}
         </Form.Group>
         <Form.Group as={Col} xs={12} md={3} controlId="minGuestRatingRequired">
-          <Form.Label>Minimum Guest Rating</Form.Label>
+          <Form.Label>Minimum Guest Rating</Form.Label>{' '}
           <Tooltip
             content={
               <span>

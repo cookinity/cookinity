@@ -6,11 +6,13 @@ const PrivateInformationSection = ({ formik }) => {
   return (
     <>
       <Form.Group controlId="privateInformation">
-        <Form.Label>Optional Private Information For Guests</Form.Label>
+        <Form.Label>Optional Private Information For Guests</Form.Label>{' '}
         <Tooltip
           content={
             <span>
-              <em>This information can only be seen by customers who actually booked the course.</em>
+              <em>
+                This information can only be seen by customers who actually booked the course.
+              </em>
               <br />
               Information that you can provide here are for example your name, email address, phone
               number, etc.

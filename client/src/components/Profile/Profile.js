@@ -122,7 +122,7 @@ const Profile = ({
               <div>
                 <span className="label">Joined: </span>
                 <span className="info">
-                  {dayjs(profile.createdAt).format('dddd, MMMM Do YYYY, H:mm:ss')}
+                  {dayjs(profile.createdAt).format('dddd, MMMM D YYYY, H:mm:ss')}
                 </span>
               </div>
               <div>
