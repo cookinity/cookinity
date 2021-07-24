@@ -250,7 +250,8 @@ const ClassForm = ({ submitCallback, isEditMode, originalClass }) => {
         <hr></hr>
         <p>
           Note: Your class will only show up for guests in the search if you add at least one time
-          slot in the host management!
+          slot in the host management! Until then, you can freely edit the class without the changes
+          being visible to guests.
         </p>
         <Button variant="primary" type="submit">
           {isEditMode ? 'Edit Class' : 'Create Class'}
