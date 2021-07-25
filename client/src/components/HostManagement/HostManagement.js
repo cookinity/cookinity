@@ -39,6 +39,10 @@ export const HostManagement = () => {
     const query = new URLSearchParams(window.location.search);
     if (query.get('success')) {
       setStripeAccountCreated(true);
+      history.push({
+        pathname: '/host-management',
+        search: '',
+      });
     }
   }, []);
 

@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import { ClassesTableYourBookings } from './ClassesTableYourBookings';
 import { ClassesTablePastBookedClasses } from './ClassesTablePastBookedClasses';
 import LayoutNarrow from 'components/Layout/LayoutNarrow';
+import { useHistory } from 'react-router-dom';
 
 export const YourBookings = () => {
   const [upcomingClasses, setUpcomingClasses] = useState([]);
@@ -19,16 +20,24 @@ export const YourBookings = () => {
   const [isOrderDone, setIsOrderDone] = useState(false);
   // @ts-ignore
   const auth = useSelector((state) => state.auth);
-
+  const history = useHistory();
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
     if (query.get('success')) {
       setIsOrderDone(true);
+      history.push({
+        pathname: '/your-bookings',
+        search: '',
+      });
     }
     if (query.get('canceled')) {
       setIsError(true);
       setErrorMessage('Order canceled');
+      history.push({
+        pathname: '/your-bookings',
+        search: '',
+      });
     }
   }, []);
 
