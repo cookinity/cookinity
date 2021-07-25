@@ -1,7 +1,6 @@
 import React from 'react';
 import LayoutNarrow from 'components/Layout/LayoutNarrow';
-import './HowCookinityWorks.scss'
-
+import './HowCookinityWorks.scss';
 
 const HowCookinityWorks = () => {
   return (
@@ -16,7 +15,9 @@ const HowCookinityWorks = () => {
               <div className="col-12 col-md-8 text-center">
                 <h1 className="display-2 mb-4">Cooking alone is boring</h1>
                 <p className="lead mb-4 text-muted">
-                Cookinity is a cooking class platform to help food lovers have an authentic culinary experience and improve their skills with the twist that cooking enthusiasts host the classes.
+                  Cookinity is a cooking class platform to help food lovers have an authentic
+                  culinary experience and improve their skills with the twist that cooking
+                  enthusiasts host the classes.
                 </p>
               </div>
             </div>
@@ -42,11 +43,11 @@ const HowCookinityWorks = () => {
               </div>
               <div className="col-md-4">
                 <p className="lead">
-                  You want to host a cooking class? 
+                  You want to host a cooking class?
                   <br></br>
                   1. Register on <span className="font-weight-bold">Cookinity</span> website.
                   <br></br>
-                  2. Navigate to <span className="font-italic">Host a Class</span> tab.
+                  2. Navigate to <span className="font-italic">Become A Host</span> tab.
                   <br></br>
                   3. Create a Stripe account.
                   <br></br>
@@ -59,7 +60,7 @@ const HowCookinityWorks = () => {
               </div>
               <div className="col-md-4">
                 <p className="lead">
-                You want to book a cooking class? 
+                  You want to book a cooking class?
                   <br></br>
                   1. Register on <span className="font-weight-bold">Cookinity</span> website.
                   <br></br>
