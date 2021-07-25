@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Layout from '../Layout/Layout';
 import { Alert, Col, Row } from 'react-bootstrap';
 import Loader from 'components/Shared/Loader/Loader';
 import requireAuth from 'higherOrderComponents/requireAuth';
@@ -11,7 +10,7 @@ import { ClassesTableYourBookings } from './ClassesTableYourBookings';
 import { ClassesTablePastBookedClasses } from './ClassesTablePastBookedClasses';
 import LayoutNarrow from 'components/Layout/LayoutNarrow';
 
-export const HostManagement = () => {
+export const YourBookings = () => {
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [pastClasses, setPastClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -122,4 +121,4 @@ export const HostManagement = () => {
   }
 };
 
-export default compose(requireAuth)(HostManagement);
+export default compose(requireAuth)(YourBookings);
