@@ -98,6 +98,17 @@ const ClassDetail = () => {
             d.push(dayjs(timeslot.date));
           }
         }
+        // sort future dates earlierst to latest
+        d.sort((a, b) => {
+          if (a.isBefore(b)) {
+            return -1;
+          } else if (a.isAfter(b)) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
         setFutureDates(d);
       } catch (err) {
         setIsError(true);
