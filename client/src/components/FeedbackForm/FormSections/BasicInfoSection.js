@@ -51,7 +51,7 @@ const BasicInfoSection = ({
       </div>
 
       <div className="row">
-        <h3 className="col text-center">Value to money ratio</h3>
+        <h3 className="col text-center">Value to Money Ratio</h3>
         <h3 className="col text-center">Experience Rating</h3>
       </div>
 
