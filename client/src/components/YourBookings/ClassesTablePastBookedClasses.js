@@ -38,7 +38,7 @@ export const ClassesTablePastBookedClasses = ({ yourbookings }) => {
           </Link>
         </td>
         <td>{dayjs(b.bookedTimeSlot.date).format('llll')}</td>
-        <td>{b.class.durationInMinutes}</td>
+        <td>{b.class.durationInMinutes} Minutes</td>
         <td>{b.numberOfGuests}</td>
         <td>{priceineuro} Euro</td>
         <td>
