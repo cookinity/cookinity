@@ -26,7 +26,7 @@ export const Home = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   // @ts-ignore
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(4);
   const [skip, setSkip] = useState(0);
 
   const [startDate, setStartDate] = useState(undefined);
@@ -267,7 +267,9 @@ export const Home = () => {
                 <Row xs={1} md={2} lg={2}>
                   {filteredClasses.length === 0 ? (
                     <div className="alert alert-warning mx-auto text-center" role="alert">
-                      <span>🥺 We are sorry! We found no classes for your selected filters! 🥺</span>
+                      <span>
+                        🥺 We are sorry! We found no classes for your selected filters! 🥺
+                      </span>
                       <br />
                       <span>💡 Try a different combination of filters 💡</span>
                       <br />
@@ -302,7 +304,6 @@ export const Home = () => {
           </Row>
         </Layout>
       </div>
-     
     </>
   );
 };
