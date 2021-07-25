@@ -14,6 +14,7 @@ import { useHistory } from 'react-router-dom';
 export const YourBookings = () => {
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [pastClasses, setPastClasses] = useState([]);
+  const [allClasses, setAllClasses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -62,6 +63,7 @@ export const YourBookings = () => {
       // load all bookings for which the currently logged in user is the customer
       const result = await axios.get('/api/bookings/ascustomer', config);
       const unformattedBookings = result.data.bookings;
+      setAllClasses(unformattedBookings);
       const classesBookedFuture = [];
       const classesBookedPast = [];
       const today = dayjs(new Date());
@@ -82,6 +84,22 @@ export const YourBookings = () => {
     }
     setIsLoading(false);
   };
+
+  let content;
+
+  if (allClasses && allClasses.length > 0) {
+    content = (
+      <>
+        <h1 className="text-center">Upcoming</h1>
+        <ClassesTableYourBookings yourbookings={upcomingClasses}></ClassesTableYourBookings>
+        <hr></hr>
+        <h1 className="text-center">Previous</h1>
+        <ClassesTablePastBookedClasses yourbookings={pastClasses}></ClassesTablePastBookedClasses>
+      </>
+    );
+  } else {
+    content = <Alert variant="warning">😢 You have not booked a class yet!😢</Alert>;
+  }
 
   if (isLoading) {
     return (
@@ -110,18 +128,11 @@ export const YourBookings = () => {
               )}
               {isOrderDone && (
                 <Alert variant="success" dismissible>
-                  🎉Order confirmed!🎉 Please check if there is a "View Private Information" Button
-                  in the table. Then the host has some more information for you!
+                  🎉Order confirmed!🎉 Please check if there is a "View Contact Details" Button in
+                  the table. Then the host has some more information for you!
                 </Alert>
               )}
-              <p></p>
-              <h1 className="text-center">Upcoming</h1>
-              <ClassesTableYourBookings yourbookings={upcomingClasses}></ClassesTableYourBookings>
-              <hr></hr>
-              <h1 className="text-center">Previous</h1>
-              <ClassesTablePastBookedClasses
-                yourbookings={pastClasses}
-              ></ClassesTablePastBookedClasses>
+              {content}
             </div>
           </Col>
         </Row>

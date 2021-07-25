@@ -1,10 +1,10 @@
 import { faEdit, faTrash, faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ClassesTablePastBookedClasses } from 'components/YourBookings/ClassesTablePastBookedClasses';
 import React, { useState } from 'react';
 import { Accordion, Button, Card, Modal, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import './ClassesTable.scss'
+import { Link } from 'react-router-dom';
+import './ClassesTable.scss';
 
 export const ClassesTable = ({ classes, onDeleteCallback }) => {
   const [show, setShow] = useState(false);
@@ -22,9 +22,9 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
     <tr>
       <th>Title</th>
       <th>Category</th>
+      <th>Meeting Location</th>
       <th>Price</th>
-      <th>Min Guests</th>
-      <th>Max Guests</th>
+      <th>Guests</th>
       <th>Duration</th>
       <th>Dates</th>
       <th>Actions</th>
@@ -34,19 +34,32 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
   const rows = classes.map((c) => {
     return (
       <tr key={c.id}>
-        <td>{c.title}</td>
+        <td>
+          <Link to={`/classes/${c.id}`} className="hoverLink">
+            {c.title}
+          </Link>
+        </td>
         <td>{c.category}</td>
+        <td>
+          {c.meetingAddress.street + ', ' + c.meetingAddress.zip + ' ' + c.meetingAddress.city}
+        </td>
         <td>{c.pricePerPerson} Euro</td>
-        <td>{c.minGuests} Guests</td>
-        <td>{c.maxGuests} Guests</td>
+        <td>
+          {c.minGuests}-{c.maxGuests} Guests
+        </td>
         <td>{c.durationInMinutes} Minutes</td>
         <td>
           <Accordion>
             {c.pastDates.length !== 0 ? (
               <Card className="rounded">
-                  <Accordion.Toggle as={Button} variant="secondary" className="dateButton" eventKey="0">
-                    Past Dates
-                  </Accordion.Toggle>
+                <Accordion.Toggle
+                  as={Button}
+                  variant="secondary"
+                  className="dateButton"
+                  eventKey="0"
+                >
+                  Past Dates
+                </Accordion.Toggle>
                 <Accordion.Collapse eventKey="0">
                   <Card.Body>
                     <ul>
@@ -62,7 +75,12 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
             )}
             {c.futureDates.length !== 0 ? (
               <Card className="rounded">
-                <Accordion.Toggle as={Button} variant="secondary" className="dateButton" eventKey="1">
+                <Accordion.Toggle
+                  as={Button}
+                  variant="secondary"
+                  className="dateButton"
+                  eventKey="1"
+                >
                   Upcoming Dates
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey="1">
@@ -92,8 +110,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
           </Button>
           <LinkContainer to={`/hostmanagement/edit-class/${c.id}/times`}>
             <Button variant="secondary" className="mt-1">
-              <FontAwesomeIcon icon={faClock} />
-              {' '}Manage Bookable Times
+              <FontAwesomeIcon icon={faClock} /> Manage Bookable Times
             </Button>
           </LinkContainer>
         </td>

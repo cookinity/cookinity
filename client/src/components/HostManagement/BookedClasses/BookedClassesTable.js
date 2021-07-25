@@ -10,10 +10,11 @@ export const BookedClassesTable = ({ bookings, isPastTable }) => {
   const columns = (
     <tr>
       <th>Class</th>
+      <th>Meeting Location</th>
+      <th>Start Time</th>
       <th>Price</th>
-      <th>Number of Guests</th>
+      <th>Guests</th>
       <th>Customer</th>
-      <th>Class On</th>
       <th>Booked On</th>
       {isPastTable ? <th>Action</th> : null}
     </tr>
@@ -32,12 +33,19 @@ export const BookedClassesTable = ({ bookings, isPastTable }) => {
         <td>
           <Link to={`/classes/${b.class.id}`}>{b.class.title}</Link>
         </td>
+        <td>
+          {b.class.meetingAddress.street +
+            ', ' +
+            b.class.meetingAddress.zip +
+            ' ' +
+            b.class.meetingAddress.city}
+        </td>
+        <td>{dayjs(b.bookedTimeSlot.date).format('llll')}</td>
         <td>{priceString}</td>
         <td>{b.numberOfGuests}</td>
         <td>
           <Link to={`/${b.customer.username}`}>{b.customer.username}</Link>
         </td>
-        <td>{dayjs(b.bookedTimeSlot.date).format('llll')}</td>
         <td>{dayjs(b.bookingDate).format('llll')}</td>
         {isPastTable ? (
           <td>
