@@ -177,11 +177,11 @@ export const HostManagement = () => {
           </Button>
         </LinkContainer>
         <Button variant="secondary" className="mr-2 mt-2 paymentButton" onClick={toStripeDashboard}>
-          <FontAwesomeIcon icon={faMoneyBill} /> Payments
+          <FontAwesomeIcon icon={faMoneyBill} /> See Payouts To You
         </Button>
         <LinkContainer to={`/hostmanagement/booked-classes`}>
           <Button variant="info" className="mt-2">
-            <FontAwesomeIcon icon="info-circle" /> Booked classes
+            <FontAwesomeIcon icon="info-circle" /> See Bookings of Your Classes
           </Button>
         </LinkContainer>
         <div className="tableBackground mt-6">
