@@ -50,9 +50,11 @@ const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
           numberOfStars={numberOfStars}
         ></BasicInfoSection>
         <hr></hr>
-        <Button variant="primary" type="submit">
-          {'Submit Feedback'}
-        </Button>
+        <div className="text-center">
+          <Button variant="primary" type="submit">
+            {'Submit Feedback'}
+          </Button>
+        </div>
       </Form>
     </>
   );

@@ -30,11 +30,8 @@ const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
       const submit = async () => {
-
         try {
-          const {
-            overallRating,
-          } = values;
+          const { overallRating } = values;
           const newFeedback = {
             overallRatingStars: overallRatingStars,
             hostRatingStars: hostRatingStars,
@@ -47,7 +44,7 @@ const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
           //Error
           if (overallRatingStars === 0) {
             setIsError(true);
-            setErrorMessage("You must give a rating in the Overall Section");
+            setErrorMessage('You must give a rating in the Overall Section');
             return;
           }
           // calling submit callback from parent component
@@ -66,18 +63,27 @@ const FeedbackForm = ({ submitCallback, setIsError, setErrorMessage }) => {
     <>
       {<h1 className="text-center">Feedback</h1>}
       <Form className="mx-auto" onSubmit={formik.handleSubmit} noValidate>
-        <BasicInfoSection formik={formik}
-          setRatingOverallRatingStars={setRatingOverallRatingStars} overallRatingStars={overallRatingStars}
-          setRatingHostStars={setRatingHostStars} hostRatingStars={hostRatingStars}
-          setRatingTasteStars={setRatingTasteStars} tasteRatingStars={tasteRatingStars}
-          setRatingLocationStars={setRatingLocationStars} locationRatingStars={locationRatingStars}
-          setRatingVtmrStars={setRatingVtmrStars} vtmrRatingStars={vtmrRatingStars}
-          setRatingExperienceStars={setRatingExperienceStars} experienceRatingStars={experienceRatingStars}
+        <BasicInfoSection
+          formik={formik}
+          setRatingOverallRatingStars={setRatingOverallRatingStars}
+          overallRatingStars={overallRatingStars}
+          setRatingHostStars={setRatingHostStars}
+          hostRatingStars={hostRatingStars}
+          setRatingTasteStars={setRatingTasteStars}
+          tasteRatingStars={tasteRatingStars}
+          setRatingLocationStars={setRatingLocationStars}
+          locationRatingStars={locationRatingStars}
+          setRatingVtmrStars={setRatingVtmrStars}
+          vtmrRatingStars={vtmrRatingStars}
+          setRatingExperienceStars={setRatingExperienceStars}
+          experienceRatingStars={experienceRatingStars}
         ></BasicInfoSection>
         <hr></hr>
-        <Button variant="primary" type="submit">
-          {'Submit Feedback'}
-        </Button>
+        <div className="text-center">
+          <Button variant="primary" type="submit">
+            {'Submit Feedback'}
+          </Button>
+        </div>
       </Form>
     </>
   );
