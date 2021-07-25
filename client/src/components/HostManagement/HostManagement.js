@@ -42,7 +42,7 @@ export const HostManagement = () => {
     if (query.get('success')) {
       setStripeAccountCreated(true);
       history.push({
-        pathname: '/host-management',
+        pathname: '/hostmanagement',
         search: '',
       });
     }
