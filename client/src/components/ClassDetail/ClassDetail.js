@@ -189,8 +189,8 @@ const ClassDetail = () => {
                 {c.minGuests} - {c.maxGuests} persons
               </Col>
               <Col className="classDetail">
-                <FontAwesomeIcon icon="map-marker-alt" size="2x" className="iconPos fa-fw" />
-                {formatAddress(c.meetingAddress)}
+                <FontAwesomeIcon icon="clock" size="2x" className="iconPos fa-fw" />
+                {c.durationInMinutes} Minutes
               </Col>
             </Row>
             <ColoredLine color="gray" />
