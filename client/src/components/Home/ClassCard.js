@@ -88,8 +88,9 @@ export default function ClassCard({ c, filterDate }) {
   }
 
   function generateBookableDates() {
-    // if a filter date is set we take this as an orientation point otherwise the current date
-    const orientationDate = filterDate ? dayjs(filterDate.toDate()) : dayjs();
+    // if a filter date is set we take this
+    const filter = filterDate ? dayjs(filterDate.toDate()) : undefined;
+    // only consider dates that are not booked and are in the future
     const bookableTimeSlots = c.timeSlots.filter(
       (ts) => !ts.isBooked && dayjs(ts.date).isAfter(dayjs()),
     );
@@ -106,20 +107,22 @@ export default function ClassCard({ c, filterDate }) {
       return 0;
     });
 
-    const bookableDatesAroundOrientationDate = [];
+    const dateElements = [];
     for (let i = 0; i < bookableTimeSlots.length; i++) {
       const timeSlot = bookableTimeSlots[i];
       const date = dayjs(timeSlot.date);
-      const diff = Math.abs(date.diff(orientationDate, 'days'));
-      if (diff < 3 && !timeSlot.isBooked) {
-        bookableDatesAroundOrientationDate.push(
-          <li key={date.format('llll')}>{date.format('llll')}</li>,
-        );
-        if (bookableDatesAroundOrientationDate.length === 3) {
-          break;
+      if (filter) {
+        if (filter.format('DD/MM/YYYY') === date.format('DD/MM/YYYY')) {
+          dateElements.push(<li key={date.format('llll')}>{date.format('llll')}</li>);
         }
+      } else {
+        dateElements.push(<li key={date.format('llll')}>{date.format('llll')}</li>);
+      }
+      // only show a maximum of 3 dates
+      if (dateElements.length === 3) {
+        break;
       }
     }
-    return bookableDatesAroundOrientationDate;
+    return dateElements;
   }
 }
