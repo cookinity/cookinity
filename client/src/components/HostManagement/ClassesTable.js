@@ -43,12 +43,10 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
         <td>
           <Accordion>
             {c.pastDates.length !== 0 ? (
-              <Card>
-                <Card.Header className="dateButton">
+              <Card className="rounded">
                   <Accordion.Toggle as={Button} variant="secondary" className="dateButton" eventKey="0">
                     Past Dates
                   </Accordion.Toggle>
-                </Card.Header>
                 <Accordion.Collapse eventKey="0">
                   <Card.Body>
                     <ul>
@@ -63,7 +61,7 @@ export const ClassesTable = ({ classes, onDeleteCallback }) => {
               ''
             )}
             {c.futureDates.length !== 0 ? (
-              <Card>
+              <Card className="rounded">
                 <Accordion.Toggle as={Button} variant="secondary" className="dateButton" eventKey="1">
                   Upcoming Dates
                 </Accordion.Toggle>
