@@ -18,6 +18,7 @@ import { ClassesTable } from './ClassesTable';
 import { LinkContainer } from 'react-router-bootstrap';
 import './HostManagementStyles.scss';
 import LayoutNarrow from 'components/Layout/LayoutNarrow';
+import { useHistory } from 'react-router-dom';
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 
@@ -29,6 +30,7 @@ export const HostManagement = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [stripeAccountCreated, setStripeAccountCreated] = useState(false);
   const auth = useSelector((state) => state.auth);
+  const history = useHistory();
 
   useEffect(() => {
     fetchClasses();
