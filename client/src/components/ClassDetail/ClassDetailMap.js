@@ -24,6 +24,21 @@ const ClassDetailMap = ({ c }) => {
         Meeting Address: {addressFormatted}{' '}
         <FontAwesomeIcon icon="map-marker-alt" className="iconPos fa-fw" />
       </h3>
+      <div className="text-center mb-2">
+        <span>🤝 You will meet your host at this public location close to his or her home🤝</span>
+        <br />
+        <span>🔎 Please bring an ID so the host can verify your identity 🔎</span>
+        <br />
+        <span>
+          🛒 Depending on the class you will either go shopping together first or go directly to the
+          hosts home to start cooking 🧑‍🍳
+        </span>
+        <br />
+        <span>
+          📞 After booking you will receive additional contact information from the host to
+          coordinate the meetup 📞
+        </span>
+      </div>
       <MapContainer
         className="detailMapContainer"
         center={[c.lat, c.lon]}
