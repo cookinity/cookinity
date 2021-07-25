@@ -6,16 +6,17 @@ const PrivateInformationSection = ({ formik }) => {
   return (
     <>
       <Form.Group controlId="privateInformation">
-        <Form.Label>Optional Private Information For Guests</Form.Label>{' '}
+        <Form.Label>Contact Information</Form.Label>{' '}
         <Tooltip
           content={
             <span>
               <em>
-                This information can only be seen by customers who actually booked the course.
+                Important: This information can only be seen by customers who actually booked the
+                course.
               </em>
               <br />
-              Information that you can provide here are for example your name, email address, phone
-              number, etc.
+              Please provide the customer with some way to contact you. Helpful would be for example
+              a Whatsapp number.
             </span>
           }
           direction="right"
@@ -26,6 +27,7 @@ const PrivateInformationSection = ({ formik }) => {
           as="textarea"
           rows={3}
           name="privateInformation"
+          placeholder="You can reach me on WhatsApp under +49XXXXXXX"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.privateInformation}

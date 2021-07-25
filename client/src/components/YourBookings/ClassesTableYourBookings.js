@@ -18,11 +18,12 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
   const columns = (
     <tr>
       <th>Title</th>
-      <th>Class Starting Time</th>
+      <th>Starting Time</th>
+      <th>Meeting Location</th>
       <th>Duration</th>
       <th>Number of Guests</th>
       <th>Total Price</th>
-      <th>Host contact</th>
+      <th>Host E-Mail</th>
       <th>Actions</th>
     </tr>
   );
@@ -37,6 +38,13 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
           </Link>
         </td>
         <td>{dayjs(b.bookedTimeSlot.date).format('llll')}</td>
+        <td>
+          {b.class.meetingAddress.street +
+            ', ' +
+            b.class.meetingAddress.zip +
+            ' ' +
+            b.class.meetingAddress.city}
+        </td>
         <td>{b.class.durationInMinutes} Minutes</td>
         <td>{b.numberOfGuests}</td>
         <td>{priceineuro} Euro</td>
@@ -49,7 +57,7 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
           {b.privateInformation ? (
             <>
               <Button variant="warning" className="mr-1 mt-1" onClick={() => handleShow(b)}>
-                View Private Information
+                View Contact Details
               </Button>
             </>
           ) : null}
@@ -66,7 +74,7 @@ export const ClassesTableYourBookings = ({ yourbookings }) => {
       </Table>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Private Information From The Host</Modal.Title>
+          <Modal.Title>Contact Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>{modalContent}</Modal.Body>
         <Modal.Footer>
