@@ -159,7 +159,7 @@ const TimeManagement = () => {
                     <Row className="mb-2">
                       <Col xs={12} className="text-center">
                         <DatePicker
-                          minDate={new DateObject().add(1, 'day')}
+                          minDate={new DateObject()}
                           format="MM/DD/YYYY HH:mm"
                           value={newDate}
                           onChange={setNewDate}
